@@ -1,6 +1,8 @@
-# 6-Day Prototype Plan: Traffic Violation Detection
+# Design.md — Traffic Violation Detection Prototype
 
 ## Bengaluru Traffic Challenge — Stripped-Down Hackathon Build
+
+> Engineering conventions, agent workflow, directory structure, and commands live in `AGENT.md`. This document covers only project-specific scope, datasets, day-by-day plan, and technical contracts.
 
 ## Philosophy
 
@@ -9,8 +11,18 @@
 - **No deployment infrastructure** — runs locally or on Colab with GPU
 - **Prototype quality** — demonstrate the pipeline end-to-end, not production robustness
 - **Score maximization** — working code + sample outputs + demo video score highest
-- **Reproducible builds** — uv for fast, deterministic dependency management; `make setup` gets any machine running
-- **Consistent code style** — black formatter enforced via Makefile
+
+## Tech Stack (Authoritative — takes precedence over AGENT.md generic stack)
+
+- Language/runtime: Python ≥3.10
+- Detection: Ultralytics YOLOv8 (YOLOv8m for violations, YOLOv8n-pose for occupant counting)
+- OCR: PaddleOCR PP-OCRv4
+- Backend API: FastAPI + Uvicorn
+- Optional reasoning layer: Groq vision LLM (`llava-1.5-7b-4096`)
+- Package manager: uv
+- Formatter: black
+- No database — persistence is JSONL (`outputs/violations.jsonl`) + JSON (`outputs/metrics.json`) + flat files
+- No frontend in this repo — a React dashboard is built by a separate team against the API contract in §6
 
 ## Datasets (All Free, Pre-Annotated, No Manual Work)
 
@@ -72,55 +84,14 @@
   - `llm_violations.classifications.seatbelt.enabled`
 - **Behavior:** when enabled, LLM checks run after CV detections and are stored as image-level violations in evidence JSON
 
-## Project Structure
-
-```
-traffic-violation-prototype/
-├── configs/
-│   └── config.yaml              # All thresholds, paths, model configs
-├── data/
-│   ├── raw/                     # Downloaded datasets (gitignored)
-│   └── sample_outputs/          # ≥50 annotated evidence images
-├── models/
-│   └── weights/                 # Downloaded/trained .pt files
-├── src/
-│   ├── preprocessing.py         # CLAHE + resize
-│   ├── detector.py              # YOLOv8 vehicle/helmet/plate detection
-│   ├── triple_riding.py         # YOLOv8-Pose occupant counting
-│   ├── lpr.py                   # Plate detection + OCR + validation
-│   ├── evidence.py              # Annotated image + JSON + hash
-│   ├── pipeline.py              # End-to-end: image → violation records
-│   └── evaluate.py              # Metrics on test set
-├── api/
-│   ├── main.py                  # FastAPI app entrypoint
-│   ├── routes/
-│   │   ├── violations.py        # CRUD + query endpoints for violations
-│   │   ├── analytics.py         # Aggregated stats & charts data
-│   │   └── evidence.py          # Serve annotated images & metadata
-│   └── schemas.py                # Pydantic response models
-├── notebooks/
-│   ├── 01_train_detector.ipynb  # Fine-tuning notebook (Colab-ready)
-│   ├── 02_evaluate.ipynb        # Evaluation results + charts
-│   └── 03_demo.ipynb            # Interactive demo
-├── outputs/
-│   ├── violations.jsonl         # All violation records
-│   ├── metrics.json             # Evaluation results
-│   └── report.pdf               # Auto-generated summary
-├── Makefile                      # Build automation (setup, format, lint, run, test)
-├── pyproject.toml                # Project metadata + dependencies (uv/PEP 621)
-├── uv.lock                        # Locked dependency versions (committed)
-├── README.md
-└── TECHNICAL_REPORT.md           # ≤20 pages
-```
-
 ## Day-by-Day Plan
 
 ### Day 1: Setup + Data + Detection Model
 
 **Morning:**
 
-- Initialize repo with `uv init`, configure `pyproject.toml`, create project structure
-- Run `make setup` to bootstrap environment (installs uv if missing, creates venv, syncs deps)
+- Initialize repo with `uv init`, configure `pyproject.toml`, create project structure (see AGENT.md for directory layout)
+- Run `make setup` to bootstrap environment
 - Download datasets:
 
 ```bash
@@ -396,36 +367,11 @@ Add Pydantic response schemas in `api/schemas.py`
 
 > **Note:** The React dashboard frontend is out of scope — built by a separate team. Our API provides all data it needs.
 
-### Day 6: Polish + Report + Demo Video
-
-**Morning:**
-
-Write `TECHNICAL_REPORT.md` (≤20 pages):
-
-1. System architecture diagram
-2. Model selection rationale
-3. Dataset description + preprocessing
-4. Training methodology
-5. Evaluation results (mAP, plate accuracy, per-class metrics)
-6. Sample outputs (10 annotated images)
-7. Known limitations + future work
-8. Legal section mapping table
-
-Write `README.md` with setup instructions
-
-**Afternoon:**
-
-- Record 3-5 minute demo video
-- Final cleanup: ensure 50+ sample outputs exist, all scripts run
-- Zip deliverables
+### Day 6: Complete deliverables
 
 **Deliverable:** Complete submission (code + report + demo + samples)
 
-## Implementation Guide (Code-Aligned)
-
-This section translates the plan into concrete coding contracts so implementation is faster and less ambiguous.
-
-### 1) Module Responsibilities
+## Module Responsibilities
 
 | File | Responsibility | Inputs | Outputs | Common Failure Modes |
 |---|---|---|---|---|
@@ -438,9 +384,9 @@ This section translates the plan into concrete coding contracts so implementatio
 | `src/evaluate.py` | detector/LPR metrics + metrics.json | dataset YAML, GT folder | metrics report JSON | missing datasets/annotations |
 | `api/routes/*.py` | serve records, analytics, evidence, process endpoint | HTTP request + outputs/* | JSON/API responses | schema drift, stale files, missing records |
 
-### 2) Canonical Data Contracts
+## Canonical Data Contracts
 
-**2.1 Detector output item (vehicle-level)**
+### Detector output item (vehicle-level)
 
 ```json
 {
@@ -459,7 +405,7 @@ This section translates the plan into concrete coding contracts so implementatio
 }
 ```
 
-**2.2 LLM image-level output item**
+### LLM image-level output item
 
 ```json
 {
@@ -479,7 +425,7 @@ This section translates the plan into concrete coding contracts so implementatio
 }
 ```
 
-**2.3 Evidence JSONL record (persisted)**
+### Evidence JSONL record (persisted)
 
 ```json
 {
@@ -497,9 +443,9 @@ This section translates the plan into concrete coding contracts so implementatio
 }
 ```
 
-### 3) Config Reference (Developer-Facing)
+## Config Reference (configs/config.yaml)
 
-Keep all knobs in `configs/config.yaml`. Minimum required keys:
+Minimum required keys:
 
 ```yaml
 models:
@@ -539,15 +485,9 @@ llm_violations:
     seatbelt: { enabled: false, confidence_threshold: 0.6 }
 ```
 
-### 4) Environment Variables
+Note: these values are loaded into the project's Settings object per AGENT.md's config convention (`utils/config.py`) — never read directly via `os.environ`.
 
-| Variable | Required | Purpose |
-|---|---|---|
-| `KAGGLE_USERNAME` | for data download | Kaggle API auth |
-| `KAGGLE_KEY` | for data download | Kaggle API auth |
-| `GROQ_API_KEY` | only if `llm_violations.enabled=true` | vision LLM API key |
-
-### 5) Error Handling and Fallback Policy
+## Error Handling and Fallback Policy
 
 1. If detector weights are missing, use `fallback_weights`.
 2. If OCR fails/returns empty, set `plate_text=null`, `plate_confidence=0.0`.
@@ -555,7 +495,7 @@ llm_violations:
 4. If one image fails in directory mode, continue remaining images and report per-file error.
 5. If legal mapping key is missing, keep empty section for that violation type and include in report under known gaps.
 
-### 6) API Contract Summary (for Frontend Team)
+## API Contract Summary (for Frontend Team)
 
 | Endpoint | Method | Purpose | Notes |
 |---|---|---|---|
@@ -568,7 +508,7 @@ llm_violations:
 | `/api/evidence/{id}/image` | GET | annotated image | JPEG response |
 | `/api/evidence/{id}/metadata` | GET | evidence metadata | includes hash + legal sections |
 
-### 7) Quick Runbook
+## Quick Runbook
 
 ```bash
 make setup
@@ -586,7 +526,9 @@ export GROQ_API_KEY="<key>"
 make process
 ```
 
-### 8) Testing Matrix (Minimum)
+## Testing Matrix (Project-Specific Minimum Cases)
+
+> General TDD philosophy (write test first, no function ships without one) is defined in AGENT.md. This table lists the minimum project-specific cases each area must cover.
 
 | Area | Test Type | Minimum Cases |
 |---|---|---|
@@ -599,7 +541,7 @@ make process
 | Pipeline | integration | single image success, per-image failure isolation in directory mode |
 | API routes | integration | pagination/filter behavior, 404 paths, process endpoint success |
 
-### 9) Definition of Done (Engineering)
+## Definition of Done (Project-Specific)
 
 1. `make process` generates annotated outputs and `outputs/violations.jsonl` without crashes on 50+ images.
 2. `make evaluate` generates `outputs/metrics.json` with detector metrics and (when GT exists) LPR metrics.
@@ -608,7 +550,7 @@ make process
 5. README includes exact setup + run commands and required environment variables.
 6. Demo run can be reproduced on a fresh machine using `make setup` + documented commands only.
 
-### 10) Known Risks to Track During Build
+## Known Risks to Track During Build
 
 1. Dataset class-name drift (Plate vs NumberPlate) can silently break mapping logic.
 2. LPR accuracy may vary heavily with blur/night and crop quality.
@@ -707,24 +649,7 @@ clean:
 | Helmet/violation dataset | devgurucodes YOLO dataset | Pre-split, YOLO format, 4 perfect classes, 708MB |
 | Occupant counting | YOLOv8n-pose (COCO pretrained) | Zero training needed; count keypoints in vehicle bbox |
 | OCR engine | PaddleOCR PP-OCRv4 | Free, excellent accuracy, pip install |
-| Package manager | uv | 10-100x faster than pip; lockfile ensures reproducible installs |
-| Code formatter | black | Zero-config, deterministic, enforced via make format-check |
-| Build automation | Makefile | Single `make setup` bootstraps any machine; no docs needed |
 | Backend API | FastAPI | Lightweight, async, auto-generates OpenAPI docs for React team |
 | Optional reasoning layer | Groq vision LLM (llava-1.5-7b-4096) | Fast prototype path for hard visual behaviors (toggleable per use case) |
 | Evidence format | JSONL + annotated JPG + SHA-256 | Matches task requirements exactly |
 | Confidence threshold | 0.5 detect / 0.7 report | Minimize false positives in demo |
-
-## Honest Assessment
-
-| Component | Expected Result in 6 Days |
-|---|---|
-| Helmet detection | mAP 0.70-0.85 (dataset is good quality) |
-| Triple riding detection | Works on clear images; ~70% accuracy |
-| Plate detection | mAP 0.75+ (well-represented in data) |
-| Plate OCR (clean plates) | 70-80% full-plate accuracy |
-| Plate OCR (dirty/night) | 40-60% (PaddleOCR struggles without fine-tuning) |
-| Optional LLM checks (phone/wrong-side/red-light/seatbelt) | Useful prototype signal; accuracy varies by scene visibility and prompt quality |
-| Backend API | Functional MVP (all endpoints serving data for React dashboard) |
-| Evidence packaging | Complete and correct |
-| Production-grade wrong-side / red-light | NOT IMPLEMENTED (documented as future work) |
