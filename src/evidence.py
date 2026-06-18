@@ -47,8 +47,10 @@ def package_evidence(image_path: str, detections: list[dict]) -> list[ViolationR
 
     for det in detections:
         # Determine severity
-        is_high_severity = any(v.get("type") in ["red_light", "wrong_side_driving"] for v in det["violations"])
-        
+        is_high_severity = any(
+            v.get("type") in ["red_light", "wrong_side_driving"] for v in det["violations"]
+        )
+
         record = ViolationRecord(
             violation_id=str(uuid.uuid4()),
             timestamp=datetime.now().isoformat(),
@@ -76,20 +78,30 @@ def annotate_image(image: np.ndarray, records: list[ViolationRecord]) -> np.ndar
             continue
 
         x1, y1, x2, y2 = rec.vehicle_bbox
-        color = (0, 0, 255) if rec.severity == "high" else (0, 165, 255)  # Red for high, Orange for standard
-        
+        color = (
+            (0, 0, 255) if rec.severity == "high" else (0, 165, 255)
+        )  # Red for high, Orange for standard
+
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
 
         # Draw violation texts above box
         for i, v in enumerate(rec.violations):
             label = f"{v['type']} ({v.get('confidence', 0.0):.2f})"
             y_offset = y1 - 10 - (i * 20)
-            cv2.putText(img, label, (x1, max(20, y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            cv2.putText(
+                img, label, (x1, max(20, y_offset)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2
+            )
 
         # Draw plate below box
         if rec.plate_number:
             cv2.putText(
-                img, rec.plate_number, (x1, y2 + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2
+                img,
+                rec.plate_number,
+                (x1, y2 + 25),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                (255, 255, 0),
+                2,
             )
 
     return img

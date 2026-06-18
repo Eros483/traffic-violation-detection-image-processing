@@ -89,16 +89,14 @@
     {
       "id": "F006",
       "name": "Backend REST API",
-      "description": "FastAPI service exposing violations, analytics, and evidence endpoints for consumption by the (separately built) React dashboard.",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "high",
       "module": "api/",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Cases: pagination/filter behavior, 404 paths, process endpoint success."
-      },
+      "tests": { "status": "failing", "files": ["tests/test_api/test_routes.py"], "notes": "Test coverage added for health, violations, and analytics." },
+      "notes": "Starting TDD cycle for FastAPI.",
+      "added": "2026-06-18",
+      "completed": null,
       "subtasks": [
         {
           "id": "F006-1",
@@ -140,10 +138,7 @@
           "name": "GET /health",
           "status": "planned"
         }
-      ],
-      "notes": "",
-      "added": "2026-06-18",
-      "completed": null
+      ]
     },
     {
       "id": "F007",

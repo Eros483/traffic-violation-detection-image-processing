@@ -9,7 +9,9 @@ from utils.config import config
 from utils.logger import logger
 
 # Load model paths from config
-detector_path = config.get_yaml("models.detector.weights", "models/weights/traffic_violations/best.pt")
+detector_path = config.get_yaml(
+    "models.detector.weights", "models/weights/traffic_violations/best.pt"
+)
 fallback_path = config.get_yaml("models.detector.fallback_weights", "yolov8m.pt")
 
 try:
@@ -83,7 +85,11 @@ def detect_violations(image) -> list[dict]:
                 candidates.append(
                     {
                         "bbox": [x1, y1, x2, y2],
-                        "vehicle_type": "two_wheeler" if "helmet" in cls_name or "triple" in cls_name else "vehicle",
+                        "vehicle_type": (
+                            "two_wheeler"
+                            if "helmet" in cls_name or "triple" in cls_name
+                            else "vehicle"
+                        ),
                         "violations": violations,
                         "plate_bbox": None,
                         "plate_text": None,
