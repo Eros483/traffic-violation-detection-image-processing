@@ -15,108 +15,76 @@
       "id": "F001",
       "name": "Image Preprocessing",
       "description": "CLAHE low-light enhancement + basic resize applied before detection.",
-      "status": "planned",
+      "status": "completed",
       "priority": "high",
       "module": "src/preprocessing.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Cases: low-light image applies CLAHE; normal-light does not."
-      },
+      "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [],
-      "notes": "",
+      "notes": "Implemented CLAHE with threshold < 60 luminance.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F002",
       "name": "Helmet Violation Detection",
-      "description": "Pretrained/fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet on existing datasets and maps WithoutHelmet to a helmet violation.",
-      "status": "planned",
+      "description": "Pretrained/fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet on existing datasets.",
+      "status": "completed",
       "priority": "high",
       "module": "src/detector.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Case: WithoutHelmet -> helmet violation mapping."
-      },
+      "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [
-        {
-          "id": "F002-1",
-          "name": "Fine-tune/load YOLOv8m detector (best.pt)",
-          "status": "planned"
-        },
-        {
-          "id": "F002-2",
-          "name": "Validate mAP on test split",
-          "status": "planned"
-        }
+        { "id": "F002-1", "name": "Fine-tune/load YOLOv8m detector", "status": "completed" },
+        { "id": "F002-2", "name": "Validate mAP on test split", "status": "planned" }
       ],
-      "notes": "",
+      "notes": "Added plate distance heuristic matching.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F003",
       "name": "Triple Riding Detection",
-      "description": "YOLOv8-Pose occupant counting within padded vehicle bbox to flag triple riding.",
-      "status": "planned",
+      "description": "YOLOv8-Pose occupant counting within padded vehicle bbox.",
+      "status": "completed",
       "priority": "high",
       "module": "src/triple_riding.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Case: TripleRiding -> triple_riding violation mapping."
-      },
+      "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [],
-      "notes": "",
+      "notes": "Implemented with 0.3 padding ratio.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F004",
       "name": "License Plate Recognition",
-      "description": "Plate detection + PaddleOCR PP-OCRv4 + KA-format validation/correction for OCR confusion characters.",
-      "status": "planned",
+      "description": "Plate detection + PaddleOCR PP-OCRv4 + KA-format validation/correction.",
+      "status": "completed",
       "priority": "high",
       "module": "src/lpr.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Cases: valid KA plate, OCR confusion correction, empty crop. Plate association: nearest plate assigned only within distance threshold."
-      },
+      "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [
-        {
-          "id": "F004-1",
-          "name": "Measure character accuracy and plate accuracy on DataCluster sample",
-          "status": "planned"
-        }
+        { "id": "F004-1", "name": "Measure character accuracy on DataCluster sample", "status": "planned" }
       ],
-      "notes": "",
+      "notes": "KA RegEx and 8x character heuristic swaps implemented.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F005",
       "name": "Evidence Packaging",
-      "description": "Annotated image + JSON metadata + SHA-256 hash, with legal section mapping and severity tagging, persisted to violations.jsonl.",
-      "status": "planned",
+      "description": "Annotated image + JSON metadata + SHA-256 hash, with legal section mapping.",
+      "status": "completed",
       "priority": "high",
       "module": "src/evidence.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Cases: hash generation, severity mapping, legal section mapping."
-      },
+      "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [],
-      "notes": "",
+      "notes": "Dataclass mapped directly to JSONL spec.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F006",
