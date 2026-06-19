@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* Dark mode is class-driven (.dark on <html>), not OS-preference driven */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Map semantic Tailwind color utilities to runtime CSS variables.
+   @theme inline => utilities emit var(--color-*) which resolve to the
+   --bg / --card / etc. variables below, so they switch with .dark. */
+@theme inline {
+  --color-bg:             var(--bg);
+  --color-sidebar:        var(--sidebar);
+  --color-card:           var(--card);
+  --color-border:         var(--border);
+  --color-primary:        var(--primary);
+  --color-primary-light:  var(--primary-light);
+  --color-success:        var(--success);
+  --color-warning:        var(--warning);
+  --color-danger:         var(--danger);
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+
+  --font-family-sans: Inter, system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Light mode (default) — government-grade slate + blue palette ── */
+:root {
+  --bg:             #F0F4F8;
+  --sidebar:        #FFFFFF;
+  --card:           #FFFFFF;
+  --border:         #E2E8F0;
+  --primary:        #2563EB;
+  --primary-light:  #EFF6FF;
+  --success:        #10B981;
+  --warning:        #F59E0B;
+  --danger:         #EF4444;
+  --text-primary:   #0F172A;
+  --text-secondary: #64748B;
+  --text-muted:     #94A3B8;
+  --shadow-card:    0 1px 3px rgba(0, 0, 0, 0.07);
+  color-scheme: light;
+}
+
+/* ── Dark mode — matching slate tones, camera viewport stays dark always ── */
+html.dark {
+  --bg:             #0B1220;
+  --sidebar:        #0F172A;
+  --card:           #1E293B;
+  --border:         #334155;
+  --primary:        #3B82F6;
+  --primary-light:  rgba(59, 130, 246, 0.16);
+  --success:        #10B981;
+  --warning:        #F59E0B;
+  --danger:         #EF4444;
+  --text-primary:   #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted:     #64748B;
+  --shadow-card:    0 1px 3px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+html, body, #root {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Card elevation — subtle shadow per spec §1 */
+.shadow-card { box-shadow: var(--shadow-card); }
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse   { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-spin    { animation: spin 1s linear infinite; }
+.animate-fade-in { animation: fadeSlideIn 0.2s ease-out forwards; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Print — challan PDF via window.print() */
+@media print {
+  .no-print { display: none !important; }
+}
