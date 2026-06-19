@@ -3,9 +3,6 @@ import { ScanEye, Cpu } from 'lucide-react'
 import PageTransition from '../components/ui/PageTransition'
 import EmptyState from '../components/ui/EmptyState'
 
-// The backend exposes no image-processing endpoint (e.g. POST /api/violations/process),
-// so there is nothing to drive a real "analyze this image" flow. Rather than fake it
-// with sample data, we state that plainly.
 export default function LiveDetection() {
   const navigate = useNavigate()
 

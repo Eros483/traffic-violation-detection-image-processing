@@ -9,10 +9,6 @@ export interface FetchState<T> {
   reload: () => void
 }
 
-/**
- * Runs an async fetcher and tracks loading/error/data. Re-runs when `deps` change
- * or when reload() is called. Errors surface as a friendly message string.
- */
 export function useFetch<T>(fetcher: () => Promise<T>, deps: unknown[] = []): FetchState<T> {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(true)
@@ -47,7 +43,6 @@ export function useFetch<T>(fetcher: () => Promise<T>, deps: unknown[] = []): Fe
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps, nonce])
 
   return { data, loading, error, reload }

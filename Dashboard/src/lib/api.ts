@@ -1,12 +1,9 @@
-// API client for the Traffic Violation Detection backend (FastAPI).
-// Base URL is configurable via VITE_API_URL; defaults to the dev server.
 import type { ViolationRecord } from '../types'
 
 export const API_BASE =
   (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ??
   'http://localhost:8000'
 
-// ── Response shapes (mirror api/schemas.py) ──────────────────────────────────
 export interface PaginatedViolations {
   items: ViolationRecord[]
   total: number
@@ -21,7 +18,6 @@ export interface HealthResponse {
   status: string
 }
 
-// ── Error type ───────────────────────────────────────────────────────────────
 export class ApiError extends Error {
   /** HTTP status, or 0 when the request never reached the server. */
   status: number
@@ -44,7 +40,6 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       ...init,
     })
   } catch {
-    // Network failure / CORS / server down — never got an HTTP response.
     throw new ApiError(UNREACHABLE, 0)
   }
 
@@ -62,7 +57,6 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 }
 
-// ── Endpoints (the three the backend actually implements) ────────────────────
 export function getHealth(): Promise<HealthResponse> {
   return request<HealthResponse>('/health')
 }

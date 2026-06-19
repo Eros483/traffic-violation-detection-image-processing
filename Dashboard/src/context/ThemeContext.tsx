@@ -10,7 +10,6 @@ const ThemeContext = createContext<{
 }>({ theme: 'light', toggle: () => {} })
 
 function initialTheme(): Theme {
-  // Light is the default. Honor a previously chosen value if present.
   if (typeof localStorage !== 'undefined') {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved === 'dark' || saved === 'light') return saved
@@ -37,5 +36,4 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => useContext(ThemeContext)

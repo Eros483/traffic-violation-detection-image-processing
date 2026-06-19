@@ -1,6 +1,3 @@
-// Client-side derivations from the violations list. The backend exposes only a
-// total count and the raw records, so any breakdown/trend/offender view is
-// computed here from GET /api/violations.
 import type { ViolationRecord } from '../types'
 import { violationLabel } from './constants'
 
@@ -23,7 +20,6 @@ export function breakdownByType(items: ViolationRecord[]): Slice[] {
     .sort((a, b) => b.value - a.value)
 }
 
-/** Count of records per severity. */
 export function breakdownBySeverity(items: ViolationRecord[]): Record<string, number> {
   const counts: Record<string, number> = {}
   for (const rec of items) {
@@ -32,7 +28,6 @@ export function breakdownBySeverity(items: ViolationRecord[]): Record<string, nu
   return counts
 }
 
-/** Records grouped by weekday (Mon–Sun), for the trend line. */
 export function trendByWeekday(items: ViolationRecord[]): TrendPoint[] {
   const counts = new Array(7).fill(0)
   for (const rec of items) {

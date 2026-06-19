@@ -3,10 +3,6 @@ import type { FetchState } from '../../hooks/useFetch'
 import LoadingState from './LoadingState'
 import ErrorState from './ErrorState'
 
-/**
- * Renders loading / error UI for a useFetch state, or the children once data
- * has arrived. Keeps pages from re-implementing the same three branches.
- */
 export default function AsyncBoundary<T>({
   state,
   loadingMessage,

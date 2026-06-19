@@ -2,7 +2,6 @@ import { ArrowRight } from 'lucide-react'
 import type { ViolationRecord } from '../../types'
 import { badgeClass } from '../../lib/badges'
 
-// Compact uppercase labels for the dispatch-style feed.
 const SHORT_LABEL: Record<string, string> = {
   helmet:        'HELMET',
   triple_riding: 'TRIPLE',
@@ -17,7 +16,6 @@ function shortLabel(type: string): string {
   return SHORT_LABEL[type] ?? type.replace(/_/g, ' ').toUpperCase()
 }
 
-// Status derived from severity — high = HIGH (danger), standard = OPEN (primary).
 function statusPill(severity: ViolationRecord['severity']) {
   return severity === 'high'
     ? { label: 'HIGH', cls: 'bg-danger/10 text-danger', dot: 'bg-danger' }

@@ -4,9 +4,6 @@ import PageTransition from '../components/ui/PageTransition'
 import SectionHeader from '../components/ui/SectionHeader'
 import EmptyState from '../components/ui/EmptyState'
 
-// The backend exposes no challans endpoint, so there is nothing to list.
-// A challan can still be previewed client-side from a violation
-// (Violation detail → Generate Challan), but none are persisted/served.
 export default function ChallansList() {
   const navigate = useNavigate()
 

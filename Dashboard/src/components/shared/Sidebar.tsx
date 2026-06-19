@@ -16,8 +16,6 @@ interface NavGroup {
   items: NavItem[]
 }
 
-// Sidebar is ALWAYS dark navy — colors are hardcoded hex, never CSS variables,
-// so it looks identical in light and dark mode.
 const navGroups: NavGroup[] = [
   {
     category: 'Overview',
