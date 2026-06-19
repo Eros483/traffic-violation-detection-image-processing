@@ -16,10 +16,10 @@ function shortLabel(type: string): string {
   return SHORT_LABEL[type] ?? type.replace(/_/g, ' ').toUpperCase()
 }
 
-function statusPill(severity: ViolationRecord['severity']) {
+function stsPill(severity: ViolationRecord['severity']) {
   return severity === 'high'
     ? { label: 'HIGH', cls: 'bg-danger/10 text-danger', dot: 'bg-danger' }
-    : { label: 'OPEN', cls: 'bg-primary/10 text-primary', dot: 'bg-primary' }
+    : { label: 'OPEN', cls: 'bg-primary/10 texst-primary', dot: 'bg-primary' }
 }
 
 export default function ActivityRow({
@@ -30,7 +30,7 @@ export default function ActivityRow({
   onClick?: () => void
 }) {
   const primary = record.violations[0]?.type ?? 'helmet'
-  const status = statusPill(record.severity)
+  const status = stsPill(record.severity)
   const time = new Date(record.timestamp).toLocaleTimeString('en-IN', {
     hour: '2-digit', minute: '2-digit',
   })
