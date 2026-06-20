@@ -30,6 +30,7 @@ export function Dashboard() {
   );
 
   const d = metrics?.detector;
+  const b = metrics?.benchmark;
   const highShare = a.total ? a.bySeverity.high / a.total : 0;
 
   return (
@@ -52,12 +53,17 @@ export function Dashboard() {
                 </span>
               }
             />
-            {d ? (
-              <div className="grid grid-cols-4 gap-px bg-slate-200">
-                <MetricTile label="Precision" value={pct(d.precision, 1)} />
-                <MetricTile label="Recall" value={pct(d.recall, 1)} />
-                <MetricTile label="mAP@50" value={pct(d.mAP50, 1)} />
-                <MetricTile label="mAP@50–95" value={pct(d.mAP50_95, 1)} />
+            {d || b ? (
+              <div className={`grid gap-px bg-slate-200 ${b ? 'grid-cols-5' : 'grid-cols-4'}`}>
+                {d && <>
+                  <MetricTile label="Precision" value={pct(d.precision, 1)} />
+                  <MetricTile label="Recall" value={pct(d.recall, 1)} />
+                  <MetricTile label="mAP@50" value={pct(d.mAP50, 1)} />
+                  <MetricTile label="mAP@50–95" value={pct(d.mAP50_95, 1)} />
+                </>}
+                {b && <>
+                  <MetricTile label="Mean latency" value={`${formatNumber(Math.round(b.per_stage_timing.total_ms.mean))} ms`} />
+                </>}
               </div>
             ) : (
               <div className="px-4 py-6 text-sm text-slate-500">

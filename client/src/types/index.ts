@@ -57,6 +57,15 @@ export interface ModelMetrics {
   };
   status?: string;
   message?: string;
+  /** F012 benchmark — populated by `make benchmark`. */
+  benchmark?: {
+    per_stage_timing: {
+      total_ms: { mean: number; std: number; min: number; max: number; total: number };
+    };
+    throughput_images_per_sec: number;
+    num_images: number;
+    peak_memory_mb: number | null;
+  };
 }
 
 /** One line of outputs/challans.jsonl (api/schemas.py :: ChallanResponse). */

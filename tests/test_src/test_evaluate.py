@@ -1,5 +1,8 @@
 # ----- tests for evaluation script @ tests/test_src/test_evaluate.py -----
 
+import uuid
+from datetime import datetime
+
 import json
 import os
 from unittest.mock import MagicMock, patch
@@ -364,3 +367,267 @@ def test_evaluate_lpr_multiple_plates_same_image(tmp_path):
         assert data["lpr"]["num_images_with_gt"] == 1
         assert data["lpr"]["full_plate_accuracy"] == 1.0
         assert data["lpr"]["character_accuracy"] == 1.0
+
+
+# ----- tests for pipeline benchmark -----
+
+
+def _make_test_image(tmp_path, name, w=200, h=200):
+    """Create a dummy image file at tmp_path/name and return its full path."""
+    import cv2
+    import numpy as np
+
+    img = np.zeros((h, w, 3), dtype=np.uint8)
+    path = tmp_path / name
+    cv2.imwrite(str(path), img)
+    return str(path)
+
+
+def _mock_package_evidence(image_path, detections):
+    """Return a single ViolationRecord with default values."""
+    from src.evidence import ViolationRecord
+
+    rec = ViolationRecord(
+        violation_id=str(uuid.uuid4()),
+        timestamp=datetime.now().isoformat(),
+        image_path=image_path,
+        image_hash="abc123",
+        vehicle_bbox=[10, 10, 100, 100],
+        vehicle_type="two_wheeler",
+        plate_number="KA-01-AB-1234",
+        plate_confidence=0.95,
+        violations=[{"type": "helmet", "confidence": 0.85, "description": "No helmet"}],
+        severity="standard",
+        legal_sections=["MV Act S129"],
+    )
+    return [rec]
+
+
+def test_benchmark_pipeline_produces_metrics(tmp_path):
+    """Test that benchmark_pipeline writes all expected keys."""
+    from src.evaluate import benchmark_pipeline
+
+    img1 = _make_test_image(tmp_path, "img1.jpg")
+    _make_test_image(tmp_path, "img2.jpg")
+    _make_test_image(tmp_path, "img3.jpg")
+
+    output_path = tmp_path / "metrics.json"
+
+    with (
+        patch("src.preprocessing.preprocess") as mock_preprocess,
+        patch("src.detector.detect_violations") as mock_detect,
+        patch("src.lpr.read_plate") as mock_read,
+        patch("src.llm_classifier.evaluate_image_level_violations") as mock_llm,
+        patch("src.evidence.package_evidence", side_effect=_mock_package_evidence),
+        patch("src.evidence.annotate_image") as mock_annotate,
+    ):
+        import numpy as np
+
+        dummy_img = np.zeros((200, 200, 3), dtype=np.uint8)
+        mock_preprocess.return_value = (dummy_img, [])
+        mock_detect.return_value = [
+            {
+                "bbox": [10, 10, 100, 100],
+                "vehicle_type": "two_wheeler",
+                "violations": [{"type": "helmet", "confidence": 0.85, "description": "No helmet"}],
+                "plate_bbox": [50, 50, 100, 80],
+                "plate_text": None,
+                "plate_confidence": None,
+            }
+        ]
+        mock_read.return_value = {
+            "text": "KA-01-AB-1234",
+            "confidence": 0.95,
+            "valid": True,
+            "raw": "KA-01-AB-1234",
+        }
+        mock_llm.return_value = [
+            {"type": "mobile_phone", "confidence": 0.75, "description": "Phone usage"}
+        ]
+        mock_annotate.return_value = dummy_img
+
+        result = benchmark_pipeline(
+            image_dir=str(tmp_path), output_path=str(output_path), skip_llm=False, num_warmup=0
+        )
+
+    assert result["benchmark"]["status"] == "success"
+    assert result["benchmark"]["num_images"] == 3
+    assert result["benchmark"]["num_skipped"] == 0
+    assert result["benchmark"]["total_time_seconds"] > 0
+    assert result["benchmark"]["throughput_images_per_sec"] > 0
+    assert "per_stage_timing" in result["benchmark"]
+    assert "per_stage_memory" in result["benchmark"]
+    assert "per_image" in result["benchmark"]
+    assert len(result["benchmark"]["per_image"]) == 3
+    assert "hardware" in result["benchmark"]
+
+    stages = result["benchmark"]["per_stage_timing"]
+    for key in (
+        "preprocess_ms",
+        "detect_ms",
+        "ocr_ms",
+        "llm_ms",
+        "evidence_ms",
+        "annotation_ms",
+        "total_ms",
+    ):
+        assert key in stages
+        for metric in ("mean", "std", "min", "max", "total"):
+            assert metric in stages[key]
+
+    mem = result["benchmark"]["per_stage_memory"]
+    for key in ("preprocess_mb", "detect_mb", "ocr_mb", "llm_mb", "evidence_mb", "annotation_mb"):
+        assert key in mem
+        for metric in ("mean_delta_mb", "max_delta_mb", "min_delta_mb"):
+            assert metric in mem[key]
+
+    for entry in result["benchmark"]["per_image"]:
+        assert "memory_mb" in entry
+        for stage in ("preprocess_mb", "detect_mb", "ocr_mb", "evidence_mb", "annotation_mb"):
+            assert stage in entry["memory_mb"]
+            for field in ("start", "end", "delta"):
+                assert field in entry["memory_mb"][stage]
+
+    assert output_path.exists()
+    saved = json.loads(output_path.read_text())
+    assert "benchmark" in saved
+
+
+def test_benchmark_pipeline_empty_directory(tmp_path):
+    """Test that benchmark_pipeline returns error when no images exist."""
+    from src.evaluate import benchmark_pipeline
+
+    output_path = tmp_path / "metrics.json"
+    result = benchmark_pipeline(image_dir=str(tmp_path), output_path=str(output_path))
+
+    assert result["benchmark"]["status"] == "error"
+    assert "No images found" in result["benchmark"]["message"]
+    assert output_path.exists()
+    saved = json.loads(output_path.read_text())
+    assert saved["benchmark"]["status"] == "error"
+
+
+def test_benchmark_pipeline_merges_existing(tmp_path):
+    """Test that benchmark merges with existing detector/LPR keys."""
+    from src.evaluate import benchmark_pipeline
+
+    _make_test_image(tmp_path, "img1.jpg")
+
+    output_path = tmp_path / "metrics.json"
+    existing = {
+        "detector": {"mAP50": 0.85, "status": "success"},
+        "lpr": {"num_plates_evaluated": 5},
+    }
+    output_path.write_text(json.dumps(existing))
+
+    with (
+        patch("src.preprocessing.preprocess") as mock_preprocess,
+        patch("src.detector.detect_violations") as mock_detect,
+        patch("src.lpr.read_plate") as mock_read,
+        patch("src.llm_classifier.evaluate_image_level_violations") as mock_llm,
+        patch("src.evidence.package_evidence", side_effect=_mock_package_evidence),
+        patch("src.evidence.annotate_image") as mock_annotate,
+    ):
+        import numpy as np
+
+        dummy_img = np.zeros((200, 200, 3), dtype=np.uint8)
+        mock_preprocess.return_value = (dummy_img, [])
+        mock_detect.return_value = []
+        mock_read.return_value = {
+            "text": "KA-01-AB-1234",
+            "confidence": 0.95,
+            "valid": True,
+            "raw": "KA-01-AB-1234",
+        }
+        mock_llm.return_value = []
+        mock_annotate.return_value = dummy_img
+
+        benchmark_pipeline(image_dir=str(tmp_path), output_path=str(output_path))
+
+    saved = json.loads(output_path.read_text())
+    assert saved["detector"]["mAP50"] == 0.85
+    assert saved["lpr"]["num_plates_evaluated"] == 5
+    assert "benchmark" in saved
+    assert saved["benchmark"]["status"] == "success"
+
+
+def test_benchmark_pipeline_skips_bad_images(tmp_path):
+    """Test that an image that cannot be read is skipped, not fatal."""
+    from src.evaluate import benchmark_pipeline
+
+    _make_test_image(tmp_path, "good.jpg")
+    # Create an invalid file that cv2 will return None for
+    bad_path = tmp_path / "bad.jpg"
+    bad_path.write_text("not an image")
+
+    output_path = tmp_path / "metrics.json"
+
+    with (
+        patch("src.preprocessing.preprocess") as mock_preprocess,
+        patch("src.detector.detect_violations") as mock_detect,
+        patch("src.lpr.read_plate") as mock_read,
+        patch("src.llm_classifier.evaluate_image_level_violations") as mock_llm,
+        patch("src.evidence.package_evidence", side_effect=_mock_package_evidence),
+        patch("src.evidence.annotate_image") as mock_annotate,
+    ):
+        import numpy as np
+
+        dummy_img = np.zeros((200, 200, 3), dtype=np.uint8)
+        mock_preprocess.return_value = (dummy_img, [])
+        mock_detect.return_value = []
+        mock_read.return_value = {
+            "text": "KA-01-AB-1234",
+            "confidence": 0.95,
+            "valid": True,
+            "raw": "KA-01-AB-1234",
+        }
+        mock_llm.return_value = []
+        mock_annotate.return_value = dummy_img
+
+        result = benchmark_pipeline(image_dir=str(tmp_path), output_path=str(output_path))
+
+    assert result["benchmark"]["status"] == "success"
+    assert result["benchmark"]["num_images"] == 1
+    assert result["benchmark"]["num_skipped"] >= 0
+
+
+def test_benchmark_pipeline_llm_disabled(tmp_path):
+    """Test that skip_llm=True results in llm_ms = 0.0 for all images."""
+    from src.evaluate import benchmark_pipeline
+
+    _make_test_image(tmp_path, "img1.jpg")
+
+    output_path = tmp_path / "metrics.json"
+
+    with (
+        patch("src.preprocessing.preprocess") as mock_preprocess,
+        patch("src.detector.detect_violations") as mock_detect,
+        patch("src.lpr.read_plate") as mock_read,
+        patch("src.llm_classifier.evaluate_image_level_violations") as mock_llm,
+        patch("src.evidence.package_evidence", side_effect=_mock_package_evidence),
+        patch("src.evidence.annotate_image") as mock_annotate,
+    ):
+        import numpy as np
+
+        dummy_img = np.zeros((200, 200, 3), dtype=np.uint8)
+        mock_preprocess.return_value = (dummy_img, [])
+        mock_detect.return_value = []
+        mock_read.return_value = {
+            "text": "KA-01-AB-1234",
+            "confidence": 0.95,
+            "valid": True,
+            "raw": "KA-01-AB-1234",
+        }
+        mock_annotate.return_value = dummy_img
+
+        result = benchmark_pipeline(
+            image_dir=str(tmp_path), output_path=str(output_path), skip_llm=True
+        )
+
+    assert result["benchmark"]["status"] == "success"
+    # When skip_llm=True, evaluate_image_level_violations is never called
+    mock_llm.assert_not_called()
+    for entry in result["benchmark"]["per_image"]:
+        assert entry["stages"]["llm_ms"] == 0.0
+    assert result["benchmark"]["per_stage_timing"]["llm_ms"]["mean"] == 0.0
+    assert result["benchmark"]["per_stage_timing"]["llm_ms"]["max"] == 0.0

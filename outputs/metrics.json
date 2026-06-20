@@ -11,5 +11,593 @@
         "num_images_with_gt": 20,
         "character_accuracy": 0.7984,
         "full_plate_accuracy": 0.6
+    },
+    "benchmark": {
+        "status": "success",
+        "num_images": 11,
+        "num_skipped": 0,
+        "total_time_seconds": 9.914,
+        "throughput_images_per_sec": 1.11,
+        "peak_memory_mb": 731.0,
+        "timestamp": "2026-06-20T20:45:27.316439",
+        "per_stage_timing": {
+            "preprocess_ms": {
+                "mean": 13.02,
+                "std": 35.77,
+                "min": 1.32,
+                "max": 120.85,
+                "total": 143.17
+            },
+            "detect_ms": {
+                "mean": 615.79,
+                "std": 274.25,
+                "min": 298.44,
+                "max": 1070.27,
+                "total": 6773.69
+            },
+            "ocr_ms": {
+                "mean": 268.34,
+                "std": 361.33,
+                "min": 0.0,
+                "max": 1140.64,
+                "total": 2951.75
+            },
+            "llm_ms": {
+                "mean": 0.0,
+                "std": 0.0,
+                "min": 0.0,
+                "max": 0.0,
+                "total": 0.01
+            },
+            "evidence_ms": {
+                "mean": 0.14,
+                "std": 0.02,
+                "min": 0.11,
+                "max": 0.17,
+                "total": 1.55
+            },
+            "annotation_ms": {
+                "mean": 0.26,
+                "std": 0.08,
+                "min": 0.06,
+                "max": 0.37,
+                "total": 2.84
+            },
+            "total_ms": {
+                "mean": 899.35,
+                "std": 489.19,
+                "min": 300.59,
+                "max": 1967.09,
+                "total": 9892.89
+            }
+        },
+        "per_stage_memory": {
+            "preprocess_mb": {
+                "mean_delta_mb": 0.0,
+                "max_delta_mb": 0.4,
+                "min_delta_mb": 0.0
+            },
+            "detect_mb": {
+                "mean_delta_mb": 26.0,
+                "max_delta_mb": 77.3,
+                "min_delta_mb": 0.0
+            },
+            "ocr_mb": {
+                "mean_delta_mb": -11.9,
+                "max_delta_mb": 0.2,
+                "min_delta_mb": -43.4
+            },
+            "llm_mb": {
+                "mean_delta_mb": 0.0,
+                "max_delta_mb": 0.0,
+                "min_delta_mb": 0.0
+            },
+            "evidence_mb": {
+                "mean_delta_mb": 0.0,
+                "max_delta_mb": 0.0,
+                "min_delta_mb": 0.0
+            },
+            "annotation_mb": {
+                "mean_delta_mb": 0.0,
+                "max_delta_mb": 0.2,
+                "min_delta_mb": 0.0
+            }
+        },
+        "per_image": [
+            {
+                "image": "img_001.png",
+                "total_ms": 751.73,
+                "stages": {
+                    "preprocess_ms": 120.85,
+                    "detect_ms": 620.14,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.11,
+                    "annotation_ms": 0.06
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 536.1,
+                        "end": 536.5,
+                        "delta": 0.4
+                    },
+                    "detect_mb": {
+                        "start": 536.5,
+                        "end": 610.1,
+                        "delta": 73.6
+                    },
+                    "ocr_mb": {
+                        "start": 610.1,
+                        "end": 610.1,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 610.1,
+                        "end": 610.1,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 610.1,
+                        "end": 610.1,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 610.1,
+                        "end": 610.1,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_002.jpg",
+                "total_ms": 543.71,
+                "stages": {
+                    "preprocess_ms": 2.47,
+                    "detect_ms": 325.86,
+                    "ocr_ms": 214.26,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.17,
+                    "annotation_ms": 0.3
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 610.5,
+                        "end": 610.5,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 610.5,
+                        "end": 687.8,
+                        "delta": 77.3
+                    },
+                    "ocr_mb": {
+                        "start": 687.8,
+                        "end": 685.4,
+                        "delta": -2.4
+                    },
+                    "llm_mb": {
+                        "start": 685.4,
+                        "end": 685.4,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 685.4,
+                        "end": 685.4,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 685.4,
+                        "end": 685.6,
+                        "delta": 0.2
+                    }
+                }
+            },
+            {
+                "image": "img_003.jpg",
+                "total_ms": 1378.98,
+                "stages": {
+                    "preprocess_ms": 2.53,
+                    "detect_ms": 630.13,
+                    "ocr_ms": 745.09,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.32
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 685.6,
+                        "end": 685.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 685.6,
+                        "end": 696.0,
+                        "delta": 10.4
+                    },
+                    "ocr_mb": {
+                        "start": 696.0,
+                        "end": 674.7,
+                        "delta": -21.3
+                    },
+                    "llm_mb": {
+                        "start": 674.7,
+                        "end": 674.7,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 674.7,
+                        "end": 674.7,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 674.7,
+                        "end": 674.7,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_004.jpg",
+                "total_ms": 1967.09,
+                "stages": {
+                    "preprocess_ms": 2.84,
+                    "detect_ms": 822.46,
+                    "ocr_ms": 1140.64,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.14,
+                    "annotation_ms": 0.24
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 674.7,
+                        "end": 674.7,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 674.7,
+                        "end": 721.4,
+                        "delta": 46.7
+                    },
+                    "ocr_mb": {
+                        "start": 721.4,
+                        "end": 687.1,
+                        "delta": -34.3
+                    },
+                    "llm_mb": {
+                        "start": 687.1,
+                        "end": 687.1,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 687.1,
+                        "end": 687.1,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 687.1,
+                        "end": 687.1,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_005.jpg",
+                "total_ms": 543.68,
+                "stages": {
+                    "preprocess_ms": 2.59,
+                    "detect_ms": 540.1,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.15,
+                    "annotation_ms": 0.37
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 687.1,
+                        "end": 687.1,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 687.1,
+                        "end": 730.8,
+                        "delta": 43.7
+                    },
+                    "ocr_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_006.jpg",
+                "total_ms": 601.57,
+                "stages": {
+                    "preprocess_ms": 2.1,
+                    "detect_ms": 313.86,
+                    "ocr_ms": 284.51,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.31
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 730.8,
+                        "end": 730.8,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 730.8,
+                        "end": 731.0,
+                        "delta": 0.2
+                    },
+                    "llm_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_007.jpg",
+                "total_ms": 1084.8,
+                "stages": {
+                    "preprocess_ms": 2.39,
+                    "detect_ms": 875.53,
+                    "ocr_ms": 202.56,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.17,
+                    "annotation_ms": 0.3
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_008.jpg",
+                "total_ms": 1159.91,
+                "stages": {
+                    "preprocess_ms": 2.41,
+                    "detect_ms": 914.55,
+                    "ocr_ms": 241.94,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.12,
+                    "annotation_ms": 0.25
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 731.0,
+                        "end": 731.0,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 731.0,
+                        "end": 687.6,
+                        "delta": -43.4
+                    },
+                    "llm_mb": {
+                        "start": 687.6,
+                        "end": 687.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 687.6,
+                        "end": 687.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 687.6,
+                        "end": 687.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_009.jpg",
+                "total_ms": 1072.33,
+                "stages": {
+                    "preprocess_ms": 1.32,
+                    "detect_ms": 1070.27,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.11,
+                    "annotation_ms": 0.22
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 687.6,
+                        "end": 687.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 687.6,
+                        "end": 721.7,
+                        "delta": 34.1
+                    },
+                    "ocr_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_010.jpg",
+                "total_ms": 300.59,
+                "stages": {
+                    "preprocess_ms": 1.37,
+                    "detect_ms": 298.44,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.12,
+                    "annotation_ms": 0.21
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_011.jpg",
+                "total_ms": 488.5,
+                "stages": {
+                    "preprocess_ms": 2.29,
+                    "detect_ms": 362.34,
+                    "ocr_ms": 122.75,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.15,
+                    "annotation_ms": 0.26
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 721.7,
+                        "end": 721.7,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 721.7,
+                        "end": 691.7,
+                        "delta": -30.0
+                    },
+                    "llm_mb": {
+                        "start": 691.7,
+                        "end": 691.7,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 691.7,
+                        "end": 691.7,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 691.7,
+                        "end": 691.7,
+                        "delta": 0.0
+                    }
+                }
+            }
+        ],
+        "hardware": {
+            "cpu": "x86_64",
+            "ram_gb": 15.0,
+            "python_version": "3.13.11"
+        },
+        "config": {
+            "image_dir": "public",
+            "skip_llm": true,
+            "num_warmup": 0
+        }
     }
 }

@@ -1,4 +1,4 @@
-.PHONY: setup sync format format-check lint run-api process evaluate \
+.PHONY: setup sync format format-check lint run-api process evaluate benchmark \
         data test clean client-install client-build run download-model
 
 # Install uv if not present, then sync all dependencies & install frontend deps
@@ -31,6 +31,10 @@ process:
 # Run evaluation on test set
 evaluate:
 	uv run python -m src.evaluate
+
+# Run pipeline benchmark (timing, throughput, memory)
+benchmark:
+	uv run python -c "from src.evaluate import benchmark_pipeline; benchmark_pipeline()"
 
 # Download datasets (requires KAGGLE_USERNAME + KAGGLE_KEY env vars)
 data:

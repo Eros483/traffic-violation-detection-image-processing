@@ -3,10 +3,10 @@
   "last_updated": "2026-06-22",
   "summary": {
     "total": 19,
-    "completed": 18,
+    "completed": 19,
     "in_progress": 0,
-    "planned": 1,
-    "tests_passing": 42,
+    "planned": 0,
+    "tests_passing": 47,
     "tests_failing": 0,
     "tests_missing": 0
   },
@@ -283,16 +283,21 @@
     {
       "id": "F012",
       "name": "Computational Efficiency & Scalability Evaluation",
-      "description": "Measure wall-clock time per pipeline stage (preprocess, detect, OCR, LLM), throughput in images/sec, and memory usage. Output as extended metrics.json section. Design doc to be provided separately.",
-      "status": "planned",
+      "description": "Measure wall-clock time per pipeline stage (preprocess, detect, OCR, LLM), throughput in images/sec, and memory usage. Output as extended metrics.json section under 'benchmark' key.",
+      "status": "completed",
       "priority": "medium",
-      "module": "src/evaluate.py, outputs/metrics.json",
+      "module": "src/evaluate.py, outputs/metrics.json, Makefile",
       "design_doc": null,
-      "tests": { "status": "missing", "files": [], "notes": "Waiting on design doc from stakeholder." },
-      "subtasks": [],
-      "notes": "No code written yet. Design doc incoming from user.",
+      "tests": { "status": "passing", "files": ["tests/test_src/test_evaluate.py"], "notes": "5 unit tests for benchmark_pipeline." },
+      "subtasks": [
+        { "id": "F012-1", "name": "Implement benchmark_pipeline() in src/evaluate.py", "status": "completed" },
+        { "id": "F012-2", "name": "Add psutil dependency for memory tracking", "status": "completed" },
+        { "id": "F012-3", "name": "Add 'make benchmark' target", "status": "completed" },
+        { "id": "F012-4", "name": "Write 5 unit tests for benchmark_pipeline", "status": "completed" }
+      ],
+      "notes": "Reports per-stage timing (mean/std/min/max), throughput, peak memory, and hardware info. psutil fallback if not installed. All pipeline stages instrumented individually. Merges into existing metrics.json without clobbering.",
       "added": "2026-06-20",
-      "completed": null
+      "completed": "2026-06-22"
     },
     {
       "id": "F017",
