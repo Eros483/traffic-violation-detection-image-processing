@@ -14,9 +14,11 @@ from utils.config import config
 from utils.logger import logger
 
 
-def process_image(image_path: str) -> dict:
+def process_image(image_path: str, skip_llm: bool = False) -> dict:
     """
     Runs the full violation detection pipeline on a single image.
+    When skip_llm is True, the optional LLM reasoning layer is bypassed
+    (useful for batch processing where per-image LLM calls are too slow/expensive).
     """
     logger.info(f"Processing image: {image_path}")
     image = cv2.imread(image_path)
@@ -40,7 +42,9 @@ def process_image(image_path: str) -> dict:
             det["plate_confidence"] = plate_result["confidence"]
 
     # 4. Optional LLM validations (Image-level reasoning)
-    llm_violations = evaluate_image_level_violations(image_path)
+    llm_violations = []
+    if not skip_llm:
+        llm_violations = evaluate_image_level_violations(image_path)
     if llm_violations:
         detections.append(
             {
@@ -69,8 +73,8 @@ def process_image(image_path: str) -> dict:
 if __name__ == "__main__":
     import glob
 
-    # Grab sample images to process
-    images = glob.glob("data/raw/**/*.jpg", recursive=True)
+    # Grab sample images from the master traffic violation test set
+    images = sorted(glob.glob("data/raw/master_traffic_violation_dataset/test/images/*.jpg"))
     images = images[:50]  # Process 50 samples as per design docs
 
     out_dir = "data/sample_outputs"
@@ -80,7 +84,7 @@ if __name__ == "__main__":
     all_records = []
 
     for img_path in images:
-        result = process_image(img_path)
+        result = process_image(img_path, skip_llm=True)
         if not result:
             continue
 
