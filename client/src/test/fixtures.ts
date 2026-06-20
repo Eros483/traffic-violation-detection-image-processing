@@ -1,4 +1,3 @@
-// Shared test fixtures. Builders keep tests terse and intention-revealing.
 import type { ViolationRecord } from "../types";
 
 let seq = 0;
