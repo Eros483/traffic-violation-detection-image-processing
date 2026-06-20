@@ -1,7 +1,6 @@
 models:
   detector:
     weights: models/weights/traffic_violations/best.pt
-    fallback_weights: yolov8m.pt
     confidence_threshold: 0.5
     iou_threshold: 0.45
     image_size: 640

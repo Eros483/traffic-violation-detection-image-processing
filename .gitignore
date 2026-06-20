@@ -2,5 +2,5 @@
 .venv
 data
 __pycache__/
-*.pt
 logs/
+.pytest_cache/

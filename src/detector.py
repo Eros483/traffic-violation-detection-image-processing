@@ -20,10 +20,11 @@ if os.path.exists(detector_path):
         logger.info(f"Loaded detector from {detector_path}")
     except Exception as e:
         logger.error(f"Failed to load detector from {detector_path}: {e}")
+        raise
 else:
-    logger.warning(
+    logger.error(
         f"Detector weights not found at {detector_path}. "
-        "Model training still in progress. Detection will return empty results until model is placed."
+        "Model must be placed at this path before running detection."
     )
 
 
