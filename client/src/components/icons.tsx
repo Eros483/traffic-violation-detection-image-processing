@@ -113,3 +113,45 @@ export const IconInfo = (p: P) => (
     <line x1="12" y1="8" x2="12" y2="8.1" />
   </Base>
 );
+export const IconChart = (p: P) => (
+  <Base {...p}>
+    <line x1="4" y1="20" x2="20" y2="20" />
+    <rect x="6" y="11" width="3" height="6" rx="0.5" />
+    <rect x="11" y="7" width="3" height="10" rx="0.5" />
+    <rect x="16" y="13" width="3" height="4" rx="0.5" />
+  </Base>
+);
+export const IconUpload = (p: P) => (
+  <Base {...p}>
+    <path d="M12 16V4" />
+    <polyline points="7 9 12 4 17 9" />
+    <path d="M5 20h14" />
+  </Base>
+);
+export const IconCamera = (p: P) => (
+  <Base {...p}>
+    <path d="M4 8h3l1.5-2h7L17 8h3v11H4z" />
+    <circle cx="12" cy="13" r="3.2" />
+  </Base>
+);
+export const IconActivity = (p: P) => (
+  <Base {...p}>
+    <polyline points="3 12 7 12 10 5 14 19 17 12 21 12" />
+  </Base>
+);
+export const IconSun = (p: P) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+  </Base>
+);
+export const IconMoon = (p: P) => (
+  <Base {...p}>
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+  </Base>
+);
+export const IconChevronRightSm = (p: P) => (
+  <Base {...p}>
+    <polyline points="9 6 15 12 9 18" />
+  </Base>
+);

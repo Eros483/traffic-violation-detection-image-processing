@@ -1,40 +1,18 @@
-// Labels, citations, confidence banding, currency and date formatting. The
-// fine and section maps mirror api/routes/challans.py so the console can show
-// an estimated fine before a challan is issued.
+// Pure formatting + lookup helpers. Labels, citations, confidence banding,
+// currency and date formatting. All deterministic and side-effect free.
 
-export const VIOLATION_LABELS: Record<string, string> = {
-  helmet: "No Helmet",
-  triple_riding: "Triple Riding",
-  mobile_phone: "Mobile Use",
-  red_light: "Signal Jump",
-  wrong_side: "Wrong Side",
-  wrong_side_driving: "Wrong Side",
-  parking: "Illegal Parking",
-  illegal_parking: "Illegal Parking",
-  seatbelt: "No Seatbelt",
-  stop_line: "Stop-line Cross",
-};
-
-// Mirror of FINE_MAP in api/routes/challans.py (rupees).
-export const FINE_MAP: Record<string, number> = {
-  helmet: 1000,
-  triple_riding: 1000,
-  mobile_phone: 5000,
-  red_light: 5000,
-  wrong_side: 1000,
-  wrong_side_driving: 1000,
-  parking: 500,
-  illegal_parking: 500,
-  seatbelt: 1000,
-  stop_line: 5000,
-};
-
-export function violationLabel(type: string): string {
-  return VIOLATION_LABELS[type] ?? titleCase(type);
-}
+import { VIOLATION_META } from "./constants";
 
 export function titleCase(s: string): string {
   return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+export function violationLabel(type: string): string {
+  return VIOLATION_META[type]?.label ?? titleCase(type);
+}
+
+export function violationShort(type: string): string {
+  return VIOLATION_META[type]?.short ?? titleCase(type);
 }
 
 export function vehicleLabel(type: string): string {
@@ -45,26 +23,28 @@ export function vehicleLabel(type: string): string {
 
 /** Estimated fine for a set of violations (matches backend summation). */
 export function estimatedFine(violations: { type: string }[]): number {
-  return violations.reduce((sum, v) => sum + (FINE_MAP[v.type] ?? 0), 0);
+  return violations.reduce((sum, v) => sum + (VIOLATION_META[v.type]?.fine ?? 0), 0);
 }
 
 /** Normalise a section token for display: "MV Act S129" → "MV Act §129". */
 export function displaySection(token: string): string {
   if (!token || token === "Unknown") return "—";
-  return token.replace(/\bS(\d+)/i, "§$1");
+  return token.replace(/\bS(?:ection\s*)?(\d+)/i, "§$1");
 }
 
 /* ---- confidence banding ---- */
 export type Band = "high" | "med" | "low";
+
 export function confidenceBand(v: number): Band {
   if (v >= 0.85) return "high";
   if (v >= 0.7) return "med";
   return "low";
 }
+
 export const BAND_LABEL: Record<Band, string> = { high: "High", med: "Med", low: "Low" };
 
 export function pct(value: number | null | undefined, digits = 0): string {
-  if (value == null) return "—";
+  if (value == null || Number.isNaN(value)) return "—";
   return `${(value * 100).toFixed(digits)}%`;
 }
 
@@ -93,5 +73,5 @@ export function formatDate(iso: string): string {
 }
 
 export function shortId(id: string): string {
-  return id.length > 10 ? `${id.slice(0, 8)}` : id;
+  return id.length > 10 ? id.slice(0, 8) : id;
 }

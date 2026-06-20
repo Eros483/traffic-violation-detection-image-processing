@@ -1,73 +1,99 @@
 <div align="center">
 
-# Traffic Violation Detection · Image Processing
+# Traffic Violation Detection · Enforcement Console
 
-<img alt="React" src="https://img.shields.io/badge/React-18-2563eb?style=flat-square">
-<img alt="Vite" src="https://img.shields.io/badge/Vite-5-2563eb?style=flat-square">
-<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-2563eb?style=flat-square">
-<img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-4-2563eb?style=flat-square">
+<img alt="React" src="https://img.shields.io/badge/React-18-6b728e?style=flat-square">
+<img alt="Vite" src="https://img.shields.io/badge/Vite-5-6b728e?style=flat-square">
+<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-6b728e?style=flat-square">
+<img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-4-6b728e?style=flat-square">
+<img alt="React Router" src="https://img.shields.io/badge/React_Router-6-6b728e?style=flat-square">
+<img alt="Vitest" src="https://img.shields.io/badge/Vitest-2_·_23_tests-5d8a6a?style=flat-square">
 
 Traffic-enforcement console for the Bengaluru Traffic Police. Strict,
-utilitarian, light-theme; reads live from the read-only detection API.
+utilitarian design; reads live from the read-only detection API.
 
 </div>
 
-## Palette — "Sentinel"
+## Palette
 
 A deliberate, documented set (defined in `src/index.css` `@theme`), not stock
-framework defaults. Colour is used by **role**, never decoration.
+framework defaults. Colour is used by **role**, never decoration — a muted,
+desaturated register.
 
 | Token | Hex | Role |
 |---|---|---|
-| Brand | `#2563EB` | primary action, active nav |
-| Info | `#3B82F6` | total / informational accent |
-| Critical | `#EF4444` | high severity, low confidence |
-| Warning | `#F59E0B` | pending, medium confidence |
-| Success | `#10B981` | confirmed, high confidence |
-| Canvas | `#F8FAFC` (slate-50) | application background |
+| Brand | `#6B728E` | primary action, active nav |
+| Critical | `#B75D5D` | high severity, low confidence |
+| Warning | `#B0894F` | pending, medium confidence |
+| Success | `#5D8A6A` | confirmed, high confidence |
+| Canvas | `#F5F6F8` | application background |
 | Surface | `#FFFFFF` | cards & tables |
-| Sidebar | `#0F172A` (slate-900) | navigation rail |
-| Ink / muted / faint | `#111827` / `#6B7280` / `#9CA3AF` | text hierarchy |
-| Rules | `#E5E7EB` / `#D1D5DB` | 1px borders |
+| Sidebar | `#111827` | navigation rail (dark in both themes) |
+| Ink / muted | `#1F2937` / `#6B7280` | text hierarchy |
+| Rules | `#E2E8F0` | 1px borders |
 
 Neutral system sans throughout (no decorative faces); monospace for
 identifiers (plates, IDs, hashes). Numbers are tabular. Type is weight-led —
 22px/600 page titles, 32px/700 KPI figures, 11px/500 uppercase labels.
 
-## Views
+### Light / dark theme
 
-- **Overview** — weighted, accent-bordered KPI cards (with a small base
-  sparkline), **model performance** from `outputs/metrics.json` (precision /
-  recall / mAP), a **type donut** (Recharts), and proportional confidence bars.
-- **Violations** — the detection log as a dense, filterable, paginated data
-  grid (subtle alternating rows). Row → case file.
-- **Case file** (drawer) — evidence image (`/api/evidence/{id}/image`, graceful
-  fallback), per-violation confidence, all persisted fields incl. SHA-256, an
-  **estimated fine**, and a working **Issue Challan** action.
-- **Challans** — issued-challan register with fine totals and pill status
-  badges (amber pending / green paid).
-- **System** — Export (client-side CSV of the loaded log) and Settings.
+Light and dark are both supported, selectable from the **Settings** page and
+persisted to `localStorage` (`src/theme/ThemeContext.tsx`). The four accent
+hues above are **identical** in both themes — only the neutral surfaces, text,
+and borders invert (overrides in `src/index.css` under `[data-theme="dark"]`),
+so colour meaning never shifts.
 
-## Backend contract (read-only, Python untouched)
+## Routes & views
+
+Nine routes (`HashRouter`), all under one application shell — Sidebar +
+Navbar + animated outlet (`src/layouts/AppLayout.tsx`).
+
+| Path | View | What it shows |
+|---|---|---|
+| `/` | **Dashboard** | accent-bordered KPI cards (real trend sparkline), model performance from `outputs/metrics.json`, recent-activity feed, capture-source panel |
+| `/analytics` | **Analytics** | 30-day trend area chart, violation-type donut, top repeat-offenders ranking |
+| `/violations` | **Violations** | the detection log as a dense, filterable, paginated grid (search by plate, filter by type/severity); `?plate=` deep-links from the offenders ranking |
+| `/violations/:id` | **Case file** | evidence image (graceful 404 fallback), per-violation confidence meters, all persisted fields incl. SHA-256, estimated fine, and a working **Issue Challan** action |
+| `/challans` | **Challans** | issued-challan register with fine-total rollup and status pills |
+| `/challans/:id` | **Challan detail** | printable e-ticket preview; links back to the source violation |
+| `/live` | **Live Detection** | upload a still image → run the full pipeline → annotated result + per-record detections, each issuable as a challan |
+| `/settings` | **Settings** | theme selection (light/dark) and an about panel |
+| `*` | **Not found** | 404 with a route back to the dashboard |
+
+## Live Detection
+
+Drag-and-drop or click to upload any image (`image/*`). The file is POSTed to
+`POST /api/violations/upload` as multipart form-data; the response carries the
+records, the base64 annotated image, and the preprocessing steps applied.
+Results are **transient** — the upload endpoint runs the pipeline in-memory and
+does not write to `outputs/violations.jsonl`, so detections appear here only
+until a challan is issued from them.
+
+## Backend contract
 
 | Endpoint | Use |
 |---|---|
-| `GET /health` | connection status (animated live dot) |
+| `GET /health` | connection status (animated live dot in the navbar) |
 | `GET /api/violations` (+ `/{id}`) | detection log |
 | `GET /api/analytics/summary`, `/metrics` | totals, model metrics |
 | `GET /api/evidence/{id}/image`, `/metadata` | evidence |
-| `GET /api/challans`, `POST /api/challans` | issue & list challans |
+| `GET /api/challans`, `POST /api/challans` | list & issue challans |
+| `POST /api/violations/upload` | Live Detection pipeline run |
 
-The ML endpoints (`/process`, `/upload`) are out of UI scope. Breakdowns the
-backend doesn't aggregate are computed in the browser (`src/lib/analytics.ts`).
+Breakdowns the backend doesn't aggregate (severity / type / vehicle splits,
+daily trend, repeat-offender ranking) are computed in the browser
+(`src/lib/derive.ts`).
 
 ## Run
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173  (proxies /api → :8000)
+npm run dev        # http://localhost:5173  (proxies /api, /health → :8000)
 npm run build      # typecheck + production build → dist/
 npm run preview
+npm run test       # Vitest (23 tests, 6 files)
+npm run lint       # ESLint 9 (flat config)
 ```
 
 Start the backend in another terminal (`make run-api`). The dev server proxies
@@ -75,15 +101,34 @@ Start the backend in another terminal (`make run-api`). The dev server proxies
 `VITE_API_BASE` for a different origin (see `.env.example`). A production
 `dist/` build is auto-served by the backend at `/` (see `api/main.py`).
 
+> **Why `HashRouter`?** The build is served by FastAPI's `StaticFiles` mount,
+> which has no SPA fallback. Hash routing keeps every deep link working on a
+> hard refresh without any backend change.
+
 ## Structure
 
 ```
 src/
-├── lib/          types, api client, formatters, analytics
-├── hooks/        useViolationsData, useChallans (live API)
-├── components/   Sidebar, Topbar, ViolationsTable, CaseDrawer, charts, ui, icons
-├── pages/        Overview, Violations, Challans
-└── index.css     Tailwind v4 entry + Sentinel palette tokens
+├── types/        domain types (backend mirror + view models)
+├── lib/          api client, constants, badge colours, derive (analytics), formatters
+├── hooks/        useFetch (generic), useData (violations/challans)
+├── context/      DataContext (single live data load, shared)
+├── theme/        ThemeContext (light/dark, localStorage)
+├── layouts/      AppLayout (Sidebar + Navbar + animated Outlet)
+├── components/   Sidebar, Navbar, PageTransition, ViolationsTable, icons
+│   └── ui/       14 modules — Badge (+SeverityBadge, ConfidenceBadge), StatusBadge,
+│                 PlateNumber, ConfidenceMeter, TypeTags, AsyncBoundary, SectionHeader,
+│                 Sparkline, StatCard, KPICard, ActivityRow, ViolationCard, TypeDonut, TrendChart
+├── pages/        Dashboard, Analytics, ViolationsList, ViolationDetail,
+│                 ChallansList, ChallanDetail, LiveDetection, Settings, NotFound
+├── test/         Vitest setup + shared fixtures
+└── index.css     Tailwind v4 entry + palette tokens (light + dark)
 ```
 
-Recharts powers the type donut; sparklines and confidence bars are hand-rolled.
+## Testing
+
+Vitest + Testing Library (jsdom). **23 tests across 6 files** —
+`lib/constants`, `lib/derive`, `lib/api` (mocked fetch), `hooks/useFetch`,
+`components/ui/Badge`, and `pages/ViolationsList` (rendered with a mocked data
+context). Recharts powers the trend chart and type donut; sparklines are
+hand-rolled SVG.

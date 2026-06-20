@@ -80,6 +80,43 @@
   }
 }
 
+/* ------------------------------------------------------------------
+   Dark theme. Accent hues (brand / success / warning / critical) are
+   UNCHANGED — only the neutral surfaces, borders, and text invert, plus
+   the faint accent tints darken so status chips stay legible. Activated
+   by <html data-theme="dark"> (see theme/ThemeContext). The navigation
+   rail (gray-900) is dark in both themes and is intentionally untouched.
+   ------------------------------------------------------------------ */
+[data-theme="dark"] {
+  /* Surfaces & neutrals */
+  --color-white: #161c27; /* panels, cards, inputs */
+  --color-slate-50: #0f141d; /* application canvas */
+  --color-slate-100: #1f2735; /* subtle fills, table headers, hover */
+  --color-slate-200: #2a3342; /* 1px rules / borders */
+  --color-slate-300: #3a4456; /* stronger borders, dashed dropzones */
+  --color-slate-400: #8a93a3; /* muted icons / faint text */
+  --color-slate-500: #99a2b2; /* secondary text */
+  --color-slate-600: #b3bac6; /* body text */
+  --color-slate-700: #ccd2dc; /* strong text */
+  --color-slate-900: #e7ebf1; /* primary ink */
+
+  /* Accent tint backgrounds darkened; accent text lightened for contrast.
+     Mid tones (border-*-300, the -500/-600 fills) keep the project hue. */
+  --color-blue-50: #212a3d;
+  --color-blue-100: #2b3852;
+  --color-green-50: #16241c;
+  --color-green-100: #1d3326;
+  --color-green-700: #9ec8aa;
+  --color-green-800: #b8dac2;
+  --color-amber-50: #2a2114;
+  --color-amber-100: #38301a;
+  --color-amber-800: #e2c99c;
+  --color-red-50: #2a1717;
+  --color-red-100: #381d1d;
+  --color-red-700: #e8b2b2;
+  --color-red-800: #f1c8c8;
+}
+
 html,
 body,
 #root {
