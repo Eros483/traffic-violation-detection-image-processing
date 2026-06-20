@@ -3,7 +3,7 @@ models:
     weights: artifacts/best.pt
     confidence_threshold: 0.5
     iou_threshold: 0.45
-    image_size: 640
+    image_size: 480
   pose:
     weights: artifacts/yolov8n-pose.pt
     confidence_threshold: 0.5

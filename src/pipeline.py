@@ -1,5 +1,6 @@
 # ----- end to end orchestration pipeline @ src/pipeline.py -----
 
+import gc
 import json
 import os
 import uuid
@@ -86,6 +87,8 @@ def process_image(image_path: str, skip_llm: bool = False) -> dict:
 
     # 6. Annotation
     annotated = annotate_image(image, records)
+
+    gc.collect()
 
     return {
         "records": [r.__dict__ for r in records],

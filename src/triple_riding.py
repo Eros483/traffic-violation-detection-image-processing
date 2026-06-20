@@ -1,18 +1,32 @@
 # ----- yolov8 pose occupant counting @ src/triple_riding.py -----
 
+import os
+
 import numpy as np
 from ultralytics import YOLO
 
 from utils.config import config
 from utils.logger import logger
 
-pose_model_path = config.get_yaml("models.pose.weights", "artifacts/yolov8n-pose.pt")
-try:
-    pose_model = YOLO(pose_model_path)
-    logger.info(f"Successfully loaded pose model from {pose_model_path}")
-except Exception as e:
-    logger.error(f"Failed to load pose model {pose_model_path}: {e}")
-    pose_model = None
+_pose_model = None
+
+
+def _get_pose_model():
+    global _pose_model
+    if _pose_model is not None:
+        return _pose_model
+    pose_model_path = config.get_yaml("models.pose.weights", "artifacts/yolov8n-pose.pt")
+    if not os.path.exists(pose_model_path):
+        logger.warning(f"Pose model weights not found at {pose_model_path}")
+        _pose_model = False
+        return None
+    try:
+        _pose_model = YOLO(pose_model_path)
+        logger.info(f"Loaded pose model from {pose_model_path}")
+    except Exception as e:
+        logger.error(f"Failed to load pose model {pose_model_path}: {e}")
+        _pose_model = False
+    return _pose_model if _pose_model is not False else None
 
 
 def count_riders(image: np.ndarray, vehicle_bbox: list[int]) -> int:
@@ -20,8 +34,8 @@ def count_riders(image: np.ndarray, vehicle_bbox: list[int]) -> int:
     Takes a vehicle bounding box, pads it, and runs YOLO pose estimation
     to count the number of occupants.
     """
-    if pose_model is None:
-        logger.warning("Pose model not loaded. Returning 0 riders.")
+    model = _get_pose_model()
+    if model is None:
         return 0
 
     x1, y1, x2, y2 = vehicle_bbox
@@ -40,7 +54,7 @@ def count_riders(image: np.ndarray, vehicle_bbox: list[int]) -> int:
     if crop.size == 0:
         return 0
 
-    results = pose_model(crop, verbose=False)
+    results = model(crop, verbose=False)
 
     # Count the number of detected persons (boxes)
     person_count = len(results[0].boxes) if results[0].boxes is not None else 0

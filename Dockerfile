@@ -32,6 +32,7 @@ RUN uv sync --no-dev --frozen
 # CPU-only inference: reduce thread/memory overhead
 ENV OMP_NUM_THREADS=1
 ENV MALLOC_ARENA_MAX=2
+ENV MALLOC_TRIM_THRESHOLD_=131072
 
 COPY . .
 

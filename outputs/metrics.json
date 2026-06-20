@@ -16,31 +16,31 @@
         "status": "success",
         "num_images": 11,
         "num_skipped": 0,
-        "total_time_seconds": 9.914,
-        "throughput_images_per_sec": 1.11,
-        "peak_memory_mb": 731.0,
-        "timestamp": "2026-06-20T20:45:27.316439",
+        "total_time_seconds": 7.714,
+        "throughput_images_per_sec": 1.43,
+        "peak_memory_mb": 806.7,
+        "timestamp": "2026-06-20T21:03:22.711343",
         "per_stage_timing": {
             "preprocess_ms": {
-                "mean": 13.02,
-                "std": 35.77,
-                "min": 1.32,
-                "max": 120.85,
-                "total": 143.17
+                "mean": 13.69,
+                "std": 35.09,
+                "min": 1.37,
+                "max": 119.35,
+                "total": 150.54
             },
             "detect_ms": {
-                "mean": 615.79,
-                "std": 274.25,
-                "min": 298.44,
-                "max": 1070.27,
-                "total": 6773.69
+                "mean": 469.47,
+                "std": 276.34,
+                "min": 183.87,
+                "max": 875.57,
+                "total": 5164.17
             },
             "ocr_ms": {
-                "mean": 268.34,
-                "std": 361.33,
+                "mean": 213.62,
+                "std": 268.86,
                 "min": 0.0,
-                "max": 1140.64,
-                "total": 2951.75
+                "max": 810.42,
+                "total": 2349.85
             },
             "llm_ms": {
                 "mean": 0.0,
@@ -51,41 +51,41 @@
             },
             "evidence_ms": {
                 "mean": 0.14,
-                "std": 0.02,
-                "min": 0.11,
-                "max": 0.17,
-                "total": 1.55
+                "std": 0.03,
+                "min": 0.09,
+                "max": 0.16,
+                "total": 1.51
             },
             "annotation_ms": {
                 "mean": 0.26,
-                "std": 0.08,
+                "std": 0.1,
                 "min": 0.06,
-                "max": 0.37,
-                "total": 2.84
+                "max": 0.36,
+                "total": 2.86
             },
             "total_ms": {
-                "mean": 899.35,
-                "std": 489.19,
-                "min": 300.59,
-                "max": 1967.09,
-                "total": 9892.89
+                "mean": 699.24,
+                "std": 337.55,
+                "min": 222.76,
+                "max": 1268.14,
+                "total": 7691.62
             }
         },
         "per_stage_memory": {
             "preprocess_mb": {
                 "mean_delta_mb": 0.0,
-                "max_delta_mb": 0.4,
+                "max_delta_mb": 0.5,
                 "min_delta_mb": 0.0
             },
             "detect_mb": {
-                "mean_delta_mb": 26.0,
-                "max_delta_mb": 77.3,
+                "mean_delta_mb": 8.6,
+                "max_delta_mb": 75.2,
                 "min_delta_mb": 0.0
             },
             "ocr_mb": {
-                "mean_delta_mb": -11.9,
-                "max_delta_mb": 0.2,
-                "min_delta_mb": -43.4
+                "mean_delta_mb": 17.1,
+                "max_delta_mb": 95.0,
+                "min_delta_mb": 0.0
             },
             "llm_mb": {
                 "mean_delta_mb": 0.0,
@@ -106,484 +106,484 @@
         "per_image": [
             {
                 "image": "img_001.png",
-                "total_ms": 751.73,
+                "total_ms": 707.77,
                 "stages": {
-                    "preprocess_ms": 120.85,
-                    "detect_ms": 620.14,
+                    "preprocess_ms": 119.35,
+                    "detect_ms": 577.95,
                     "ocr_ms": 0.0,
                     "llm_ms": 0.0,
-                    "evidence_ms": 0.11,
+                    "evidence_ms": 0.1,
                     "annotation_ms": 0.06
                 },
                 "memory_mb": {
                     "preprocess_mb": {
-                        "start": 536.1,
-                        "end": 536.5,
-                        "delta": 0.4
+                        "start": 522.3,
+                        "end": 522.8,
+                        "delta": 0.5
                     },
                     "detect_mb": {
-                        "start": 536.5,
-                        "end": 610.1,
-                        "delta": 73.6
+                        "start": 522.8,
+                        "end": 598.0,
+                        "delta": 75.2
                     },
                     "ocr_mb": {
-                        "start": 610.1,
-                        "end": 610.1,
+                        "start": 598.0,
+                        "end": 598.0,
                         "delta": 0.0
                     },
                     "llm_mb": {
-                        "start": 610.1,
-                        "end": 610.1,
+                        "start": 598.0,
+                        "end": 598.0,
                         "delta": 0.0
                     },
                     "evidence_mb": {
-                        "start": 610.1,
-                        "end": 610.1,
+                        "start": 598.0,
+                        "end": 598.0,
                         "delta": 0.0
                     },
                     "annotation_mb": {
-                        "start": 610.1,
-                        "end": 610.1,
+                        "start": 598.0,
+                        "end": 598.0,
                         "delta": 0.0
                     }
                 }
             },
             {
                 "image": "img_002.jpg",
-                "total_ms": 543.71,
+                "total_ms": 392.99,
                 "stages": {
-                    "preprocess_ms": 2.47,
-                    "detect_ms": 325.86,
-                    "ocr_ms": 214.26,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.17,
-                    "annotation_ms": 0.3
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 610.5,
-                        "end": 610.5,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 610.5,
-                        "end": 687.8,
-                        "delta": 77.3
-                    },
-                    "ocr_mb": {
-                        "start": 687.8,
-                        "end": 685.4,
-                        "delta": -2.4
-                    },
-                    "llm_mb": {
-                        "start": 685.4,
-                        "end": 685.4,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 685.4,
-                        "end": 685.4,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 685.4,
-                        "end": 685.6,
-                        "delta": 0.2
-                    }
-                }
-            },
-            {
-                "image": "img_003.jpg",
-                "total_ms": 1378.98,
-                "stages": {
-                    "preprocess_ms": 2.53,
-                    "detect_ms": 630.13,
-                    "ocr_ms": 745.09,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.16,
-                    "annotation_ms": 0.32
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 685.6,
-                        "end": 685.6,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 685.6,
-                        "end": 696.0,
-                        "delta": 10.4
-                    },
-                    "ocr_mb": {
-                        "start": 696.0,
-                        "end": 674.7,
-                        "delta": -21.3
-                    },
-                    "llm_mb": {
-                        "start": 674.7,
-                        "end": 674.7,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 674.7,
-                        "end": 674.7,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 674.7,
-                        "end": 674.7,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_004.jpg",
-                "total_ms": 1967.09,
-                "stages": {
-                    "preprocess_ms": 2.84,
-                    "detect_ms": 822.46,
-                    "ocr_ms": 1140.64,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.14,
-                    "annotation_ms": 0.24
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 674.7,
-                        "end": 674.7,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 674.7,
-                        "end": 721.4,
-                        "delta": 46.7
-                    },
-                    "ocr_mb": {
-                        "start": 721.4,
-                        "end": 687.1,
-                        "delta": -34.3
-                    },
-                    "llm_mb": {
-                        "start": 687.1,
-                        "end": 687.1,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 687.1,
-                        "end": 687.1,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 687.1,
-                        "end": 687.1,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_005.jpg",
-                "total_ms": 543.68,
-                "stages": {
-                    "preprocess_ms": 2.59,
-                    "detect_ms": 540.1,
-                    "ocr_ms": 0.0,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.15,
-                    "annotation_ms": 0.37
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 687.1,
-                        "end": 687.1,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 687.1,
-                        "end": 730.8,
-                        "delta": 43.7
-                    },
-                    "ocr_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    },
-                    "llm_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_006.jpg",
-                "total_ms": 601.57,
-                "stages": {
-                    "preprocess_ms": 2.1,
-                    "detect_ms": 313.86,
-                    "ocr_ms": 284.51,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.16,
-                    "annotation_ms": 0.31
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 730.8,
-                        "end": 730.8,
-                        "delta": 0.0
-                    },
-                    "ocr_mb": {
-                        "start": 730.8,
-                        "end": 731.0,
-                        "delta": 0.2
-                    },
-                    "llm_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_007.jpg",
-                "total_ms": 1084.8,
-                "stages": {
-                    "preprocess_ms": 2.39,
-                    "detect_ms": 875.53,
-                    "ocr_ms": 202.56,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.17,
-                    "annotation_ms": 0.3
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "ocr_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "llm_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_008.jpg",
-                "total_ms": 1159.91,
-                "stages": {
-                    "preprocess_ms": 2.41,
-                    "detect_ms": 914.55,
-                    "ocr_ms": 241.94,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.12,
-                    "annotation_ms": 0.25
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 731.0,
-                        "end": 731.0,
-                        "delta": 0.0
-                    },
-                    "ocr_mb": {
-                        "start": 731.0,
-                        "end": 687.6,
-                        "delta": -43.4
-                    },
-                    "llm_mb": {
-                        "start": 687.6,
-                        "end": 687.6,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 687.6,
-                        "end": 687.6,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 687.6,
-                        "end": 687.6,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_009.jpg",
-                "total_ms": 1072.33,
-                "stages": {
-                    "preprocess_ms": 1.32,
-                    "detect_ms": 1070.27,
-                    "ocr_ms": 0.0,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.11,
-                    "annotation_ms": 0.22
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 687.6,
-                        "end": 687.6,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 687.6,
-                        "end": 721.7,
-                        "delta": 34.1
-                    },
-                    "ocr_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "llm_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_010.jpg",
-                "total_ms": 300.59,
-                "stages": {
-                    "preprocess_ms": 1.37,
-                    "detect_ms": 298.44,
-                    "ocr_ms": 0.0,
-                    "llm_ms": 0.0,
-                    "evidence_ms": 0.12,
-                    "annotation_ms": 0.21
-                },
-                "memory_mb": {
-                    "preprocess_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "detect_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "ocr_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "llm_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "evidence_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    },
-                    "annotation_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
-                    }
-                }
-            },
-            {
-                "image": "img_011.jpg",
-                "total_ms": 488.5,
-                "stages": {
-                    "preprocess_ms": 2.29,
-                    "detect_ms": 362.34,
-                    "ocr_ms": 122.75,
+                    "preprocess_ms": 2.36,
+                    "detect_ms": 197.87,
+                    "ocr_ms": 191.71,
                     "llm_ms": 0.0,
                     "evidence_ms": 0.15,
                     "annotation_ms": 0.26
                 },
                 "memory_mb": {
                     "preprocess_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
+                        "start": 598.4,
+                        "end": 598.4,
                         "delta": 0.0
                     },
                     "detect_mb": {
-                        "start": 721.7,
-                        "end": 721.7,
-                        "delta": 0.0
+                        "start": 598.4,
+                        "end": 611.4,
+                        "delta": 13.0
                     },
                     "ocr_mb": {
-                        "start": 721.7,
-                        "end": 691.7,
-                        "delta": -30.0
+                        "start": 611.4,
+                        "end": 654.9,
+                        "delta": 43.5
                     },
                     "llm_mb": {
-                        "start": 691.7,
-                        "end": 691.7,
+                        "start": 654.9,
+                        "end": 654.9,
                         "delta": 0.0
                     },
                     "evidence_mb": {
-                        "start": 691.7,
-                        "end": 691.7,
+                        "start": 654.9,
+                        "end": 654.9,
                         "delta": 0.0
                     },
                     "annotation_mb": {
-                        "start": 691.7,
-                        "end": 691.7,
+                        "start": 654.9,
+                        "end": 655.1,
+                        "delta": 0.2
+                    }
+                }
+            },
+            {
+                "image": "img_003.jpg",
+                "total_ms": 1268.14,
+                "stages": {
+                    "preprocess_ms": 2.45,
+                    "detect_ms": 454.01,
+                    "ocr_ms": 810.42,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.35
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 655.1,
+                        "end": 655.1,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 655.1,
+                        "end": 661.9,
+                        "delta": 6.8
+                    },
+                    "ocr_mb": {
+                        "start": 661.9,
+                        "end": 756.9,
+                        "delta": 95.0
+                    },
+                    "llm_mb": {
+                        "start": 756.9,
+                        "end": 756.9,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 756.9,
+                        "end": 756.9,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 756.9,
+                        "end": 756.9,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_004.jpg",
+                "total_ms": 1224.06,
+                "stages": {
+                    "preprocess_ms": 3.01,
+                    "detect_ms": 752.1,
+                    "ocr_ms": 467.71,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.15,
+                    "annotation_ms": 0.31
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 756.9,
+                        "end": 756.9,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 756.9,
+                        "end": 756.9,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 756.9,
+                        "end": 806.6,
+                        "delta": 49.7
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_005.jpg",
+                "total_ms": 749.42,
+                "stages": {
+                    "preprocess_ms": 2.29,
+                    "detect_ms": 742.99,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.36
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_006.jpg",
+                "total_ms": 626.43,
+                "stages": {
+                    "preprocess_ms": 2.22,
+                    "detect_ms": 215.08,
+                    "ocr_ms": 404.95,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.33
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_007.jpg",
+                "total_ms": 752.11,
+                "stages": {
+                    "preprocess_ms": 5.46,
+                    "detect_ms": 745.96,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.09,
+                    "annotation_ms": 0.12
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_008.jpg",
+                "total_ms": 558.31,
+                "stages": {
+                    "preprocess_ms": 2.2,
+                    "detect_ms": 183.87,
+                    "ocr_ms": 371.19,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.13,
+                    "annotation_ms": 0.27
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_009.jpg",
+                "total_ms": 883.89,
+                "stages": {
+                    "preprocess_ms": 7.55,
+                    "detect_ms": 875.57,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.11,
+                    "annotation_ms": 0.21
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_010.jpg",
+                "total_ms": 222.76,
+                "stages": {
+                    "preprocess_ms": 1.37,
+                    "detect_ms": 220.52,
+                    "ocr_ms": 0.0,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.15,
+                    "annotation_ms": 0.26
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "ocr_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    }
+                }
+            },
+            {
+                "image": "img_011.jpg",
+                "total_ms": 305.73,
+                "stages": {
+                    "preprocess_ms": 2.27,
+                    "detect_ms": 198.24,
+                    "ocr_ms": 103.87,
+                    "llm_ms": 0.0,
+                    "evidence_ms": 0.16,
+                    "annotation_ms": 0.32
+                },
+                "memory_mb": {
+                    "preprocess_mb": {
+                        "start": 806.6,
+                        "end": 806.6,
+                        "delta": 0.0
+                    },
+                    "detect_mb": {
+                        "start": 806.6,
+                        "end": 806.7,
+                        "delta": 0.1
+                    },
+                    "ocr_mb": {
+                        "start": 806.7,
+                        "end": 806.7,
+                        "delta": 0.0
+                    },
+                    "llm_mb": {
+                        "start": 806.7,
+                        "end": 806.7,
+                        "delta": 0.0
+                    },
+                    "evidence_mb": {
+                        "start": 806.7,
+                        "end": 806.7,
+                        "delta": 0.0
+                    },
+                    "annotation_mb": {
+                        "start": 806.7,
+                        "end": 806.7,
                         "delta": 0.0
                     }
                 }

@@ -43,7 +43,8 @@ def detect_violations(image) -> list[dict]:
         return []
 
     conf_thresh = config.get_yaml("models.detector.confidence_threshold", 0.5)
-    results = model(image, conf=conf_thresh, verbose=False)
+    img_size = config.get_yaml("models.detector.image_size", 640)
+    results = model(image, conf=conf_thresh, imgsz=img_size, verbose=False)
 
     candidates = []
     plates = []
