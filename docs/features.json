@@ -2,7 +2,7 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-20",
   "summary": {
-    "total": 16,
+    "total": 17,
     "completed": 15,
     "in_progress": 0,
     "planned": 2,
@@ -293,6 +293,23 @@
       "notes": "No code written yet. Design doc incoming from user.",
       "added": "2026-06-20",
       "completed": null
+    },
+    {
+      "id": "F017",
+      "name": "CI Pipeline",
+      "description": "GitHub Actions CI workflow with two jobs: backend (uv sync --frozen, black --check, pytest) and frontend (npm ci, tsc typecheck, vite build). Runs on push/PR to main.",
+      "status": "completed",
+      "priority": "high",
+      "module": ".github/workflows/ci.yml",
+      "design_doc": null,
+      "tests": { "status": "passing", "files": [], "notes": "CI is the runner, not a tested module. Backend and frontend tests run within CI." },
+      "subtasks": [
+        { "id": "F017-1", "name": "Backend job: uv setup, black check, pytest", "status": "completed" },
+        { "id": "F017-2", "name": "Frontend job: npm ci, typecheck, build", "status": "completed" }
+      ],
+      "notes": "Lean CI — no Docker build, no Python matrix. Easy to extend later.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
     }
   ]
 }

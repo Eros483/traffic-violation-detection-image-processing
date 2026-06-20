@@ -18,7 +18,7 @@ format:
 
 # Check formatting without modifying files
 format-check:
-	uv run black --check src/ api/ notebooks/ tests/ utils/
+	uv run black --check src/ api/ tests/ utils/
 
 # Run the FastAPI backend (without frontend)
 run-api:

@@ -15,9 +15,7 @@ def generate_metrics(output_path: str = "outputs/metrics.json") -> None:
     and saves the precision/recall metrics to a JSON file.
     Requires the trained best.pt to be present at the configured path.
     """
-    detector_path = config.get_yaml(
-        "models.detector.weights", "artifacts/best.pt"
-    )
+    detector_path = config.get_yaml("models.detector.weights", "artifacts/best.pt")
 
     if not os.path.exists(detector_path):
         logger.error(f"Trained model not found at {detector_path}. Cannot evaluate.")

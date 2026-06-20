@@ -9,9 +9,7 @@ from src.triple_riding import count_riders
 from utils.config import config
 from utils.logger import logger
 
-detector_path = config.get_yaml(
-    "models.detector.weights", "artifacts/best.pt"
-)
+detector_path = config.get_yaml("models.detector.weights", "artifacts/best.pt")
 
 model = None
 if os.path.exists(detector_path):
