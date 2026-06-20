@@ -1,7 +1,10 @@
 # ----- fastapi app entry point @ api/main.py -----
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from api.routes import analytics, evidence, violations
 from api.schemas import HealthResponse
@@ -26,3 +29,9 @@ app.include_router(evidence.router, prefix="/api/evidence", tags=["evidence"])
 def health_check():
     """Basic health check endpoint."""
     return {"status": "ok"}
+
+
+# Serve built frontend as static files (optional — API works without it)
+frontend_dist = os.path.join(os.path.dirname(__file__), "..", "client", "dist")
+if os.path.isdir(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

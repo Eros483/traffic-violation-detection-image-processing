@@ -1,8 +1,10 @@
 import type { ViolationRecord } from '../types'
 
+// When VITE_API_URL is set (e.g. dev mode with separate Vite + API servers),
+// requests go to that origin. When unset (production / same-origin serving via
+// FastAPI), relative URLs are used — no extra env var needed.
 export const API_BASE =
-  (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ??
-  'http://localhost:8000'
+  (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? ''
 
 export interface PaginatedViolations {
   items: ViolationRecord[]

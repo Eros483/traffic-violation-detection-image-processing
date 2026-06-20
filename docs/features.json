@@ -2,8 +2,8 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-20",
   "summary": {
-    "total": 9,
-    "completed": 6,
+    "total": 10,
+    "completed": 7,
     "in_progress": 3,
     "planned": 0,
     "tests_passing": 30,
@@ -156,6 +156,24 @@
       "notes": "Groq vision integration implemented.",
       "added": "2026-06-18",
       "completed": "2026-06-18"
+    },
+    {
+      "id": "F010",
+      "name": "Frontend Static File Serving",
+      "description": "Built React dashboard (client/dist/) served automatically by FastAPI via StaticFiles mount at /. Single-command make run builds frontend + starts API.",
+      "status": "completed",
+      "priority": "high",
+      "module": "api/main.py, Makefile",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Verification is manual — start server and navigate to /" },
+      "subtasks": [
+        { "id": "F010-1", "name": "Mount StaticFiles in api/main.py after API routes", "status": "completed" },
+        { "id": "F010-2", "name": "Add client-install, client-build, run targets to Makefile", "status": "completed" },
+        { "id": "F010-3", "name": "Update API client to use relative URLs by default for same-origin serving", "status": "completed" }
+      ],
+      "notes": "Frontend mount is conditional (skipped if client/dist/ doesn't exist). API-only dev workflow unchanged.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
     }
   ]
 }
