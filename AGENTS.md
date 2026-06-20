@@ -24,13 +24,13 @@ make test                        # run pytest
 
 ```
 traffic-violation-prototype/
+├── artifacts/                   # tracked model weights (best.pt, yolov8n-pose.pt)
 ├── configs/
 │   └── config.yaml              # all thresholds, paths, model configs (see design.md §3)
 ├── data/
 │   ├── raw/                     # downloaded datasets (gitignored)
 │   └── sample_outputs/          # ≥50 annotated evidence images
-├── models/
-│   └── weights/                 # downloaded/trained .pt files
+├── models/                      # local training artifacts (gitignored)
 ├── src/
 │   ├── preprocessing.py         # CLAHE + resize
 │   ├── detector.py              # YOLOv8 vehicle/helmet/plate detection
@@ -214,6 +214,6 @@ The Reviewer must approve before any task is considered done.
 ## Project-Specific Notes
 - External APIs: Kaggle API (`KAGGLE_USERNAME`, `KAGGLE_KEY`) for dataset downloads; Groq API (`GROQ_API_KEY`) for optional vision LLM checks — only required if `llm_violations.enabled: true` in `configs/config.yaml`.
 - Non-standard setup: `git lfs` is required to clone the Indian Number Plates dataset from HuggingFace.
-- Never touch: `data/raw/` (gitignored, regenerated via `make data`), `models/weights/` (downloaded/trained, not hand-edited).
+- Never touch: `data/raw/` (gitignored, regenerated via `make data`), `models/` (gitignored training artifacts). Deployed model weights live in `artifacts/` and are tracked in git.
 - Deployment target: none — this is a local/Colab prototype only. No Docker, K8s, or production deployment in scope.
 - Known gotchas: dataset class-name drift (`Plate` vs `NumberPlate`) across source datasets can silently break detector-to-violation mapping; verify class names before wiring `src/detector.py` to a new dataset.

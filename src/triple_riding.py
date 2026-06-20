@@ -6,7 +6,7 @@ from ultralytics import YOLO
 from utils.config import config
 from utils.logger import logger
 
-pose_model_path = config.get_yaml("models.pose.weights", "yolov8n-pose.pt")
+pose_model_path = config.get_yaml("models.pose.weights", "artifacts/yolov8n-pose.pt")
 try:
     pose_model = YOLO(pose_model_path)
     logger.info(f"Successfully loaded pose model from {pose_model_path}")

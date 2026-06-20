@@ -125,6 +125,11 @@ model.train(
 
 - If using Colab (free T4), training 30 epochs on ~11k images takes ~2-3 hours
 - Validate mAP on test split
+- Copy the trained weights to `artifacts/best.pt` for deployment:
+  ```python
+  import shutil
+  shutil.copy("models/weights/traffic_violations/train/weights/best.pt", "artifacts/best.pt")
+  ```
 
 **Deliverable:** Trained detection model (`best.pt`) detecting: WithHelmet, WithoutHelmet, TripleRiding, Plate
 
@@ -450,13 +455,12 @@ Minimum required keys:
 ```yaml
 models:
   detector:
-    weights: models/weights/traffic_violations/best.pt
-    fallback_weights: yolov8m.pt
+    weights: artifacts/best.pt
     confidence_threshold: 0.5
     iou_threshold: 0.45
     image_size: 640
   pose:
-    weights: yolov8n-pose.pt
+    weights: artifacts/yolov8n-pose.pt
     confidence_threshold: 0.5
   ocr:
     lang: en
@@ -489,7 +493,7 @@ Note: these values are loaded into the project's Settings object per AGENT.md's 
 
 ## Error Handling and Fallback Policy
 
-1. If detector weights are missing, use `fallback_weights`.
+1. If detector weights are missing at `artifacts/best.pt`, log error and return empty detections.
 2. If OCR fails/returns empty, set `plate_text=null`, `plate_confidence=0.0`.
 3. If LLM is enabled but API key/package is missing, log warning and continue pipeline with CV-only detections.
 4. If one image fails in directory mode, continue remaining images and report per-file error.

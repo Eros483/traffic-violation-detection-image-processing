@@ -136,7 +136,7 @@
       "tests": { "status": "passing", "files": ["tests/test_src/test_detector.py"], "notes": "5 unit tests for mapping logic. Full integration requires model weights." },
       "subtasks": [
         { "id": "F002-1", "name": "Fine-tune YOLOv8m on master dataset", "status": "completed" },
-        { "id": "F002-2", "name": "Place best.pt at models/weights/traffic_violations/best.pt", "status": "completed" },
+        { "id": "F002-2", "name": "Place best.pt at artifacts/best.pt", "status": "completed" },
         { "id": "F002-3", "name": "Validate mAP on test split", "status": "completed" }
       ],
       "notes": "Model trained on Kaggle, weights placed and pipeline confirmed working.",

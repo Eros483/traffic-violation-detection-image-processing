@@ -1,11 +1,11 @@
 models:
   detector:
-    weights: models/weights/traffic_violations/best.pt
+    weights: artifacts/best.pt
     confidence_threshold: 0.5
     iou_threshold: 0.45
     image_size: 640
   pose:
-    weights: yolov8n-pose.pt
+    weights: artifacts/yolov8n-pose.pt
     confidence_threshold: 0.5
   ocr:
     lang: en

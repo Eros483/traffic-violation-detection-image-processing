@@ -41,11 +41,11 @@ data:
 
 # Download trained YOLOv8m model weights from HuggingFace
 download-model:
-	@mkdir -p models/weights/traffic_violations
+	@mkdir -p artifacts
 	@echo "Downloading trained model weights..."
-	curl -L -o models/weights/traffic_violations/best.pt \
+	curl -L -o artifacts/best.pt \
 		https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
-	@echo "✓ Model weights placed at models/weights/traffic_violations/best.pt"
+	@echo "✓ Model weights placed at artifacts/best.pt"
 
 # Run tests
 test:

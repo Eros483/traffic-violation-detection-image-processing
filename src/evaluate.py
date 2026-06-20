@@ -16,14 +16,14 @@ def generate_metrics(output_path: str = "outputs/metrics.json") -> None:
     Requires the trained best.pt to be present at the configured path.
     """
     detector_path = config.get_yaml(
-        "models.detector.weights", "models/weights/traffic_violations/best.pt"
+        "models.detector.weights", "artifacts/best.pt"
     )
 
     if not os.path.exists(detector_path):
         logger.error(f"Trained model not found at {detector_path}. Cannot evaluate.")
         results = {
             "status": "error",
-            "message": "Model weights not found. Train the model and place best.pt at the configured path.",
+            "message": "Model weights not found. Train the model and copy best.pt to artifacts/best.pt.",
         }
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, "w") as f:

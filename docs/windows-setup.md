@@ -28,8 +28,8 @@ npm run build
 cd ..
 
 REM Download trained model weights
-uv run python -c "from pathlib import Path; Path('models/weights/traffic_violations').mkdir(parents=True, exist_ok=True)"
-curl -L -o models/weights/traffic_violations/best.pt https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
+mkdir artifacts
+curl -L -o artifacts/best.pt https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
 
 REM Start the API server
 uv run uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
