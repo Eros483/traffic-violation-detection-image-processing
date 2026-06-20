@@ -16,8 +16,7 @@ docs/
 README.md
 AGENTS.md
 client/node_modules/
-client/src/
-client/public/
+client/dist/
 public/outputs/uploads/
 outputs/
 Dockerfile

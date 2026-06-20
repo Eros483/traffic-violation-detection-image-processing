@@ -2,8 +2,8 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-20",
   "summary": {
-    "total": 17,
-    "completed": 15,
+    "total": 18,
+    "completed": 16,
     "in_progress": 0,
     "planned": 2,
     "tests_passing": 45,
@@ -33,16 +33,16 @@
       "id": "F013",
       "name": "Manual Testing via Frontend Dashboard",
       "description": "Upload an image through the React dashboard UI, run the full detection pipeline on it, and see violation results, annotated image, and challan generation in real-time.",
-      "status": "planned",
+      "status": "completed",
       "priority": "medium",
       "module": "client/src/pages/LiveDetection.tsx, client/src/lib/api.ts",
       "design_doc": null,
       "tests": { "status": "missing", "files": [], "notes": "Frontend integration — verification is manual." },
       "subtasks": [
-        { "id": "F013-1", "name": "Add image upload widget to LiveDetection page", "status": "planned" },
-        { "id": "F013-2", "name": "Call POST /api/violations/process with uploaded image", "status": "planned" },
-        { "id": "F013-3", "name": "Display violation results and annotated image", "status": "planned" },
-        { "id": "F013-4", "name": "Add \"Generate Challan\" action from test results", "status": "planned" }
+        { "id": "F013-1", "name": "Add image upload widget to LiveDetection page", "status": "completed" },
+        { "id": "F013-2", "name": "Call POST /api/violations/process with uploaded image", "status": "completed" },
+        { "id": "F013-3", "name": "Display violation results and annotated image", "status": "completed" },
+        { "id": "F013-4", "name": "Add \"Generate Challan\" action from test results", "status": "completed" }
       ],
       "notes": "POST /api/violations/upload endpoint exists. Only frontend work needed.",
       "added": "2026-06-20",
@@ -308,6 +308,24 @@
         { "id": "F017-2", "name": "Frontend job: npm ci, typecheck, build", "status": "completed" }
       ],
       "notes": "Lean CI — no Docker build, no Python matrix. Easy to extend later.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
+    {
+      "id": "F018",
+      "name": "Render Deployment (Docker)",
+      "description": "Multi-stage Dockerfile with uv, PaddleOCR pre-download, PORT env var support, healthcheck, and .dockerignore for clean builds on Render.",
+      "status": "completed",
+      "priority": "high",
+      "module": "Dockerfile, .dockerignore",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Manual — deploy and verify /health responds." },
+      "subtasks": [
+        { "id": "F018-1", "name": "Fix libgl1 package name for slim", "status": "completed" },
+        { "id": "F018-2", "name": "Use $PORT env var in CMD and healthcheck", "status": "completed" },
+        { "id": "F018-3", "name": "Create .dockerignore", "status": "completed" }
+      ],
+      "notes": "llm_classifier gracefully degrades if GROQ_API_KEY not set. Ephemeral filesystem: outputs/ lost on restart — fine for prototype.",
       "added": "2026-06-20",
       "completed": "2026-06-20"
     }
