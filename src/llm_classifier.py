@@ -15,6 +15,23 @@ def encode_image(image_path: str) -> str:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 
+def _normalize_violations(raw: list) -> list[dict]:
+    """
+    Validates and normalizes the LLM response into a flat list of violation dicts.
+    Handles nested arrays, non-dict items, and missing fields gracefully.
+    """
+    result = []
+    for item in raw:
+        if isinstance(item, dict):
+            result.append(item)
+        elif isinstance(item, list):
+            # Flatten nested arrays the model sometimes produces
+            for sub in item:
+                if isinstance(sub, dict):
+                    result.append(sub)
+    return result
+
+
 def evaluate_image_level_violations(image_path: str) -> list[dict]:
     """
     Uses Groq vision LLM to check for complex violations.
@@ -41,10 +58,25 @@ def evaluate_image_level_violations(image_path: str) -> list[dict]:
     if not active_checks:
         return []
 
+    checks_str = ", ".join(active_checks)
     prompt = (
-        f"Analyze this traffic camera image. Specifically check for the following traffic violations: {', '.join(active_checks)}. "
-        'Reply ONLY in valid JSON format. Example: {"violations": [{"type": "mobile_phone", "confidence": 0.85, "description": "Driver holding phone"}]}'
-        ' If no violations are present, return {"violations": []}.'
+        f"You are analyzing an Indian traffic camera image for the Bengaluru Traffic Challenge.\n"
+        f"Check for these violations: {checks_str}.\n\n"
+        f"Rules:\n"
+        f"- Report a violation ONLY if you are confident it is present\n"
+        f"- Only include violations with confidence > 0.5 — omit anything scored 0.5 or below\n"
+        f"- seatbelt: only applies to cars and auto-rickshaws — NEVER report for motorcycles, scooters, or bicycles\n"
+        f"- mobile_phone: only if the driver/rider is visibly holding a phone to their ear or looking at the screen\n"
+        f"- wrong_side_driving: vehicle is clearly on the wrong side of the road\n"
+        f"- red_light: vehicle is crossing an intersection against a clearly visible red signal\n"
+        f"- stop_line: vehicle has crossed the stop line at a red light\n"
+        f"- illegal_parking: vehicle is parked in a no-parking zone or on a footpath\n"
+        f"- Confidence must be a float (e.g. 0.85), never a string\n\n"
+        f"Respond ONLY with valid JSON using this exact array format:\n"
+        f'{{"violations": [{{"type": "mobile_phone", "confidence": 0.85, "description": "Rider holding phone to ear"}}]}}\n\n'
+        f'CORRECT (flat array): {{"violations": [{{"type": "seatbelt", "confidence": 0.9, "description": "Car driver not wearing seatbelt"}}]}}\n'
+        f'WRONG (nested array - DO NOT do this): {{"violations": [[{{"type": "seatbelt", "confidence": 0.9}}]]}}\n'
+        f'No violations found: {{"violations": []}}'
     )
 
     try:
@@ -71,7 +103,13 @@ def evaluate_image_level_violations(image_path: str) -> list[dict]:
         content = chat_completion.choices[0].message.content
         parsed = json.loads(content)
 
-        return parsed.get("violations", [])
+        raw = parsed.get("violations", [])
+        violations = _normalize_violations(raw)
+        return [
+            v
+            for v in violations
+            if isinstance(v.get("confidence"), (int, float)) and v["confidence"] > 0.5
+        ]
 
     except Exception as e:
         logger.error(f"LLM API call failed: {e}")

@@ -5,5 +5,11 @@
         "precision": 0.8657845383426621,
         "recall": 0.7028955314551679
     },
-    "status": "success"
+    "status": "success",
+    "lpr": {
+        "num_plates_evaluated": 25,
+        "num_images_with_gt": 20,
+        "character_accuracy": 0.7984,
+        "full_plate_accuracy": 0.6
+    }
 }

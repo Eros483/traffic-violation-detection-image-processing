@@ -2,6 +2,8 @@
 
 import json
 import os
+import uuid
+from datetime import datetime
 
 import cv2
 
@@ -12,6 +14,28 @@ from src.lpr import read_plate
 from src.preprocessing import preprocess
 from utils.config import config
 from utils.logger import logger
+
+FINE_MAP = {
+    "helmet": 1000,
+    "triple_riding": 1000,
+    "mobile_phone": 5000,
+    "red_light": 5000,
+    "wrong_side_driving": 1000,
+    "illegal_parking": 500,
+    "seatbelt": 1000,
+    "stop_line": 5000,
+}
+
+LEGAL_SECTION_MAP = {
+    "helmet": "MV Act Section 129",
+    "triple_riding": "MV Act Section 128",
+    "mobile_phone": "MV Act Section 184",
+    "red_light": "MV Act Section 119/177",
+    "wrong_side_driving": "MV Act Section 119",
+    "illegal_parking": "MV Act Section 122",
+    "seatbelt": "MV Act Section 194B",
+    "stop_line": "MV Act Section 119/177",
+}
 
 
 def process_image(image_path: str, skip_llm: bool = False) -> dict:
@@ -74,7 +98,7 @@ if __name__ == "__main__":
     import glob
 
     # Grab sample images from the public demo directory
-    images = sorted(glob.glob("public/*.jpg"))
+    images = sorted(glob.glob("public/*.jpg") + glob.glob("public/*.png"))
 
     if not images:
         logger.error("No images found in public/. Place demo images there and try again.")
@@ -113,7 +137,38 @@ if __name__ == "__main__":
         for rec in all_records:
             f.write(json.dumps(rec) + "\n")
 
+    # Generate challans from all records
+    challans = []
+    for rec in all_records:
+        challan_id = str(uuid.uuid4())
+        violations = rec.get("violations", [])
+        legal_sections = list(
+            dict.fromkeys(LEGAL_SECTION_MAP.get(v.get("type", ""), "Unknown") for v in violations)
+        )
+        fine_total = sum(FINE_MAP.get(v.get("type", ""), 0) for v in violations)
+
+        challan = {
+            "challan_id": challan_id,
+            "violation_id": rec.get("evidence_id", ""),
+            "issued_at": datetime.now().isoformat(),
+            "vehicle_type": rec.get("vehicle_type", "vehicle"),
+            "plate_number": rec.get("plate_number"),
+            "location": rec.get("location", "Bengaluru"),
+            "violations": violations,
+            "legal_sections": legal_sections,
+            "fine_total": fine_total,
+            "status": "pending",
+            "image_ref": rec.get("image_path", ""),
+            "image_hash": rec.get("image_hash", ""),
+        }
+        challans.append(challan)
+
+    with open("outputs/challans.jsonl", "w") as f:
+        for c in challans:
+            f.write(json.dumps(c) + "\n")
+
     logger.info(
         f"Pipeline complete. {len(images)} images processed. "
-        f"Records at outputs/violations.jsonl"
+        f"Records at outputs/violations.jsonl ({len(all_records)} records), "
+        f"challans at outputs/challans.jsonl ({len(challans)} challans)"
     )
