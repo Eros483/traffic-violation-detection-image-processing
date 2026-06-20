@@ -6,7 +6,7 @@
     "completed": 15,
     "in_progress": 0,
     "planned": 2,
-    "tests_passing": 40,
+    "tests_passing": 45,
     "tests_failing": 0,
     "tests_missing": 0
   },
@@ -167,9 +167,9 @@
       "design_doc": "docs/design.md",
       "tests": { "status": "passing", "files": ["tests/test_src/test_lpr.py"], "notes": "4 unit tests covering formatting, valid plates, OCR confusion correction, out-of-state rejection." },
       "subtasks": [
-        { "id": "F004-1", "name": "Measure character accuracy on DataCluster sample", "status": "planned" }
+        { "id": "F004-1", "name": "Measure character accuracy on DataCluster sample", "status": "completed" }
       ],
-      "notes": "KA RegEx and 8x character heuristic swaps implemented.",
+      "notes": "KA RegEx and 8x character heuristic swaps implemented. evaluate_lpr() in src/evaluate.py computes char/plate accuracy on 47-image DataCluster dataset (20 with GT).",
       "added": "2026-06-18",
       "completed": "2026-06-18"
     },

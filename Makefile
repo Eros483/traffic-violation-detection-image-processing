@@ -51,10 +51,11 @@ download-model:
 test:
 	uv run pytest tests/ -v
 
-# Remove generated artifacts
+# Remove generated artifacts (preserves metrics.json for realistic dashboard data)
 clean:
-	rm -rf outputs/*.jsonl outputs/*.json data/sample_outputs/*.jpg
-	@echo "✓ Cleaned generated outputs."
+	rm -f outputs/violations.jsonl outputs/challans.jsonl
+	rm -f data/sample_outputs/*.jpg
+	@echo "✓ Cleaned violations, challans, and sample outputs. (metrics.json preserved)"
 
 # ----- Frontend (React dashboard) -----
 

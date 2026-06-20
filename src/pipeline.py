@@ -73,18 +73,32 @@ def process_image(image_path: str, skip_llm: bool = False) -> dict:
 if __name__ == "__main__":
     import glob
 
-    # Grab sample images from the master traffic violation test set
-    images = sorted(glob.glob("data/raw/master_traffic_violation_dataset/test/images/*.jpg"))
-    images = images[:50]  # Process 50 samples as per design docs
+    # Grab sample images from the public demo directory
+    images = sorted(glob.glob("public/*.jpg"))
+
+    if not images:
+        logger.error("No images found in public/. Place demo images there and try again.")
+        raise SystemExit(1)
 
     out_dir = "data/sample_outputs"
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
 
+    # Clear previous sample outputs
+    for f in os.listdir(out_dir):
+        fp = os.path.join(out_dir, f)
+        if os.path.isfile(fp):
+            os.remove(fp)
+
+    # Clear previous violations and challans
+    for f in ("outputs/violations.jsonl", "outputs/challans.jsonl"):
+        if os.path.exists(f):
+            os.remove(f)
+
     all_records = []
 
     for img_path in images:
-        result = process_image(img_path, skip_llm=True)
+        result = process_image(img_path)
         if not result:
             continue
 
@@ -100,5 +114,6 @@ if __name__ == "__main__":
             f.write(json.dumps(rec) + "\n")
 
     logger.info(
-        f"Pipeline complete. {len(images)} images processed. Records at outputs/violations.jsonl"
+        f"Pipeline complete. {len(images)} images processed. "
+        f"Records at outputs/violations.jsonl"
     )
