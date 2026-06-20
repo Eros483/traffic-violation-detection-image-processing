@@ -5,7 +5,7 @@ FROM node:20-alpine AS frontend
 
 WORKDIR /build/client
 COPY client/package*.json ./
-RUN npm ci --omit=optional
+RUN npm ci
 COPY client/ ./
 RUN npm run build
 
@@ -26,7 +26,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --no-dev --frozen --system
+RUN uv sync --no-dev --frozen
 
 # Pre-download PaddleOCR models (fetched from remote at runtime otherwise)
 RUN uv run python -c "from paddleocr import PaddleOCR; PaddleOCR(use_angle_cls=True, lang='en')"
@@ -34,6 +34,10 @@ RUN uv run python -c "from paddleocr import PaddleOCR; PaddleOCR(use_angle_cls=T
 COPY . .
 
 COPY --from=frontend /build/client/dist client/dist/
+
+# Set VIRTUAL_ENV so non-uv commands can find packages too
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH=$VIRTUAL_ENV/bin:$PATH
 
 RUN mkdir -p outputs public/outputs
 
