@@ -1,107 +1,125 @@
 @import "tailwindcss";
 
-/* Dark mode is class-driven (.dark on <html>), not OS-preference driven */
-@custom-variant dark (&:where(.dark, .dark *));
+/* ------------------------------------------------------------------
+   Theme tokens. Standard, legible system fonts — no decorative display
+   faces. Monospace is reserved for identifiers (plates, IDs, hashes).
+   Colours stay on Tailwind's standard high-contrast palette.
+   ------------------------------------------------------------------ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo,
+    Consolas, monospace;
 
-/* Map semantic Tailwind color utilities to runtime CSS variables.
-   @theme inline => utilities emit var(--color-*) which resolve to the
-   --bg / --card / etc. variables below, so they switch with .dark. */
-@theme inline {
-  --color-bg:             var(--bg);
-  --color-sidebar:        var(--sidebar);
-  --color-card:           var(--card);
-  --color-border:         var(--border);
-  --color-primary:        var(--primary);
-  --color-primary-light:  var(--primary-light);
-  --color-success:        var(--success);
-  --color-warning:        var(--warning);
-  --color-danger:         var(--danger);
-  --color-text-primary:   var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted:     var(--text-muted);
+  /* ----------------------------------------------------------------
+     Project palette — fixed, documented set (see README). A muted,
+     desaturated register. Roles, not decoration.
+       Background #F5F6F8 · Surface #FFFFFF · Sidebar #111827
+       Primary #6B728E · Success #5D8A6A · Warning #B0894F · Danger #B75D5D
+       Text #1F2937 · Muted #6B7280
+     ---------------------------------------------------------------- */
+  --color-brand: #6b728e; /* primary action / active nav */
+  --color-success: #5d8a6a; /* confirmed / high confidence */
+  --color-warning: #b0894f; /* pending / medium confidence */
+  --color-critical: #b75d5d; /* high severity / low confidence */
+  --color-sidebar: #111827; /* navigation rail */
+  --color-ink: #1f2937; /* primary text */
+  --color-muted: #6b7280; /* secondary text */
+  --color-border: #e2e8f0; /* 1px rules */
 
-  --font-family-sans: Inter, system-ui, sans-serif;
-  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  /* ---- Remap Tailwind ramps onto the palette so existing utility
+          classes (bg-blue-600, text-green-700, …) inherit it. ---- */
+  /* Primary (slate-blue) */
+  --color-blue-50: #eef0f3;
+  --color-blue-100: #dee1e8;
+  --color-blue-400: #8c92a6;
+  --color-blue-500: #6b728e;
+  --color-blue-600: #6b728e;
+  --color-blue-700: #595f76;
+  --color-blue-800: #4a4f62;
+  /* Success */
+  --color-green-50: #ecf2ee;
+  --color-green-100: #dde9e1;
+  --color-green-300: #b6ccbd;
+  --color-green-500: #5d8a6a;
+  --color-green-600: #5d8a6a;
+  --color-green-700: #466b51;
+  --color-green-800: #3a5743;
+  /* Warning */
+  --color-amber-50: #f4efe4;
+  --color-amber-100: #efe6d3;
+  --color-amber-300: #dcc8a3;
+  --color-amber-500: #b0894f;
+  --color-amber-800: #6f5630;
+  /* Danger */
+  --color-red-50: #f5e8e8;
+  --color-red-100: #efdada;
+  --color-red-300: #e0bcbc;
+  --color-red-500: #b75d5d;
+  --color-red-600: #a85252;
+  --color-red-700: #8e4545;
+  --color-red-800: #793b3b;
+  /* Neutrals: canvas, muted text, body text */
+  --color-slate-50: #f5f6f8;
+  --color-slate-500: #6b7280;
+  --color-slate-900: #1f2937;
+
+  /* slow, calm "live" pulse for the connection indicator */
+  --animate-live: live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@keyframes live {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
   margin: 0;
-  padding: 0;
-}
-
-/* ── Light mode (default) — government-grade slate + blue palette ── */
-:root {
-  --bg:             #F0F4F8;
-  --sidebar:        #FFFFFF;
-  --card:           #FFFFFF;
-  --border:         #E2E8F0;
-  --primary:        #2563EB;
-  --primary-light:  #EFF6FF;
-  --success:        #10B981;
-  --warning:        #F59E0B;
-  --danger:         #EF4444;
-  --text-primary:   #0F172A;
-  --text-secondary: #64748B;
-  --text-muted:     #94A3B8;
-  --shadow-card:    0 1px 3px rgba(0, 0, 0, 0.07);
-  color-scheme: light;
-}
-
-/* ── Dark mode — matching slate tones, camera viewport stays dark always ── */
-html.dark {
-  --bg:             #0B1220;
-  --sidebar:        #0F172A;
-  --card:           #1E293B;
-  --border:         #334155;
-  --primary:        #3B82F6;
-  --primary-light:  rgba(59, 130, 246, 0.16);
-  --success:        #10B981;
-  --warning:        #F59E0B;
-  --danger:         #EF4444;
-  --text-primary:   #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted:     #64748B;
-  --shadow-card:    0 1px 3px rgba(0, 0, 0, 0.4);
-  color-scheme: dark;
-}
-
-html, body, #root {
-  background-color: var(--bg);
-  color: var(--text-primary);
-  font-family: Inter, system-ui, sans-serif;
+  /* Cool light-gray application canvas. */
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  text-rendering: optimizeLegibility;
 }
 
-/* Card elevation — subtle shadow per spec §1 */
-.shadow-card { box-shadow: var(--shadow-card); }
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-@keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Tabular numerals everywhere numbers matter — keeps grids aligned. */
+.tnum {
+  font-variant-numeric: tabular-nums;
 }
 
-.animate-pulse   { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-.animate-spin    { animation: spin 1s linear infinite; }
-.animate-fade-in { animation: fadeSlideIn 0.2s ease-out forwards; }
+/* Thin, neutral scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-300) transparent;
+}
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300);
+  border-radius: 8px;
+  border: 3px solid var(--color-slate-50);
+}
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* Print — challan PDF via window.print() */
-@media print {
-  .no-print { display: none !important; }
+/* Visible focus ring for keyboard users (accessibility). */
+:focus-visible {
+  outline: 2px solid var(--color-blue-600);
+  outline-offset: 1px;
 }

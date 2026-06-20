@@ -1,144 +1,89 @@
-# TrafficVision AI — Frontend
+<div align="center">
 
-A traffic-enforcement dashboard for the **Traffic Violation Detection** project. It reads
-violation records and analytics from the Python/FastAPI backend and presents them as KPIs,
-searchable lists, an evidence gallery, and analytics charts.
+# Traffic Violation Detection · Image Processing
 
-> This is the web client only. The detection pipeline (YOLOv8 + PaddleOCR + optional vision LLM)
-> and the REST API live in the sibling `traffic-violation-detection-image-processing/` folder.
+<img alt="React" src="https://img.shields.io/badge/React-18-2563eb?style=flat-square">
+<img alt="Vite" src="https://img.shields.io/badge/Vite-5-2563eb?style=flat-square">
+<img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-2563eb?style=flat-square">
+<img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-4-2563eb?style=flat-square">
 
-## Tech Stack
+Traffic-enforcement console for the Bengaluru Traffic Police. Strict,
+utilitarian, light-theme; reads live from the read-only detection API.
 
-| Concern        | Choice                                   |
-| -------------- | ---------------------------------------- |
-| Framework      | React 19 + TypeScript                    |
-| Build tool     | Vite                                     |
-| Routing        | React Router DOM v7                       |
-| Styling        | Tailwind CSS v4 (semantic CSS-var tokens) |
-| Animation      | Framer Motion                            |
-| Charts         | Recharts                                 |
-| Icons          | Lucide React                             |
-| Testing        | Vitest + Testing Library + JSDOM         |
+</div>
 
-State is handled with a small custom `useFetch` hook — no Redux/Zustand/React Query.
+## Palette — "Sentinel"
 
-## Getting Started
+A deliberate, documented set (defined in `src/index.css` `@theme`), not stock
+framework defaults. Colour is used by **role**, never decoration.
+
+| Token | Hex | Role |
+|---|---|---|
+| Brand | `#2563EB` | primary action, active nav |
+| Info | `#3B82F6` | total / informational accent |
+| Critical | `#EF4444` | high severity, low confidence |
+| Warning | `#F59E0B` | pending, medium confidence |
+| Success | `#10B981` | confirmed, high confidence |
+| Canvas | `#F8FAFC` (slate-50) | application background |
+| Surface | `#FFFFFF` | cards & tables |
+| Sidebar | `#0F172A` (slate-900) | navigation rail |
+| Ink / muted / faint | `#111827` / `#6B7280` / `#9CA3AF` | text hierarchy |
+| Rules | `#E5E7EB` / `#D1D5DB` | 1px borders |
+
+Neutral system sans throughout (no decorative faces); monospace for
+identifiers (plates, IDs, hashes). Numbers are tabular. Type is weight-led —
+22px/600 page titles, 32px/700 KPI figures, 11px/500 uppercase labels.
+
+## Views
+
+- **Overview** — weighted, accent-bordered KPI cards (with a small base
+  sparkline), **model performance** from `outputs/metrics.json` (precision /
+  recall / mAP), a **type donut** (Recharts), and proportional confidence bars.
+- **Violations** — the detection log as a dense, filterable, paginated data
+  grid (subtle alternating rows). Row → case file.
+- **Case file** (drawer) — evidence image (`/api/evidence/{id}/image`, graceful
+  fallback), per-violation confidence, all persisted fields incl. SHA-256, an
+  **estimated fine**, and a working **Issue Challan** action.
+- **Challans** — issued-challan register with fine totals and pill status
+  badges (amber pending / green paid).
+- **System** — Export (client-side CSV of the loaded log) and Settings.
+
+## Backend contract (read-only, Python untouched)
+
+| Endpoint | Use |
+|---|---|
+| `GET /health` | connection status (animated live dot) |
+| `GET /api/violations` (+ `/{id}`) | detection log |
+| `GET /api/analytics/summary`, `/metrics` | totals, model metrics |
+| `GET /api/evidence/{id}/image`, `/metadata` | evidence |
+| `GET /api/challans`, `POST /api/challans` | issue & list challans |
+
+The ML endpoints (`/process`, `/upload`) are out of UI scope. Breakdowns the
+backend doesn't aggregate are computed in the browser (`src/lib/analytics.ts`).
+
+## Run
 
 ```bash
 npm install
-npm run dev      # Vite dev server, http://localhost:5173
+npm run dev        # http://localhost:5173  (proxies /api → :8000)
+npm run build      # typecheck + production build → dist/
+npm run preview
 ```
 
-The dashboard needs the backend running for live data:
+Start the backend in another terminal (`make run-api`). The dev server proxies
+`/api` and `/health` to `VITE_API_TARGET` (default `http://localhost:8000`); set
+`VITE_API_BASE` for a different origin (see `.env.example`). A production
+`dist/` build is auto-served by the backend at `/` (see `api/main.py`).
 
-```bash
-# in ../traffic-violation-detection-image-processing
-make run-api     # FastAPI on http://localhost:8000
-```
-
-### Configuration
-
-The API base URL is read from the `VITE_API_URL` environment variable and defaults to
-`http://localhost:8000`. To point at a different backend, create a `.env`:
-
-```
-VITE_API_URL=http://localhost:8000
-```
-
-## Scripts
-
-| Command              | Description                          |
-| -------------------- | ------------------------------------ |
-| `npm run dev`        | Start the Vite dev server            |
-| `npm run build`      | Type-check (`tsc -b`) + build to `dist/` |
-| `npm run preview`    | Preview the production build         |
-| `npm run lint`       | Run ESLint                           |
-| `npm run test`       | Run the test suite once (Vitest)     |
-| `npm run test:watch` | Run tests in watch mode              |
-
-## Routes
-
-| Path               | Page             | Purpose                                                              |
-| ------------------ | ---------------- | -------------------------------------------------------------------- |
-| `/`                | Dashboard        | KPIs, violation trend chart, recent activity, live-feed placeholder  |
-| `/detect`          | LiveDetection    | Placeholder — backend has no image-upload endpoint yet               |
-| `/violations`      | ViolationsList   | All violations, filterable by type and plate search                  |
-| `/violations/:id`  | ViolationDetail  | Single record: vehicle info, evidence hash, approve / reject actions |
-| `/evidence`        | EvidenceGallery  | Grid view of violation records                                       |
-| `/challans`        | ChallansList     | Placeholder — backend has no challans endpoint yet                   |
-| `/challans/:id`    | ChallanDetail    | Client-side challan preview (not persisted)                          |
-| `/analytics`       | Analytics        | Trend by weekday, breakdown by type, top offenders                   |
-| `/settings`        | Settings         | Theme toggle, about                                                  |
-
-All pages render inside `AppLayout` (fixed Sidebar + sticky Navbar + routed `<Outlet />`).
-
-## Backend API
-
-The API client lives in `src/lib/api.ts`. Endpoints consumed (all `GET`):
-
-| Endpoint                                  | Returns                                                       |
-| ----------------------------------------- | ------------------------------------------------------------- |
-| `/health`                                 | `{ status }`                                                  |
-| `/api/violations?page=&page_size=`        | `{ items: ViolationRecord[], total, page }`                   |
-| `/api/analytics/summary`                  | `{ total_violations }`                                        |
-
-Pages that need derived figures (trend by weekday, breakdown by type, top offenders) compute
-them client-side from `/api/violations` in `src/lib/derive.ts`. Challans are previewed in the
-UI only — the backend does not yet persist them.
-
-## Project Structure
+## Structure
 
 ```
 src/
-├── App.tsx                # Route definitions
-├── main.tsx               # App entry
-├── lib/
-│   ├── api.ts             # Fetch client + ApiError, VITE_API_URL base
-│   ├── constants.ts       # VIOLATION_META (labels, fines), legal sections
-│   ├── derive.ts          # Client-side aggregations for charts/tables
-│   └── badges.ts          # Badge class helpers
-├── types/index.ts         # ViolationRecord, Challan, enums
-├── hooks/useFetch.ts      # Async fetch state (data/loading/error/reload)
-├── context/ThemeContext.tsx  # light/dark theme, persisted to localStorage
-├── layouts/AppLayout.tsx
-├── pages/                 # One file per route
-├── components/
-│   ├── shared/            # Sidebar, Navbar
-│   └── ui/                # Badge, StatCard, AsyncBoundary, LoadingState, etc.
-└── test/                  # Vitest setup + fixtures
+├── lib/          types, api client, formatters, analytics
+├── hooks/        useViolationsData, useChallans (live API)
+├── components/   Sidebar, Topbar, ViolationsTable, CaseDrawer, charts, ui, icons
+├── pages/        Overview, Violations, Challans
+└── index.css     Tailwind v4 entry + Sentinel palette tokens
 ```
 
-### Data flow
-
-`useFetch(fetcher, deps)` runs the fetcher on mount, exposes `{ data, loading, error, reload }`,
-and cancels on unmount. Pages wrap the result in `<AsyncBoundary>`, which renders
-`LoadingState`, `ErrorState` (with retry), or the children once data is available.
-
-### Theming
-
-`ThemeContext` toggles a `dark` class on `<html>` and persists the choice to `localStorage`
-(`tv-theme`). Colors are defined as CSS custom properties in `src/index.css`; components use
-semantic tokens (`--text-primary`, `--border`, `--primary`, …). The sidebar uses a fixed navy
-palette independent of theme.
-
-## Data Models
-
-See `src/types/index.ts`. The core record from the backend:
-
-```ts
-interface ViolationRecord {
-  violation_id: string
-  timestamp: string                 // ISO-8601
-  image_path: string                // server-side path, not a URL
-  image_hash: string                // SHA-256
-  vehicle_bbox: [number, number, number, number] | null
-  vehicle_type: 'two_wheeler' | 'four_wheeler' | 'vehicle' | 'unknown' | string
-  plate_number: string | null
-  plate_confidence: number | null
-  violations: { type: ViolationType; confidence: number; description?: string }[]
-  severity: 'high' | 'standard'
-  legal_sections: string[]
-}
-```
-
-Violation labels, fines, and MV Act mappings are defined statically in `src/lib/constants.ts`.
+Recharts powers the type donut; sparklines and confidence bars are hand-rolled.
