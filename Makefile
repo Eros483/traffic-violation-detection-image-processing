@@ -44,15 +44,11 @@ download-model:
 	@mkdir -p artifacts
 	@echo "Downloading .pt model weights from HuggingFace..."
 	curl -L -o artifacts/best.pt \
-		https://huggingface.co/arnav-gupta/traffic-violation-prototype/resolve/main/artifacts/best.pt
+		https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
 	curl -L -o artifacts/yolov8n-pose.pt \
-		https://huggingface.co/arnav-gupta/traffic-violation-prototype/resolve/main/artifacts/yolov8n-pose.pt
+		https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/yolov8n-pose.pt
 	@echo "✓ .pt model weights placed in artifacts/"
 
-# Re-export .pt → .onnx (requires ultralytics dev dependency)
-export-onnx:
-	uv run python -c "from ultralytics import YOLO; YOLO('artifacts/best.pt').export(format='onnx', imgsz=640); YOLO('artifacts/yolov8n-pose.pt').export(format='onnx', imgsz=640)"
-	@echo "✓ ONNX models re-exported from .pt files"
 
 # Run tests
 test:
