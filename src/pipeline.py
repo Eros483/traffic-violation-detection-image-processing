@@ -95,4 +95,6 @@ if __name__ == "__main__":
         for rec in all_records:
             f.write(json.dumps(rec) + "\n")
 
-    logger.info(f"Pipeline complete. {len(images)} images processed. Records at outputs/violations.jsonl")
+    logger.info(
+        f"Pipeline complete. {len(images)} images processed. Records at outputs/violations.jsonl"
+    )

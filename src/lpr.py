@@ -46,23 +46,27 @@ def validate_and_correct(raw_text: str) -> tuple[str, bool]:
 
     if len(text) >= 9:
         chars = list(text)
-        
+
         # KA part (0-2) should be letters
         for i in range(min(2, len(chars))):
-            if chars[i] in alpha_fixes: chars[i] = alpha_fixes[chars[i]]
-            
+            if chars[i] in alpha_fixes:
+                chars[i] = alpha_fixes[chars[i]]
+
         # District part (2-4) should be numbers
         for i in range(2, min(4, len(chars))):
-            if chars[i] in num_fixes: chars[i] = num_fixes[chars[i]]
-            
+            if chars[i] in num_fixes:
+                chars[i] = num_fixes[chars[i]]
+
         # End sequence (last 4) should be numbers
-        for i in range(max(4, len(chars)-4), len(chars)):
-            if chars[i] in num_fixes: chars[i] = num_fixes[chars[i]]
-            
+        for i in range(max(4, len(chars) - 4), len(chars)):
+            if chars[i] in num_fixes:
+                chars[i] = num_fixes[chars[i]]
+
         # Middle series should be letters
-        for i in range(4, max(4, len(chars)-4)):
-            if chars[i] in alpha_fixes: chars[i] = alpha_fixes[chars[i]]
-            
+        for i in range(4, max(4, len(chars) - 4)):
+            if chars[i] in alpha_fixes:
+                chars[i] = alpha_fixes[chars[i]]
+
         candidate = "".join(chars)
         if KA_REGEX.match(candidate):
             return format_plate(candidate), True
@@ -80,7 +84,9 @@ def read_plate(plate_crop: np.ndarray) -> dict:
     upscale = config.get_yaml("plate.upscale_factor", 3)
 
     if w < min_width:
-        plate_crop = cv2.resize(plate_crop, (w * upscale, h * upscale), interpolation=cv2.INTER_CUBIC)
+        plate_crop = cv2.resize(
+            plate_crop, (w * upscale, h * upscale), interpolation=cv2.INTER_CUBIC
+        )
 
     results = ocr.ocr(plate_crop, cls=True)
 

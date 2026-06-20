@@ -12,7 +12,7 @@ sync:
 
 # Format all Python files with black
 format:
-	uv run black src/ api/ notebooks/ tests/ utils/
+	uv run black .
 
 # Check formatting without modifying files
 format-check:

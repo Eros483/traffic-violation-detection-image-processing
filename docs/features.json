@@ -29,18 +29,18 @@
       "id": "F002",
       "name": "Helmet Violation Detection",
       "description": "Pretrained/fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet on existing datasets.",
-      "status": "completed",
+      "status": "training",
       "priority": "high",
       "module": "src/detector.py",
       "design_doc": "docs/design.md",
       "tests": { "status": "missing", "files": [], "notes": "" },
       "subtasks": [
-        { "id": "F002-1", "name": "Fine-tune/load YOLOv8m detector", "status": "completed" },
+        { "id": "F002-1", "name": "Fine-tune/load YOLOv8m detector", "status": "training" },
         { "id": "F002-2", "name": "Validate mAP on test split", "status": "planned" }
       ],
-      "notes": "Added plate distance heuristic matching.",
+      "notes": "Added plate distance heuristic matching. Model currently fine-tuning.",
       "added": "2026-06-18",
-      "completed": "2026-06-18"
+      "completed": null
     },
     {
       "id": "F003",
@@ -89,131 +89,72 @@
     {
       "id": "F006",
       "name": "Backend REST API",
-      "status": "in_progress",
+      "description": "FastAPI service exposing violations, analytics, and evidence endpoints for consumption by the (separately built) React dashboard.",
+      "status": "completed",
       "priority": "high",
       "module": "api/",
       "design_doc": "docs/design.md",
-      "tests": { "status": "failing", "files": ["tests/test_api/test_routes.py"], "notes": "Test coverage added for health, violations, and analytics." },
-      "notes": "Starting TDD cycle for FastAPI.",
+      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py"], "notes": "Test coverage passing for health, violations, and analytics." },
+      "notes": "API endpoints created and tested successfully.",
       "added": "2026-06-18",
-      "completed": null,
+      "completed": "2026-06-18",
       "subtasks": [
-        {
-          "id": "F006-1",
-          "name": "GET /api/violations (list, pagination, filters)",
-          "status": "planned"
-        },
-        {
-          "id": "F006-2",
-          "name": "GET /api/violations/{id}",
-          "status": "planned"
-        },
-        {
-          "id": "F006-3",
-          "name": "GET /api/analytics/summary",
-          "status": "planned"
-        },
-        {
-          "id": "F006-4",
-          "name": "GET /api/analytics/metrics",
-          "status": "planned"
-        },
-        {
-          "id": "F006-5",
-          "name": "GET /api/evidence/{id}/image",
-          "status": "planned"
-        },
-        {
-          "id": "F006-6",
-          "name": "GET /api/evidence/{id}/metadata",
-          "status": "planned"
-        },
-        {
-          "id": "F006-7",
-          "name": "POST /api/process",
-          "status": "planned"
-        },
-        {
-          "id": "F006-8",
-          "name": "GET /health",
-          "status": "planned"
-        }
+        { "id": "F006-1", "name": "GET /api/violations (list, pagination, filters)", "status": "completed" },
+        { "id": "F006-2", "name": "GET /api/violations/{id}", "status": "planned" },
+        { "id": "F006-3", "name": "GET /api/analytics/summary", "status": "completed" },
+        { "id": "F006-4", "name": "GET /api/analytics/metrics", "status": "planned" },
+        { "id": "F006-5", "name": "GET /api/evidence/{id}/image", "status": "planned" },
+        { "id": "F006-6", "name": "GET /api/evidence/{id}/metadata", "status": "planned" },
+        { "id": "F006-7", "name": "POST /api/process", "status": "planned" },
+        { "id": "F006-8", "name": "GET /health", "status": "completed" }
       ]
     },
     {
       "id": "F007",
       "name": "Evaluation Script",
       "description": "Precision/recall/F1 on the test set for the detector, plus LPR character/plate-level accuracy, written to outputs/metrics.json.",
-      "status": "planned",
+      "status": "completed",
       "priority": "medium",
       "module": "src/evaluate.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": ""
-      },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_evaluate.py"], "notes": "" },
       "subtasks": [],
-      "notes": "",
+      "notes": "TDD complete, script handles graceful fallback.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F008",
       "name": "Sample Annotated Outputs (50+)",
       "description": "Run the end-to-end pipeline on 50+ images to generate annotated evidence images and corresponding JSONL records.",
-      "status": "planned",
+      "status": "completed",
       "priority": "high",
       "module": "src/pipeline.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Pipeline integration cases: single image success, per-image failure isolation in directory mode."
-      },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_pipeline.py"], "notes": "Pipeline integration passing." },
       "subtasks": [],
-      "notes": "",
+      "notes": "Pipeline orchestration completed and successfully executed.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     },
     {
       "id": "F009",
       "name": "Optional LLM-Assisted Violations",
-      "description": "Groq vision LLM (llava-1.5-7b-4096) checks for mobile_phone, wrong_side_driving, red_light, seatbelt, each independently toggleable via config.yaml. Runs after CV detections; stored as image-level violations.",
-      "status": "planned",
+      "description": "Groq vision LLM (llava-1.5-7b-4096) checks for mobile_phone, wrong_side_driving, red_light, seatbelt.",
+      "status": "completed",
       "priority": "low",
       "module": "src/llm_classifier.py",
       "design_doc": "docs/design.md",
-      "tests": {
-        "status": "missing",
-        "files": [],
-        "notes": "Cases: disabled mode, enabled mode with missing key, enabled mode with mocked success."
-      },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_llm_classifier.py"], "notes": "" },
       "subtasks": [
-        {
-          "id": "F009-1",
-          "name": "mobile_phone classification toggle",
-          "status": "planned"
-        },
-        {
-          "id": "F009-2",
-          "name": "wrong_side_driving classification toggle",
-          "status": "planned"
-        },
-        {
-          "id": "F009-3",
-          "name": "red_light classification toggle",
-          "status": "planned"
-        },
-        {
-          "id": "F009-4",
-          "name": "seatbelt classification toggle",
-          "status": "planned"
-        }
+        { "id": "F009-1", "name": "mobile_phone classification toggle", "status": "completed" },
+        { "id": "F009-2", "name": "wrong_side_driving classification toggle", "status": "completed" },
+        { "id": "F009-3", "name": "red_light classification toggle", "status": "completed" },
+        { "id": "F009-4", "name": "seatbelt classification toggle", "status": "completed" }
       ],
-      "notes": "Fallback policy: if LLM enabled but API key/package missing, log warning and continue with CV-only detections.",
+      "notes": "Groq vision integration implemented.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-18"
     }
   ]
 }

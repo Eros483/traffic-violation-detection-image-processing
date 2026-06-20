@@ -10,8 +10,8 @@ def test_evaluate_returns_empty_when_disabled():
     """Test that the LLM module safely skips processing if disabled in config."""
     # Temporarily patch the settings to ensure it acts as disabled
     config.yaml_config["llm_violations"] = {"enabled": False}
-    
+
     result = evaluate_image_level_violations("dummy_path.jpg")
-    
+
     assert result == []
     assert isinstance(result, list)

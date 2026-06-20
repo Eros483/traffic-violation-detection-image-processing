@@ -49,14 +49,17 @@ def evaluate_image_level_violations(image_path: str) -> list[dict]:
 
     try:
         base64_image = encode_image(image_path)
-        
+
         chat_completion = client.chat.completions.create(
             messages=[
                 {
                     "role": "user",
                     "content": [
                         {"type": "text", "text": prompt},
-                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}},
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                        },
                     ],
                 }
             ],
@@ -67,7 +70,7 @@ def evaluate_image_level_violations(image_path: str) -> list[dict]:
 
         content = chat_completion.choices[0].message.content
         parsed = json.loads(content)
-        
+
         return parsed.get("violations", [])
 
     except Exception as e:

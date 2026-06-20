@@ -15,7 +15,7 @@ DATA_FILE = Path("outputs/violations.jsonl")
 def get_violations(page: int = 1, page_size: int = 10):
     """Returns a paginated list of all processed traffic violations."""
     items = []
-    
+
     if DATA_FILE.exists():
         with open(DATA_FILE, "r") as f:
             for line in f:
@@ -25,8 +25,4 @@ def get_violations(page: int = 1, page_size: int = 10):
     start_idx = (page - 1) * page_size
     end_idx = start_idx + page_size
 
-    return PaginatedViolations(
-        items=items[start_idx:end_idx],
-        total=len(items),
-        page=page
-    )
+    return PaginatedViolations(items=items[start_idx:end_idx], total=len(items), page=page)
