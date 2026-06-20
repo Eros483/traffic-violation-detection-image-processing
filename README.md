@@ -20,6 +20,9 @@ A system that automatically detects seven traffic violations from live feeds (he
 
 ---
 
+Refer to `docs/capabilities.md` for everything the system is capable of doing.
+
+---
 ## Local Usage
 
 ### Prerequisites
