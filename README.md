@@ -2,6 +2,8 @@
 
 # Traffic Violation Detection Service
 
+Built for the Flipkart Gridlock 2.0
+
 <p>
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python Version">
   <img src="https://img.shields.io/badge/React-18-61DAFB.svg?logo=react" alt="React">
@@ -12,7 +14,7 @@
   <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code Style: Black">
 </p>
 
-A prototype for the Bengaluru Traffic Challenge that detects traffic violations from images using Computer Vision models, packages the results as evidence records, and exposes them via a React dashboard.
+A system that automatically detects seven traffic violations from live feeds (helmetless riders, triple-seat overcrowding, license plates, phone-using drivers, wrong-way drivers, red-light runners, unbelted passengers), references the specific laws each violation breaks, generates e-challans, and seals every detection as tamper-proof evidence on a live enforcement dashboard.
 
 </div>
 
