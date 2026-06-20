@@ -32,6 +32,9 @@ LEGAL_MAP = {
     "mobile_phone": "MV Act S184",
     "red_light": "MV Act S184",
     "wrong_side_driving": "MV Act S184",
+    "seatbelt": "MV Act S194B",
+    "stop_line": "MV Act S119/177",
+    "illegal_parking": "MV Act S122",
 }
 
 
@@ -48,7 +51,8 @@ def package_evidence(image_path: str, detections: list[dict]) -> list[ViolationR
     for det in detections:
         # Determine severity
         is_high_severity = any(
-            v.get("type") in ["red_light", "wrong_side_driving"] for v in det["violations"]
+            v.get("type") in ["red_light", "wrong_side_driving", "stop_line"]
+            for v in det["violations"]
         )
 
         record = ViolationRecord(

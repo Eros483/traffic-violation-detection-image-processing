@@ -71,6 +71,28 @@ def test_severity_high_for_dangerous_violations(tmp_path):
     assert records[0].severity == "high"
 
 
+def test_severity_high_for_stop_line(tmp_path):
+    """Test that stop_line maps to high severity."""
+    img_path = tmp_path / "test.jpg"
+    cv2.imwrite(str(img_path), np.zeros((100, 100, 3), dtype=np.uint8))
+
+    detections = [
+        {
+            "bbox": [10, 20, 100, 200],
+            "vehicle_type": "vehicle",
+            "violations": [
+                {"type": "stop_line", "confidence": 0.85, "description": "Crossed stop line"}
+            ],
+            "plate_bbox": None,
+            "plate_text": None,
+            "plate_confidence": None,
+        }
+    ]
+
+    records = package_evidence(str(img_path), detections)
+    assert records[0].severity == "high"
+
+
 def test_severity_standard_for_helmet(tmp_path):
     """Test that helmet violations map to standard severity."""
     img_path = tmp_path / "test.jpg"
@@ -113,6 +135,32 @@ def test_legal_sections_mapped_correctly(tmp_path):
     records = package_evidence(str(img_path), detections)
     assert "MV Act S129" in records[0].legal_sections  # helmet
     assert "MV Act S128" in records[0].legal_sections  # triple_riding
+
+
+def test_new_legal_sections_mapped_correctly(tmp_path):
+    """Test that newly added violation types have correct legal sections."""
+    img_path = tmp_path / "test.jpg"
+    cv2.imwrite(str(img_path), np.zeros((100, 100, 3), dtype=np.uint8))
+
+    detections = [
+        {
+            "bbox": [10, 20, 100, 200],
+            "vehicle_type": "vehicle",
+            "violations": [
+                {"type": "seatbelt", "confidence": 0.91, "description": "No seatbelt"},
+                {"type": "stop_line", "confidence": 0.85, "description": "Stop line crossed"},
+                {"type": "illegal_parking", "confidence": 0.75, "description": "Illegally parked"},
+            ],
+            "plate_bbox": None,
+            "plate_text": None,
+            "plate_confidence": None,
+        }
+    ]
+
+    records = package_evidence(str(img_path), detections)
+    assert "MV Act S194B" in records[0].legal_sections  # seatbelt
+    assert "MV Act S119/177" in records[0].legal_sections  # stop_line
+    assert "MV Act S122" in records[0].legal_sections  # illegal_parking
 
 
 def test_annotate_image_draws_boxes_and_text(tmp_path):

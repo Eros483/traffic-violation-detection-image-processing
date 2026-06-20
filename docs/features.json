@@ -2,15 +2,115 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-20",
   "summary": {
-    "total": 10,
-    "completed": 7,
-    "in_progress": 3,
-    "planned": 0,
-    "tests_passing": 30,
+    "total": 16,
+    "completed": 15,
+    "in_progress": 0,
+    "planned": 2,
+    "tests_passing": 40,
     "tests_failing": 0,
-    "tests_missing": 1
+    "tests_missing": 0
   },
   "features": [
+    {
+      "id": "F010",
+      "name": "Frontend Static File Serving",
+      "description": "Built React dashboard (client/dist/) served automatically by FastAPI via StaticFiles mount at /. Single-command make run builds frontend + starts API.",
+      "status": "completed",
+      "priority": "high",
+      "module": "api/main.py, Makefile",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Verification is manual — start server and navigate to /" },
+      "subtasks": [
+        { "id": "F010-1", "name": "Mount StaticFiles in api/main.py after API routes", "status": "completed" },
+        { "id": "F010-2", "name": "Add client-install, client-build, run targets to Makefile", "status": "completed" },
+        { "id": "F010-3", "name": "Update API client to use relative URLs by default for same-origin serving", "status": "completed" }
+      ],
+      "notes": "Frontend mount is conditional (skipped if client/dist/ doesn't exist). API-only dev workflow unchanged.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
+    {
+      "id": "F013",
+      "name": "Manual Testing via Frontend Dashboard",
+      "description": "Upload an image through the React dashboard UI, run the full detection pipeline on it, and see violation results, annotated image, and challan generation in real-time.",
+      "status": "planned",
+      "priority": "medium",
+      "module": "client/src/pages/LiveDetection.tsx, client/src/lib/api.ts",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Frontend integration — verification is manual." },
+      "subtasks": [
+        { "id": "F013-1", "name": "Add image upload widget to LiveDetection page", "status": "planned" },
+        { "id": "F013-2", "name": "Call POST /api/violations/process with uploaded image", "status": "planned" },
+        { "id": "F013-3", "name": "Display violation results and annotated image", "status": "planned" },
+        { "id": "F013-4", "name": "Add \"Generate Challan\" action from test results", "status": "planned" }
+      ],
+      "notes": "POST /api/violations/upload endpoint exists. Only frontend work needed.",
+      "added": "2026-06-20",
+      "completed": null
+    },
+    {
+      "id": "F014",
+      "name": "Frontend Application Shell",
+      "description": "App layout with sidebar navigation, top navbar, dark/light theme toggle, page transition animations, and settings page.",
+      "status": "completed",
+      "priority": "high",
+      "module": "client/src/App.tsx, client/src/layouts/AppLayout.tsx, client/src/components/shared/",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Manual verification — start server and navigate routes." },
+      "subtasks": [
+        { "id": "F014-1", "name": "AppLayout with Sidebar + Navbar + Outlet", "status": "completed" },
+        { "id": "F014-2", "name": "React Router setup (9 routes)", "status": "completed" },
+        { "id": "F014-3", "name": "ThemeContext (light/dark, localStorage)", "status": "completed" },
+        { "id": "F014-4", "name": "PageTransition (framer-motion animations)", "status": "completed" },
+        { "id": "F014-5", "name": "Settings page (theme + about)", "status": "completed" }
+      ],
+      "notes": "Conditional static file serving via FastAPI StaticFiles mount.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
+    {
+      "id": "F015",
+      "name": "Frontend Dashboard & Analytics",
+      "description": "Dashboard page with real-time KPI cards, trend chart, recent activity feed, camera placeholder. Analytics page with trend chart, pie chart, top offenders ranking.",
+      "status": "completed",
+      "priority": "high",
+      "module": "client/src/pages/Dashboard.tsx, client/src/pages/Analytics.tsx, client/src/lib/derive.ts",
+      "design_doc": null,
+      "tests": { "status": "passing", "files": ["client/src/lib/derive.test.ts"], "notes": "4 unit tests for type/severity breakdown, weekday trend, offender ranking." },
+      "subtasks": [
+        { "id": "F015-1", "name": "Dashboard KPI cards from API summary", "status": "completed" },
+        { "id": "F015-2", "name": "Dashboard recent activity feed", "status": "completed" },
+        { "id": "F015-3", "name": "Analytics trend chart (Recharts)", "status": "completed" },
+        { "id": "F015-4", "name": "Analytics pie chart by violation type", "status": "completed" },
+        { "id": "F015-5", "name": "Analytics top offenders table", "status": "completed" },
+        { "id": "F015-6", "name": "Derive utilities (breakdown, trend, ranking)", "status": "completed" }
+      ],
+      "notes": "Backend GET /api/analytics/summary powers the KPI cards.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
+    {
+      "id": "F016",
+      "name": "Frontend Shared Component Library",
+      "description": "Reusable UI components: Badge, ViolationCard, PlateNumber, ConfidenceMeter, AsyncBoundary (loading/error/empty), StatCard, KPICard, StatusBadge, SectionHeader, ActivityRow. Plus data layer: useFetch hook, API client, constants, types, badge classes, build config (Vite+TS+Tailwind). 23 unit tests across 6 test files.",
+      "status": "completed",
+      "priority": "high",
+      "module": "client/src/components/ui/, client/src/lib/, client/src/hooks/, client/src/types/",
+      "design_doc": null,
+      "tests": { "status": "passing", "files": ["client/src/lib/api.test.ts", "client/src/lib/constants.test.ts", "client/src/lib/derive.test.ts", "client/src/hooks/useFetch.test.tsx", "client/src/components/ui/Badge.test.tsx", "client/src/pages/ViolationsList.test.tsx"], "notes": "23 tests across 6 files." },
+      "subtasks": [
+        { "id": "F016-1", "name": "useFetch custom hook", "status": "completed" },
+        { "id": "F016-2", "name": "API client (6 functions, error handling)", "status": "completed" },
+        { "id": "F016-3", "name": "Constants (VIOLATION_META, LEGAL_SECTION)", "status": "completed" },
+        { "id": "F016-4", "name": "Badge color system", "status": "completed" },
+        { "id": "F016-5", "name": "Types (ViolationType, ViolationRecord, ChallanRecord, etc.)", "status": "completed" },
+        { "id": "F016-6", "name": "14 UI components (Badge, ViolationCard, PlateNumber, etc.)", "status": "completed" },
+        { "id": "F016-7", "name": "Build config (Vite 8, TS 5, Tailwind 4, Vitest 4, ESLint)", "status": "completed" }
+      ],
+      "notes": "Components are tree-shaken, Tailwind CSS v4 with CSS variables for theming.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
     {
       "id": "F001",
       "name": "Image Preprocessing",
@@ -28,20 +128,20 @@
     {
       "id": "F002",
       "name": "Helmet Violation Detection",
-      "description": "Fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet/TripleRiding/Plate on the master dataset. Model currently training on Kaggle — drop best.pt at models/weights/traffic_violations/best.pt when done.",
-      "status": "training",
+      "description": "Fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet/TripleRiding/Plate on the master dataset.",
+      "status": "completed",
       "priority": "high",
       "module": "src/detector.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "Detector mapping tests added in test_detector.py but require model weights to run full integration." },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_detector.py"], "notes": "5 unit tests for mapping logic. Full integration requires model weights." },
       "subtasks": [
-        { "id": "F002-1", "name": "Fine-tune YOLOv8m on master dataset", "status": "training" },
-        { "id": "F002-2", "name": "Place best.pt at models/weights/traffic_violations/best.pt", "status": "pending" },
-        { "id": "F002-3", "name": "Validate mAP on test split", "status": "planned" }
+        { "id": "F002-1", "name": "Fine-tune YOLOv8m on master dataset", "status": "completed" },
+        { "id": "F002-2", "name": "Place best.pt at models/weights/traffic_violations/best.pt", "status": "completed" },
+        { "id": "F002-3", "name": "Validate mAP on test split", "status": "completed" }
       ],
-      "notes": "No fallback model used — detector returns empty results until trained weights are placed. Code handles the 4-class master dataset labels correctly.",
+      "notes": "Model trained on Kaggle, weights placed and pipeline confirmed working.",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-20"
     },
     {
       "id": "F003",
@@ -51,7 +151,7 @@
       "priority": "high",
       "module": "src/triple_riding.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "Unit test would require pose model + image; integration tested via pipeline mock." },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_triple_riding.py"], "notes": "3 tests for pose counting, edge bboxes, empty images." },
       "subtasks": [],
       "notes": "Implemented with 0.3 padding ratio.",
       "added": "2026-06-18",
@@ -81,24 +181,24 @@
       "priority": "high",
       "module": "src/evidence.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": ["tests/test_src/test_evidence.py"], "notes": "Tests added: hash generation, severity mapping, annotation, legal section mapping." },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_evidence.py"], "notes": "8 tests: hash, severity, legal sections including seatbelt/stop_line/illegal_parking." },
       "subtasks": [],
-      "notes": "Dataclass mapped directly to JSONL spec.",
+      "notes": "LEGAL_MAP extended with seatbelt (S194B), stop_line (S119/177), illegal_parking (S122).",
       "added": "2026-06-18",
       "completed": "2026-06-18"
     },
     {
       "id": "F006",
       "name": "Backend REST API",
-      "description": "FastAPI service exposing violations, analytics, and evidence endpoints for consumption by the (separately built) React dashboard.",
-      "status": "in_progress",
+      "description": "FastAPI service exposing violations, analytics, evidence, and challans endpoints.",
+      "status": "completed",
       "priority": "high",
       "module": "api/",
       "design_doc": "docs/design.md",
-      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py"], "notes": "Health, violations list, analytics summary tested. New endpoints need test coverage." },
-      "notes": "3/8 endpoints complete. All 5 remaining endpoints implemented in this session.",
+      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py"], "notes": "11 tests: violations CRUD, analytics, evidence, challans CRUD." },
+      "notes": "8/8 original endpoints + 3 challans endpoints all implemented and tested.",
       "added": "2026-06-18",
-      "completed": null,
+      "completed": "2026-06-20",
       "subtasks": [
         { "id": "F006-1", "name": "GET /api/violations (list, pagination, filters)", "status": "completed" },
         { "id": "F006-2", "name": "GET /api/violations/{id}", "status": "completed" },
@@ -114,15 +214,15 @@
       "id": "F007",
       "name": "Evaluation Script",
       "description": "Precision/recall/F1 on the test set for the detector, plus LPR character/plate-level accuracy, written to outputs/metrics.json.",
-      "status": "in_progress",
+      "status": "completed",
       "priority": "medium",
       "module": "src/evaluate.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "failing", "files": ["tests/test_src/test_evaluate.py"], "notes": "Fixed data.yaml path to master_traffic_violation_dataset. Test updated to match new no-fallback behavior." },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_evaluate.py"], "notes": "Produced metrics.json: P=0.866, R=0.703, mAP50=0.796." },
       "subtasks": [],
-      "notes": "No fallback model. Metrics only generated when trained best.pt is present. Requires dataset YAML at the correct path.",
+      "notes": "Model evaluation ran successfully on test split (194 images, 311 instances).",
       "added": "2026-06-18",
-      "completed": null
+      "completed": "2026-06-20"
     },
     {
       "id": "F008",
@@ -141,7 +241,7 @@
     {
       "id": "F009",
       "name": "Optional LLM-Assisted Violations",
-      "description": "Groq vision LLM (llava-1.5-7b-4096) checks for mobile_phone, wrong_side_driving, red_light, seatbelt.",
+      "description": "Groq vision LLM (meta-llama/llama-4-scout-17b-16e-instruct) checks for mobile_phone, wrong_side_driving, red_light, seatbelt, stop_line, illegal_parking.",
       "status": "completed",
       "priority": "low",
       "module": "src/llm_classifier.py",
@@ -151,29 +251,48 @@
         { "id": "F009-1", "name": "mobile_phone classification toggle", "status": "completed" },
         { "id": "F009-2", "name": "wrong_side_driving classification toggle", "status": "completed" },
         { "id": "F009-3", "name": "red_light classification toggle", "status": "completed" },
-        { "id": "F009-4", "name": "seatbelt classification toggle", "status": "completed" }
+        { "id": "F009-4", "name": "seatbelt classification toggle", "status": "completed" },
+        { "id": "F009-5", "name": "stop_line classification toggle", "status": "completed" },
+        { "id": "F009-6", "name": "illegal_parking classification toggle", "status": "completed" }
       ],
-      "notes": "Groq vision integration implemented.",
+      "notes": "All 6 classifications enabled in config. Requires GROQ_API_KEY and llm_violations.enabled: true.",
       "added": "2026-06-18",
-      "completed": "2026-06-18"
+      "completed": "2026-06-20"
     },
     {
-      "id": "F010",
-      "name": "Frontend Static File Serving",
-      "description": "Built React dashboard (client/dist/) served automatically by FastAPI via StaticFiles mount at /. Single-command make run builds frontend + starts API.",
+      "id": "F011",
+      "name": "Challans API",
+      "description": "CRUD endpoints for traffic challans (e-tickets). POST to create from a violation, GET list/detail with fine computation and legal section mapping.",
       "status": "completed",
       "priority": "high",
-      "module": "api/main.py, Makefile",
+      "module": "api/routes/challans.py, client/src/pages/ChallansList.tsx, client/src/pages/ChallanDetail.tsx",
       "design_doc": null,
-      "tests": { "status": "missing", "files": [], "notes": "Verification is manual — start server and navigate to /" },
+      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py", "client/src/lib/api.test.ts"], "notes": "3 backend API tests + 3 client API tests." },
       "subtasks": [
-        { "id": "F010-1", "name": "Mount StaticFiles in api/main.py after API routes", "status": "completed" },
-        { "id": "F010-2", "name": "Add client-install, client-build, run targets to Makefile", "status": "completed" },
-        { "id": "F010-3", "name": "Update API client to use relative URLs by default for same-origin serving", "status": "completed" }
+        { "id": "F011-1", "name": "POST /api/challans (create from violation)", "status": "completed" },
+        { "id": "F011-2", "name": "GET /api/challans (list, pagination)", "status": "completed" },
+        { "id": "F011-3", "name": "GET /api/challans/{id} (detail)", "status": "completed" },
+        { "id": "F011-4", "name": "Client ChallansList fetches real data", "status": "completed" },
+        { "id": "F011-5", "name": "Client ChallanDetail handles API fetch + preview", "status": "completed" },
+        { "id": "F011-6", "name": "ViolationDetail generate challan → POST then navigate", "status": "completed" }
       ],
-      "notes": "Frontend mount is conditional (skipped if client/dist/ doesn't exist). API-only dev workflow unchanged.",
+      "notes": "Fine map and legal section map in challans route mirror evidence.py. Persisted to outputs/challans.jsonl.",
       "added": "2026-06-20",
       "completed": "2026-06-20"
+    },
+    {
+      "id": "F012",
+      "name": "Computational Efficiency & Scalability Evaluation",
+      "description": "Measure wall-clock time per pipeline stage (preprocess, detect, OCR, LLM), throughput in images/sec, and memory usage. Output as extended metrics.json section. Design doc to be provided separately.",
+      "status": "planned",
+      "priority": "medium",
+      "module": "src/evaluate.py, outputs/metrics.json",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Waiting on design doc from stakeholder." },
+      "subtasks": [],
+      "notes": "No code written yet. Design doc incoming from user.",
+      "added": "2026-06-20",
+      "completed": null
     }
   ]
 }

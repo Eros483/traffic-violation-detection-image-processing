@@ -1,12 +1,12 @@
 .PHONY: setup sync format format-check lint run-api process evaluate \
-        data test clean client-install client-build run
+        data test clean client-install client-build run download-model
 
 # Install uv if not present, then sync all dependencies & install frontend deps
 setup:
 	@command -v uv >/dev/null 2>&1 || { echo "Installing uv..."; curl -LsSf https://astral.sh/uv/install.sh | sh; }
 	uv sync
 	@command -v npm >/dev/null 2>&1 && { $(MAKE) client-install; } || echo "⚠ npm not found — skipping frontend install."
-	@echo "\n✓ Environment ready. Run 'make run' to build frontend + start server, or 'make run-api' for backend only."
+	@echo "\n✓ Environment ready. Run 'make download-model' to get trained weights, then 'make process' to generate sample outputs."
 
 # Sync dependencies (fast — uses lockfile)
 sync:
@@ -38,6 +38,14 @@ data:
 	uv run kaggle datasets download -d pkdarabi/helmet -p data/raw/ --unzip
 	uv run kaggle datasets download -d aneesarom/rider-with-helmet-without-helmet-number-plate -p data/raw/ --unzip
 	git lfs install && git clone https://huggingface.co/datasets/Dataclusterlabspvtltd/indian-number-plates-dataset data/raw/indian-plates
+
+# Download trained YOLOv8m model weights from HuggingFace
+download-model:
+	@mkdir -p models/weights/traffic_violations
+	@echo "Downloading trained model weights..."
+	curl -L -o models/weights/traffic_violations/best.pt \
+		https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
+	@echo "✓ Model weights placed at models/weights/traffic_violations/best.pt"
 
 # Run tests
 test:

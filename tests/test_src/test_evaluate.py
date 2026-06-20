@@ -60,23 +60,30 @@ def test_evaluate_script_generates_metrics():
 
 def test_evaluate_script_returns_error_when_model_missing():
     """Test that the evaluation script writes an error status when model weights are absent."""
-    from src.evaluate import generate_metrics
+    original_exists = os.path.exists
 
-    test_output_path = "outputs/test_metrics_error.json"
+    def _mock_exists(path):
+        p = str(path)
+        if "best.pt" in p:
+            return False
+        return original_exists(path)
 
-    # Clean up before test if it exists from a prior failed run
-    if os.path.exists(test_output_path):
+    with patch("os.path.exists", side_effect=_mock_exists):
+        from src.evaluate import generate_metrics
+
+        test_output_path = "outputs/test_metrics_error.json"
+
+        if os.path.exists(test_output_path):
+            os.remove(test_output_path)
+
+        generate_metrics(output_path=test_output_path)
+
+        assert os.path.exists(test_output_path)
+
+        with open(test_output_path, "r") as f:
+            data = json.load(f)
+
+        assert data["status"] == "error"
+        assert "not found" in data["message"].lower()
+
         os.remove(test_output_path)
-
-    generate_metrics(output_path=test_output_path)
-
-    assert os.path.exists(test_output_path)
-
-    with open(test_output_path, "r") as f:
-        data = json.load(f)
-
-    assert data["status"] == "error"
-    assert "not found" in data["message"].lower()
-
-    # Clean up
-    os.remove(test_output_path)

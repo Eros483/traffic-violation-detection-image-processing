@@ -18,7 +18,7 @@
 - Detection: Ultralytics YOLOv8 (YOLOv8m for violations, YOLOv8n-pose for occupant counting)
 - OCR: PaddleOCR PP-OCRv4
 - Backend API: FastAPI + Uvicorn
-- Optional reasoning layer: Groq vision LLM (`llava-1.5-7b-4096`)
+- Optional reasoning layer: Groq vision LLM (`meta-llama/llama-4-scout-17b-16e-instruct`)
 - Package manager: uv
 - Formatter: black
 - No database — persistence is JSONL (`outputs/violations.jsonl`) + JSON (`outputs/metrics.json`) + flat files
@@ -75,7 +75,7 @@
 ## Optional LLM-Assisted Features (Config-Toggleable)
 
 - **Provider:** Groq free vision API
-- **Model:** `llava-1.5-7b-4096` (configurable)
+- **Model:** `meta-llama/llama-4-scout-17b-16e-instruct` (configurable)
 - **Master toggle:** `llm_violations.enabled`
 - **Per-use-case toggles:**
   - `llm_violations.classifications.mobile_phone.enabled`
@@ -475,7 +475,7 @@ plate:
 llm_violations:
   enabled: false
   provider: groq
-  model: llava-1.5-7b-4096
+  model: meta-llama/llama-4-scout-17b-16e-instruct
   api_key_env: GROQ_API_KEY
   timeout_seconds: 30
   classifications:

@@ -23,13 +23,15 @@ plate:
   upscale_factor: 3
 
 llm_violations:
-  enabled: false
+  enabled: true
   provider: groq
-  model: llava-1.5-7b-4096
+  model: meta-llama/llama-4-scout-17b-16e-instruct
   api_key_env: GROQ_API_KEY
   timeout_seconds: 30
   classifications:
     mobile_phone: { enabled: true, confidence_threshold: 0.7 }
-    wrong_side_driving: { enabled: false, confidence_threshold: 0.6 }
-    red_light: { enabled: false, confidence_threshold: 0.7 }
-    seatbelt: { enabled: false, confidence_threshold: 0.6 }
+    wrong_side_driving: { enabled: true, confidence_threshold: 0.6 }
+    red_light: { enabled: true, confidence_threshold: 0.7 }
+    seatbelt: { enabled: true, confidence_threshold: 0.6 }
+    stop_line: { enabled: true, confidence_threshold: 0.6 }
+    illegal_parking: { enabled: true, confidence_threshold: 0.6 }

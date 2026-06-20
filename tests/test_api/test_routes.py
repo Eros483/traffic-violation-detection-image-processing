@@ -68,13 +68,16 @@ def test_get_analytics_summary():
     assert "total_violations" in data
 
 
-def test_get_analytics_metrics_not_found():
-    """Test that missing metrics.json returns 404."""
+def test_get_analytics_metrics():
+    """Test that analytics metrics endpoint returns metrics data."""
     if client is None:
         pytest.fail("FastAPI app not implemented yet!")
 
     response = client.get("/api/analytics/metrics")
-    assert response.status_code == 404
+    assert response.status_code == 200
+    data = response.json()
+    assert "detector" in data
+    assert "mAP50" in data["detector"]
 
 
 def test_get_evidence_image_not_found():
@@ -105,3 +108,56 @@ def test_process_image_invalid_path():
         json={"image_path": "/nonexistent/path.jpg"},
     )
     assert response.status_code == 400
+
+
+# ----- Challans API -----
+
+
+def test_create_challan():
+    """Test that creating a challan returns a valid challan record."""
+    if client is None:
+        pytest.fail("FastAPI app not implemented yet!")
+
+    response = client.post(
+        "/api/challans",
+        json={
+            "violation_id": "test-vid",
+            "violations": [
+                {"type": "helmet", "confidence": 0.91},
+                {"type": "triple_riding", "confidence": 0.85},
+            ],
+            "plate_number": "KA-01-AB-1234",
+            "vehicle_type": "two_wheeler",
+            "location": "MG Road",
+            "image_hash": "abc123",
+        },
+    )
+    assert response.status_code == 201
+    data = response.json()
+    assert data["challan_id"] is not None
+    assert data["fine_total"] == 2000  # 1000 + 1000
+    assert data["status"] == "pending"
+    assert data["violation_id"] == "test-vid"
+
+
+def test_get_challans():
+    """Test that the challans list endpoint returns paginated data."""
+    if client is None:
+        pytest.fail("FastAPI app not implemented yet!")
+
+    response = client.get("/api/challans")
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
+    assert "total" in data
+    assert "page" in data
+    assert len(data["items"]) >= 1  # from the previous create test
+
+
+def test_get_challan_not_found():
+    """Test that a missing challan ID returns 404."""
+    if client is None:
+        pytest.fail("FastAPI app not implemented yet!")
+
+    response = client.get("/api/challans/nonexistent-uuid")
+    assert response.status_code == 404
