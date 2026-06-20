@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 
 router = APIRouter()
 DATA_FILE = Path("outputs/violations.jsonl")
-SAMPLE_OUTPUTS_DIR = Path("data/sample_outputs")
+SAMPLE_OUTPUTS_DIR = Path("public/outputs")
 
 
 def _load_all_records() -> list[dict]:

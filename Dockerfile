@@ -38,7 +38,7 @@ COPY . .
 
 COPY --from=frontend /build/client/dist client/dist/
 
-RUN mkdir -p outputs data/sample_outputs
+RUN mkdir -p outputs public/outputs
 
 EXPOSE 8000
 

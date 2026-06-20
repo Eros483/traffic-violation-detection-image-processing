@@ -74,7 +74,7 @@ async def upload_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="File must be an image.")
 
     file_id = str(uuid.uuid4())
-    upload_dir = Path("data/sample_outputs/uploads")
+    upload_dir = Path("public/outputs/uploads")
     upload_dir.mkdir(parents=True, exist_ok=True)
 
     input_path = upload_dir / f"{file_id}.jpg"

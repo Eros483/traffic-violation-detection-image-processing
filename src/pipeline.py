@@ -104,7 +104,7 @@ if __name__ == "__main__":
         logger.error("No images found in public/. Place demo images there and try again.")
         raise SystemExit(1)
 
-    out_dir = "data/sample_outputs"
+    out_dir = "public/outputs"
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
 

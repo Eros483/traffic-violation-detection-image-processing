@@ -79,7 +79,7 @@ def create_challan(request: ChallanRequest):
         "legal_sections": legal_sections,
         "fine_total": fine_total,
         "status": "pending",
-        "image_ref": f"data/sample_outputs/{challan_id}.jpg",
+        "image_ref": f"public/outputs/{challan_id}.jpg",
         "image_hash": request.image_hash,
     }
 

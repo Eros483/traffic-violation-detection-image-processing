@@ -54,7 +54,7 @@ test:
 # Remove generated artifacts (preserves metrics.json for realistic dashboard data)
 clean:
 	rm -f outputs/violations.jsonl outputs/challans.jsonl
-	rm -f data/sample_outputs/*.jpg
+	rm -rf public/outputs/*.jpg public/outputs/uploads
 	@echo "✓ Cleaned violations, challans, and sample outputs. (metrics.json preserved)"
 
 # ----- Frontend (React dashboard) -----
