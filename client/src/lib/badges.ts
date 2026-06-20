@@ -1,8 +1,3 @@
-// Badge colour system. A single source of truth for the Tailwind class strings
-// that encode meaning — severity, confidence band, and challan status. Every
-// class resolves against the project palette remapped in index.css (the green/
-// amber/red/slate ramps are the desaturated project tones, not stock Tailwind).
-
 import type { Band } from "./format";
 import type { Severity } from "../types";
 

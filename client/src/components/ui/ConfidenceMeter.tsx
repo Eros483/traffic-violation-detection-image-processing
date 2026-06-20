@@ -1,7 +1,3 @@
-// Confidence meter. A thin proportional bar tinted by confidence band, with the
-// percentage tabulated alongside. Used in the case file where a chip would be
-// too coarse and the exact value matters.
-
 import { confidenceBand, pct } from "../../lib/format";
 import { ACCENT } from "../../lib/badges";
 

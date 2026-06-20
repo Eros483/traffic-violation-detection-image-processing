@@ -1,7 +1,3 @@
-// Static decorative sparkline — a fixed shape that gives a KPI number a visual
-// base instead of floating in a box. It carries no fabricated metric; pass real
-// `points` to plot an actual series (used by the dashboard trend tiles).
-
 export function Sparkline({
   color,
   points = [6, 9, 7, 12, 10, 14, 11, 16, 13, 18],

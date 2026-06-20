@@ -1,7 +1,3 @@
-// Application shell: Sidebar + Navbar + animated Outlet. Derives the page title
-// from the active route and surfaces the live connection state and record counts
-// pulled from the shared data context.
-
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import type { ConnState } from "../components/Navbar";

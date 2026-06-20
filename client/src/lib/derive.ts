@@ -1,8 +1,3 @@
-// Client-side aggregation over the violation records. The backend summary
-// endpoint only returns a total count, so every breakdown, trend, and ranking
-// is derived here. Pure functions — deterministic, no I/O — so they unit-test
-// cleanly and memoise well.
-
 import { confidenceBand } from "./format";
 import type { Band } from "./format";
 import type { ChallanRecord, Severity, ViolationRecord } from "../types";

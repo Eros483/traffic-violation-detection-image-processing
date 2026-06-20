@@ -1,7 +1,3 @@
-// Violations data grid. Dense, bordered, shaded sticky-style header with a 2px
-// base rule and a subtle alternating row tint (not zebra). Identifiers are
-// monospaced. Row click selects (used to navigate to the case file).
-
 import { displaySection, formatDateTime } from "../lib/format";
 import type { ViolationRecord } from "../types";
 import { ConfidenceBadge, PlateNumber, SeverityBadge, TypeTags } from "./ui";

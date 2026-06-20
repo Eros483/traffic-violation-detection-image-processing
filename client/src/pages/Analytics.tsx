@@ -1,7 +1,3 @@
-// Analytics — daily trend (area chart), type breakdown (donut), and a repeat-
-// offenders ranking table. All series are derived client-side from the live
-// record set; nothing is fabricated.
-
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";

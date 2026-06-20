@@ -1,7 +1,3 @@
-// KPICard — the headline dashboard card. Larger than StatCard, supports column
-// spanning so one KPI can anchor a row, and pairs the value with a descriptive
-// sub-line plus a base sparkline.
-
 import type { ReactNode } from "react";
 import { Sparkline } from "./Sparkline";
 

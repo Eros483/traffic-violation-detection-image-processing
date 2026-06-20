@@ -1,7 +1,3 @@
-// Domain types — an exact mirror of the read-only backend (api/schemas.py,
-// src/evidence.py, and the JSONL records). Do not add fields the backend does
-// not emit. Frontend-only view models live at the bottom, clearly separated.
-
 export type Severity = "high" | "standard";
 export type VehicleType = "two_wheeler" | "vehicle" | "unknown";
 

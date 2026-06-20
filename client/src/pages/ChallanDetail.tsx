@@ -1,7 +1,3 @@
-// Challan detail — a printable-style e-ticket preview. Reads the challan from
-// the shared register (already fetched), with a graceful "not found" when the id
-// is unknown. Links back to the originating violation case file.
-
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";

@@ -1,8 +1,3 @@
-// Generic data-fetching hook. Wraps an async loader in honest loading / error /
-// data state, aborts in flight on unmount or dependency change, and exposes a
-// `reload()` to re-run on demand. The loader receives an AbortSignal so callers
-// can thread it into fetch. Dependencies follow the usual effect-array rules.
-
 import { useCallback, useEffect, useState } from "react";
 
 export interface FetchState<T> {

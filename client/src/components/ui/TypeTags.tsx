@@ -1,6 +1,3 @@
-// Compact rectangular tags for a record's violation types. Truncates to `max`
-// with a "+N" overflow indicator so dense table rows stay single-line.
-
 import { violationShort } from "../../lib/format";
 import type { Violation } from "../../types";
 

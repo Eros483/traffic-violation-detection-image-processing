@@ -1,7 +1,3 @@
-// ViolationCard — a self-contained card summarising one detection: plate,
-// severity, types, top confidence, and capture time. Used where a grid of cards
-// reads better than a table row (e.g. the live-detection result panel).
-
 import { formatDateTime } from "../../lib/format";
 import type { ViolationRecord } from "../../types";
 import { ConfidenceBadge, SeverityBadge } from "./Badge";

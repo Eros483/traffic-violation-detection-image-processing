@@ -1,4 +1,3 @@
-// Inline stroke icons — no icon dependency. Inherit currentColor.
 import type { SVGProps } from "react";
 type P = SVGProps<SVGSVGElement>;
 

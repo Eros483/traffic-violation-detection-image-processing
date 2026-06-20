@@ -1,8 +1,3 @@
-// Static reference data for violation types: display label, short label, the
-// fine in rupees, and the cited legal section. The fine and section values
-// mirror api/routes/challans.py so the console can show an estimated fine
-// before a challan is issued. Keep these in sync with the backend maps.
-
 import type { ViolationType } from "../types";
 
 export interface ViolationMeta {

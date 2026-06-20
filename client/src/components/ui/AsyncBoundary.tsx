@@ -1,8 +1,3 @@
-// Loading / error / empty / data state machine. Centralises the three non-happy
-// states so every page renders them consistently and honestly: a spinner while
-// loading, an actionable error panel when the API is unreachable, and a neutral
-// empty state when there is simply nothing to show.
-
 import type { ReactNode } from "react";
 import { IconAlert } from "../icons";
 

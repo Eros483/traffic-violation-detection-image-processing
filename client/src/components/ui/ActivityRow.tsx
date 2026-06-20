@@ -1,7 +1,3 @@
-// ActivityRow — one line in the dashboard recent-activity feed. A severity dot,
-// the plate (or "unread"), the violation types, and a relative-ish timestamp.
-// The whole row is a button so it can deep-link into the case file.
-
 import { formatDateTime, violationShort } from "../../lib/format";
 import type { ViolationRecord } from "../../types";
 

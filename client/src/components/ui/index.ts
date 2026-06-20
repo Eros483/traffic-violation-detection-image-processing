@@ -1,4 +1,3 @@
-// Barrel for the shared UI component library. Import from "../components/ui".
 export { Badge, SeverityBadge, ConfidenceBadge } from "./Badge";
 export { StatusBadge } from "./StatusBadge";
 export { PlateNumber } from "./PlateNumber";

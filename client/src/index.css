@@ -1,23 +1,10 @@
 @import "tailwindcss";
-
-/* ------------------------------------------------------------------
-   Theme tokens. Standard, legible system fonts — no decorative display
-   faces. Monospace is reserved for identifiers (plates, IDs, hashes).
-   Colours stay on Tailwind's standard high-contrast palette.
-   ------------------------------------------------------------------ */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo,
     Consolas, monospace;
 
-  /* ----------------------------------------------------------------
-     Project palette — fixed, documented set (see README). A muted,
-     desaturated register. Roles, not decoration.
-       Background #F5F6F8 · Surface #FFFFFF · Sidebar #111827
-       Primary #6B728E · Success #5D8A6A · Warning #B0894F · Danger #B75D5D
-       Text #1F2937 · Muted #6B7280
-     ---------------------------------------------------------------- */
   --color-brand: #6b728e; /* primary action / active nav */
   --color-success: #5d8a6a; /* confirmed / high confidence */
   --color-warning: #b0894f; /* pending / medium confidence */
@@ -27,8 +14,6 @@
   --color-muted: #6b7280; /* secondary text */
   --color-border: #e2e8f0; /* 1px rules */
 
-  /* ---- Remap Tailwind ramps onto the palette so existing utility
-          classes (bg-blue-600, text-green-700, …) inherit it. ---- */
   /* Primary (slate-blue) */
   --color-blue-50: #eef0f3;
   --color-blue-100: #dee1e8;
@@ -64,7 +49,6 @@
   --color-slate-500: #6b7280;
   --color-slate-900: #1f2937;
 
-  /* slow, calm "live" pulse for the connection indicator */
   --animate-live: live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -80,13 +64,6 @@
   }
 }
 
-/* ------------------------------------------------------------------
-   Dark theme. Accent hues (brand / success / warning / critical) are
-   UNCHANGED — only the neutral surfaces, borders, and text invert, plus
-   the faint accent tints darken so status chips stay legible. Activated
-   by <html data-theme="dark"> (see theme/ThemeContext). The navigation
-   rail (gray-900) is dark in both themes and is intentionally untouched.
-   ------------------------------------------------------------------ */
 [data-theme="dark"] {
   /* Surfaces & neutrals */
   --color-white: #161c27; /* panels, cards, inputs */

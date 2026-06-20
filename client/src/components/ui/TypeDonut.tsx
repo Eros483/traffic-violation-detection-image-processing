@@ -1,7 +1,3 @@
-// Violation-type breakdown as a Recharts donut with a centred total and a
-// legend table. A single full ring would read as a loading state, so the legend
-// carries the exact counts and shares. Colours come from the badge system.
-
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { violationLabel } from "../../lib/format";
 import { typeColor } from "../../lib/badges";

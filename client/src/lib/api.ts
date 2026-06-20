@@ -1,8 +1,3 @@
-// Typed client for the FastAPI backend. Covers exactly what the backend
-// exposes — read endpoints, challan creation, and image upload. VITE_API_BASE
-// may set an absolute origin; when empty (the default), requests are relative
-// and ride either same-origin serving or the Vite dev proxy.
-
 import type {
   AnalyticsSummary,
   ChallanRecord,

@@ -1,7 +1,3 @@
-// Settings — appearance (theme) and an about panel. Deliberately small: the
-// console's behaviour is driven by the backend, so there is little to configure
-// client-side beyond presentation.
-
 import { useConsoleData } from "../context/DataContext";
 import { useTheme } from "../theme/ThemeContext";
 import type { Theme } from "../theme/ThemeContext";

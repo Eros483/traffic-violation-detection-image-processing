@@ -1,7 +1,3 @@
-// Navigation rail. Router-driven (NavLink), grouped (Monitoring / Enforcement /
-// Tools) so items have structure. Dark slate with a crisp right edge; the active
-// item carries a brand left-border plus a lighter background. Counts are passed
-// down from the layout's live data.
 
 import { NavLink } from "react-router-dom";
 import { formatNumber } from "../lib/format";

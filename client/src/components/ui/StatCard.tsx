@@ -1,7 +1,3 @@
-// StatCard — a compact metric tile used in grids (e.g. the challan register
-// rollup and the analytics summary strip). Accented left border encodes the
-// metric's semantic role; an optional sparkline gives the number a base.
-
 import type { ReactNode } from "react";
 import { Sparkline } from "./Sparkline";
 

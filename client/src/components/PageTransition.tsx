@@ -1,8 +1,3 @@
-// Page transition wrapper. A short, restrained fade+rise on route change —
-// framer-motion, keyed by pathname so each navigation animates once. Respects
-// the user's reduced-motion preference (framer-motion reads it automatically
-// for `transition`, and we keep the movement small regardless).
-
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 

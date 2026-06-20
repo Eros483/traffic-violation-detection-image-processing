@@ -1,8 +1,3 @@
-// App-level data hooks composed from useFetch. The console reads live from the
-// backend — no bundled mock. Violations + metrics load together (the dashboard
-// and analytics both need them); challans load separately so issuing one can
-// refresh just that register via reload().
-
 import { useMemo } from "react";
 import { fetchAllChallans, fetchAllViolations, fetchMetrics } from "../lib/api";
 import { computeAnalytics } from "../lib/derive";

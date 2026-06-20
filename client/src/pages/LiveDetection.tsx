@@ -1,9 +1,3 @@
-// Live Detection — manual pipeline test. Upload a still image, POST it to
-// /api/violations/upload, and render the annotated result plus each detected
-// record. A challan can be issued directly from a result. Note: the upload
-// endpoint runs the pipeline in-memory and does not persist to the detection
-// log, so results here are transient until a challan is issued.
-
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createChallan, uploadImage } from "../lib/api";

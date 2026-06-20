@@ -1,6 +1,3 @@
-// Pure formatting + lookup helpers. Labels, citations, confidence banding,
-// currency and date formatting. All deterministic and side-effect free.
-
 import { VIOLATION_META } from "./constants";
 
 export function titleCase(s: string): string {

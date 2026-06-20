@@ -1,7 +1,3 @@
-// Challans — issued-challan register. Rollup StatCards over the live register,
-// then a dense table. Row click opens the challan detail. Card treatment matches
-// the dashboard KPIs; status uses the solid-tint pill badge.
-
 import { useNavigate } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";
 import { challanTotals } from "../lib/derive";

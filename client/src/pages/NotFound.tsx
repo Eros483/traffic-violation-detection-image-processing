@@ -1,5 +1,3 @@
-// 404 fallback for unknown routes.
-
 import { useNavigate } from "react-router-dom";
 
 export function NotFound() {

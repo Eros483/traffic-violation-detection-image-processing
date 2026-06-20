@@ -1,8 +1,3 @@
-// Badge primitives. The base Badge is a rectangular (rounded-md) chip with an
-// explicit 1px border and high-contrast text — utilitarian, not pill-shaped.
-// SeverityBadge and ConfidenceBadge specialise it; colour always encodes meaning
-// and is sourced from the badge colour system (lib/badges.ts).
-
 import type { ReactNode } from "react";
 import { BAND_LABEL, confidenceBand, pct } from "../../lib/format";
 import { CONFIDENCE_BADGE, SEVERITY_BADGE } from "../../lib/badges";

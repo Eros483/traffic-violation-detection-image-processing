@@ -1,6 +1,3 @@
-// Daily violation trend as a Recharts area chart. Reads the derived TrendPoint
-// series (continuous, zero-filled). Brand-tinted fill, calm grid, compact axes.
-
 import {
   Area,
   AreaChart,

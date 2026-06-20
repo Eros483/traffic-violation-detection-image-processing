@@ -1,7 +1,3 @@
-// Violations — the detection log as a dense data grid with input-style filters
-// and pagination. A `?plate=` query param (used by the offenders ranking) seeds
-// the search. Row click opens the case file at /violations/:id.
-
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";

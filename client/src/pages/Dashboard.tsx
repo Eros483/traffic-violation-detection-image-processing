@@ -1,7 +1,3 @@
-// Dashboard — headline KPIs (from the live analytics), model performance from
-// metrics.json, a recent-activity feed, and a link into live detection. The KPI
-// trend sparkline is fed the real daily series so it is not decorative here.
-
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";

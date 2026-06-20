@@ -1,8 +1,3 @@
-// Violation case file (full page). Evidence image (graceful 404), every
-// persisted field, detected violations with confidence, and the issue-challan
-// action: POST /api/challans, refresh the register, then navigate to the new
-// challan's detail page.
-
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";

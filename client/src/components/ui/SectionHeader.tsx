@@ -1,7 +1,3 @@
-// Panel / section header. A consistent label bar used at the top of every panel
-// and as the heading for a group of fields. Optional trailing slot for an info
-// hint or action.
-
 import type { ReactNode } from "react";
 
 export function SectionHeader({

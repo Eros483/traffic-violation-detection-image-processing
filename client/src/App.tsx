@@ -1,16 +1,3 @@
-// Route table. Nine routes, all nested under the application shell (AppLayout),
-// which provides the sidebar, navbar, and animated outlet.
-//
-//   /                  Dashboard
-//   /analytics         Analytics
-//   /violations        Violations log
-//   /violations/:id    Violation case file
-//   /challans          Challan register
-//   /challans/:id      Challan detail
-//   /live              Live detection (image upload)
-//   /settings          Settings
-//   *                  Not found
-
 import { Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layouts/AppLayout";
 import { Dashboard } from "./pages/Dashboard";

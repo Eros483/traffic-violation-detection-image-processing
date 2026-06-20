@@ -1,7 +1,3 @@
-// Top navigation bar. Title sits above a receding subtitle; the live indicator
-// pulses when the API is connected; the jurisdiction/date sits on the right.
-// White surface, hard 1px bottom border. (Theme is selected from Settings.)
-
 import { JURISDICTION } from "../lib/constants";
 
 export type ConnState = "ok" | "down" | "loading";

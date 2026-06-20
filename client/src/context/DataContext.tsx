@@ -1,9 +1,3 @@
-// Single source of live data for the whole console. Violations + metrics +
-// challans are fetched once here and shared via context, so the sidebar counts,
-// the navbar connection state, and every page read the same snapshot without
-// duplicate requests. `reloadChallans` lets the case file refresh the register
-// after issuing a challan without re-pulling the full violation log.
-
 import { createContext, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 import { useChallans, useViolationsData } from "../hooks/useData";
