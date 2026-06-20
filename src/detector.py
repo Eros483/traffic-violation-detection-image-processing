@@ -1,6 +1,7 @@
 # ----- yolov8 vehicle, helmet, and plate detection @ src/detector.py -----
 
 import math
+import os
 
 from ultralytics import YOLO
 
@@ -8,18 +9,22 @@ from src.triple_riding import count_riders
 from utils.config import config
 from utils.logger import logger
 
-# Load model paths from config
 detector_path = config.get_yaml(
     "models.detector.weights", "models/weights/traffic_violations/best.pt"
 )
-fallback_path = config.get_yaml("models.detector.fallback_weights", "yolov8m.pt")
 
-try:
-    model = YOLO(detector_path)
-    logger.info(f"Loaded primary detector from {detector_path}")
-except Exception as e:
-    logger.warning(f"Primary detector missing, falling back to {fallback_path}: {e}")
-    model = YOLO(fallback_path)
+model = None
+if os.path.exists(detector_path):
+    try:
+        model = YOLO(detector_path)
+        logger.info(f"Loaded detector from {detector_path}")
+    except Exception as e:
+        logger.error(f"Failed to load detector from {detector_path}: {e}")
+else:
+    logger.warning(
+        f"Detector weights not found at {detector_path}. "
+        "Model training still in progress. Detection will return empty results until model is placed."
+    )
 
 
 def detect_violations(image) -> list[dict]:
@@ -27,7 +32,17 @@ def detect_violations(image) -> list[dict]:
     Runs YOLO inference on the image. Maps detected classes to violations,
     invokes pose estimation for triple riding if configured, and associates
     license plates with the nearest vehicle/violation bounding box.
+
+    The class mapping handles the master dataset labels:
+      Plate (0) -> collected for association
+      WithHelmet (1) -> no violation
+      WithoutHelmet (2) -> helmet violation
+      TripleRiding (3) -> triple_riding violation
     """
+    if model is None:
+        logger.warning("Detector not loaded. Skipping detection.")
+        return []
+
     conf_thresh = config.get_yaml("models.detector.confidence_threshold", 0.5)
     results = model(image, conf=conf_thresh, verbose=False)
 
@@ -68,7 +83,7 @@ def detect_violations(image) -> list[dict]:
                     }
                 )
 
-            # Fallback to YOLO-Pose occupant counting if explicitly needed on generic vehicles
+            # YOLO-Pose occupant counting for generic vehicle detections
             if not violations and cls_name in ["motorcycle", "two_wheeler", "vehicle"]:
                 riders = count_riders(image, [x1, y1, x2, y2])
                 triple_threshold = config.get_yaml("detection.triple_riding_threshold", 3)
@@ -76,7 +91,7 @@ def detect_violations(image) -> list[dict]:
                     violations.append(
                         {
                             "type": "triple_riding",
-                            "confidence": 0.8,  # Heuristic confidence
+                            "confidence": 0.8,
                             "description": f"Pose estimation counted {riders} riders",
                         }
                     )

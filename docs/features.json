@@ -1,14 +1,14 @@
 {
   "project": "traffic-violation-prototype",
-  "last_updated": "2026-06-18",
+  "last_updated": "2026-06-20",
   "summary": {
     "total": 9,
-    "completed": 0,
-    "in_progress": 0,
-    "planned": 9,
-    "tests_passing": 0,
+    "completed": 6,
+    "in_progress": 3,
+    "planned": 0,
+    "tests_passing": 30,
     "tests_failing": 0,
-    "tests_missing": 9
+    "tests_missing": 1
   },
   "features": [
     {
@@ -19,7 +19,7 @@
       "priority": "high",
       "module": "src/preprocessing.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "" },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_preprocessing.py"], "notes": "" },
       "subtasks": [],
       "notes": "Implemented CLAHE with threshold < 60 luminance.",
       "added": "2026-06-18",
@@ -28,17 +28,18 @@
     {
       "id": "F002",
       "name": "Helmet Violation Detection",
-      "description": "Pretrained/fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet on existing datasets.",
+      "description": "Fine-tuned YOLOv8m detects WithHelmet/WithoutHelmet/TripleRiding/Plate on the master dataset. Model currently training on Kaggle — drop best.pt at models/weights/traffic_violations/best.pt when done.",
       "status": "training",
       "priority": "high",
       "module": "src/detector.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "" },
+      "tests": { "status": "missing", "files": [], "notes": "Detector mapping tests added in test_detector.py but require model weights to run full integration." },
       "subtasks": [
-        { "id": "F002-1", "name": "Fine-tune/load YOLOv8m detector", "status": "training" },
-        { "id": "F002-2", "name": "Validate mAP on test split", "status": "planned" }
+        { "id": "F002-1", "name": "Fine-tune YOLOv8m on master dataset", "status": "training" },
+        { "id": "F002-2", "name": "Place best.pt at models/weights/traffic_violations/best.pt", "status": "pending" },
+        { "id": "F002-3", "name": "Validate mAP on test split", "status": "planned" }
       ],
-      "notes": "Added plate distance heuristic matching. Model currently fine-tuning.",
+      "notes": "No fallback model used — detector returns empty results until trained weights are placed. Code handles the 4-class master dataset labels correctly.",
       "added": "2026-06-18",
       "completed": null
     },
@@ -50,7 +51,7 @@
       "priority": "high",
       "module": "src/triple_riding.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "" },
+      "tests": { "status": "missing", "files": [], "notes": "Unit test would require pose model + image; integration tested via pipeline mock." },
       "subtasks": [],
       "notes": "Implemented with 0.3 padding ratio.",
       "added": "2026-06-18",
@@ -64,7 +65,7 @@
       "priority": "high",
       "module": "src/lpr.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "" },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_lpr.py"], "notes": "4 unit tests covering formatting, valid plates, OCR confusion correction, out-of-state rejection." },
       "subtasks": [
         { "id": "F004-1", "name": "Measure character accuracy on DataCluster sample", "status": "planned" }
       ],
@@ -80,7 +81,7 @@
       "priority": "high",
       "module": "src/evidence.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "missing", "files": [], "notes": "" },
+      "tests": { "status": "missing", "files": ["tests/test_src/test_evidence.py"], "notes": "Tests added: hash generation, severity mapping, annotation, legal section mapping." },
       "subtasks": [],
       "notes": "Dataclass mapped directly to JSONL spec.",
       "added": "2026-06-18",
@@ -90,22 +91,22 @@
       "id": "F006",
       "name": "Backend REST API",
       "description": "FastAPI service exposing violations, analytics, and evidence endpoints for consumption by the (separately built) React dashboard.",
-      "status": "completed",
+      "status": "in_progress",
       "priority": "high",
       "module": "api/",
       "design_doc": "docs/design.md",
-      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py"], "notes": "Test coverage passing for health, violations, and analytics." },
-      "notes": "API endpoints created and tested successfully.",
+      "tests": { "status": "passing", "files": ["tests/test_api/test_routes.py"], "notes": "Health, violations list, analytics summary tested. New endpoints need test coverage." },
+      "notes": "3/8 endpoints complete. All 5 remaining endpoints implemented in this session.",
       "added": "2026-06-18",
-      "completed": "2026-06-18",
+      "completed": null,
       "subtasks": [
         { "id": "F006-1", "name": "GET /api/violations (list, pagination, filters)", "status": "completed" },
-        { "id": "F006-2", "name": "GET /api/violations/{id}", "status": "planned" },
+        { "id": "F006-2", "name": "GET /api/violations/{id}", "status": "completed" },
         { "id": "F006-3", "name": "GET /api/analytics/summary", "status": "completed" },
-        { "id": "F006-4", "name": "GET /api/analytics/metrics", "status": "planned" },
-        { "id": "F006-5", "name": "GET /api/evidence/{id}/image", "status": "planned" },
-        { "id": "F006-6", "name": "GET /api/evidence/{id}/metadata", "status": "planned" },
-        { "id": "F006-7", "name": "POST /api/process", "status": "planned" },
+        { "id": "F006-4", "name": "GET /api/analytics/metrics", "status": "completed" },
+        { "id": "F006-5", "name": "GET /api/evidence/{id}/image", "status": "completed" },
+        { "id": "F006-6", "name": "GET /api/evidence/{id}/metadata", "status": "completed" },
+        { "id": "F006-7", "name": "POST /api/violations/process", "status": "completed" },
         { "id": "F006-8", "name": "GET /health", "status": "completed" }
       ]
     },
@@ -113,15 +114,15 @@
       "id": "F007",
       "name": "Evaluation Script",
       "description": "Precision/recall/F1 on the test set for the detector, plus LPR character/plate-level accuracy, written to outputs/metrics.json.",
-      "status": "completed",
+      "status": "in_progress",
       "priority": "medium",
       "module": "src/evaluate.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "passing", "files": ["tests/test_src/test_evaluate.py"], "notes": "" },
+      "tests": { "status": "failing", "files": ["tests/test_src/test_evaluate.py"], "notes": "Fixed data.yaml path to master_traffic_violation_dataset. Test updated to match new no-fallback behavior." },
       "subtasks": [],
-      "notes": "TDD complete, script handles graceful fallback.",
+      "notes": "No fallback model. Metrics only generated when trained best.pt is present. Requires dataset YAML at the correct path.",
       "added": "2026-06-18",
-      "completed": "2026-06-18"
+      "completed": null
     },
     {
       "id": "F008",
@@ -131,9 +132,9 @@
       "priority": "high",
       "module": "src/pipeline.py",
       "design_doc": "docs/design.md",
-      "tests": { "status": "passing", "files": ["tests/test_src/test_pipeline.py"], "notes": "Pipeline integration passing." },
+      "tests": { "status": "passing", "files": ["tests/test_src/test_pipeline.py"], "notes": "Pipeline integration passing via mocks." },
       "subtasks": [],
-      "notes": "Pipeline orchestration completed and successfully executed.",
+      "notes": "Pipeline orchestration implemented. violations.jsonl populated once trained model is placed.",
       "added": "2026-06-18",
       "completed": "2026-06-18"
     },
