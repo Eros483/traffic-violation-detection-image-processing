@@ -1,0 +1,43 @@
+## 1. Core Detection & AI Capabilities
+
+The platform utilizes a multi-stage, CPU-optimized machine learning pipeline to process images and identify infractions.
+
+* **Image Preprocessing:** Applies Contrast Limited Adaptive Histogram Equalization (CLAHE) for low-light enhancement (activating for luminance thresholds < 60) to improve detection accuracy.
+* **Helmet & Rider Detection:** Utilizes a fine-tuned YOLOv8m model to detect riders with helmets, without helmets, and license plates.
+* **Triple Riding Detection:** Employs YOLOv8-Pose for occupant counting within dynamically padded vehicle bounding boxes.
+* **License Plate Recognition (LPR):** Integrates RapidOCR (rapidocr-onnxruntime) combined with formatting validation and OCR confusion correction, specifically tuned for Karnataka (KA) format plates.
+* **LLM-Assisted Classification:** Features an optional integration with the Groq vision LLM (`meta-llama/llama-4-scout-17b-16e-instruct`) to classify complex secondary violations, including mobile phone usage, wrong-side driving, red-light running, seatbelt non-compliance, stop-line crossing, and illegal parking.
+
+## 2. Backend & Processing Infrastructure
+
+The backend is driven by a high-performance Python API designed for stateless processing and evidence integrity.
+
+
+* **Cryptographic Evidence Packaging:** Automatically compiles the annotated detection image, JSON metadata, and mapped legal sections (e.g., Section 194B, 119/177) into a consolidated package secured by a SHA-256 hash.
+* **Automated Challan Generation:** Allows seamless conversion of confirmed violations into e-tickets (challans) with automated fine computation based on local legal mappings.
+* **Hardware-Optimized Inference:** Operates on native `.pt` YOLO weights and a CPU-only PyTorch index, drastically reducing framework overhead and memory consumption (removing CUDA/NVIDIA dependencies).
+
+## 3. Frontend & User Experience
+
+The client-facing application is a responsive, single-page application built with React, Vite, TypeScript and Tailwind.
+
+* **Live Detection Dashboard:** Provides a manual testing interface where users can upload images, run the full AI pipeline in real-time, view annotated visual results, and generate a challan instantly.
+* **Analytics & KPI Dashboard:** Displays real-time operational metrics, including KPI cards, violation trend charts, and a recent activity feed.
+
+## 4. Analytics & Evaluation Metrics
+
+The system includes built-in tools for measuring both operational data and system performance.
+
+| Capability Area | Specific Features |
+| :--- | :--- |
+| **Operational Analytics** | Trend tracking via Recharts, pie charts for violation type breakdowns, and top offender rankings. |
+| **Model Evaluation** | Precision, recall, and F1 score tracking, alongside LPR character and plate-level accuracy metrics. |
+| **System Benchmarking** | Detailed tracking of wall-clock time per pipeline stage, throughput (images/sec), and peak memory usage via `psutil`. |
+
+## 5. DevOps & Deployment Architecture
+
+The infrastructure is optimized for lean cloud environments, specifically targeting memory-constrained tiers like Render's 512MB free tier.
+
+* **Unified Serving:** The FastAPI backend is configured to automatically mount and serve the built React frontend static files (`client/dist/`) via the root directory, enabling same-origin serving.
+* **Lean Dockerization:** Utilizes a multi-stage Dockerfile with a `.dockerignore` setup, thread limiting (`OMP_NUM_THREADS=1`, `MALLOC_ARENA_MAX=2`), and dynamic port binding for high memory efficiency.
+* **Continuous Integration:** GitHub Actions workflow automates backend formatting checks (`black`), testing (`pytest`), frontend type-checking, and build validation on all main branch pushes and pull requests.
