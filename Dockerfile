@@ -29,10 +29,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --no-dev --frozen --system
 
 # Pre-download PaddleOCR models (fetched from remote at runtime otherwise)
-RUN uv run python -c "
-from paddleocr import PaddleOCR
-PaddleOCR(use_angle_cls=True, lang='en')
-"
+RUN uv run python -c "from paddleocr import PaddleOCR; PaddleOCR(use_angle_cls=True, lang='en')"
 
 COPY . .
 
