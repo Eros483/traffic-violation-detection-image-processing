@@ -37,7 +37,7 @@ data:
 	uv run kaggle datasets download -d devgurucodes/trafffic-violations-triple-riding-no-helmet-plate -p data/raw/ --unzip
 	uv run kaggle datasets download -d pkdarabi/helmet -p data/raw/ --unzip
 	uv run kaggle datasets download -d aneesarom/rider-with-helmet-without-helmet-number-plate -p data/raw/ --unzip
-	git lfs install && git clone https://huggingface.co/datasets/Dataclusterlabspvtltd/indian-number-plates-dataset data/raw/indian-plates
+	@command -v git-lfs >/dev/null 2>&1 || { echo "Installing git-lfs..."; sudo apt-get install -y git-lfs; } && git lfs install && git clone https://huggingface.co/datasets/Dataclusterlabspvtltd/indian-number-plates-dataset data/raw/indian-plates
 
 # Download trained YOLOv8m model weights from HuggingFace
 download-model:
