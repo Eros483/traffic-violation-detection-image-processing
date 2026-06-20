@@ -14,7 +14,7 @@ def generate_metrics(output_path: str = "outputs/metrics.json") -> None:
     """
     Loads the YOLO detector, runs validation on the test dataset split,
     and saves the precision/recall metrics to a JSON file.
-    Requires the trained best.pt to be present at the configured path.
+    Requires the trained model to be present at the configured path.
     """
     detector_path = config.get_yaml("models.detector.weights", "artifacts/best.pt")
 
@@ -22,7 +22,7 @@ def generate_metrics(output_path: str = "outputs/metrics.json") -> None:
         logger.error(f"Trained model not found at {detector_path}. Cannot evaluate.")
         results = {
             "status": "error",
-            "message": "Model weights not found. Train the model and copy best.pt to artifacts/best.pt.",
+            "message": "Model weights not found. Download via 'make download-model'.",
         }
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, "w") as f:

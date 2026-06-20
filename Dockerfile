@@ -28,8 +28,10 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --no-dev --frozen
 
-# Pre-download PaddleOCR models (fetched from remote at runtime otherwise)
-RUN uv run python -c "from paddleocr import PaddleOCR; PaddleOCR(use_angle_cls=True, lang='en')"
+# Model weights (.pt) are copied in next step via COPY . .
+# CPU-only inference: reduce thread/memory overhead
+ENV OMP_NUM_THREADS=1
+ENV MALLOC_ARENA_MAX=2
 
 COPY . .
 

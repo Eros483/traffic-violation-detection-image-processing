@@ -18,6 +18,5 @@ AGENTS.md
 client/node_modules/
 client/dist/
 public/outputs/uploads/
-outputs/
 Dockerfile
 .dockerignore

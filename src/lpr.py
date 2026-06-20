@@ -4,18 +4,15 @@ import re
 
 import cv2
 import numpy as np
-from paddleocr import PaddleOCR
+from rapidocr_onnxruntime import RapidOCR
 
 from utils.config import config
 from utils.logger import logger
 
-ocr_lang = config.get_yaml("models.ocr.lang", "en")
-use_angle = config.get_yaml("models.ocr.use_angle_cls", True)
-
 try:
-    ocr = PaddleOCR(use_angle_cls=use_angle, lang=ocr_lang, show_log=False)
+    ocr = RapidOCR()
 except Exception as e:
-    logger.error(f"Failed to initialize PaddleOCR: {e}")
+    logger.error(f"Failed to initialize RapidOCR: {e}")
     ocr = None
 
 KA_PATTERN = config.get_yaml("plate.ka_pattern", r"^KA\s?\d{2}\s?[A-Z]{1,3}\s?\d{1,4}$")
@@ -75,7 +72,7 @@ def validate_and_correct(raw_text: str) -> tuple[str, bool]:
 
 
 def read_plate(plate_crop: np.ndarray) -> dict:
-    """Runs PaddleOCR on a cropped plate image and validates the text."""
+    """Runs RapidOCR on a cropped plate image and validates the text."""
     if ocr is None or plate_crop.size == 0:
         return {"text": None, "confidence": 0.0, "valid": False, "raw": None}
 
@@ -88,13 +85,13 @@ def read_plate(plate_crop: np.ndarray) -> dict:
             plate_crop, (w * upscale, h * upscale), interpolation=cv2.INTER_CUBIC
         )
 
-    results = ocr.ocr(plate_crop, cls=True)
+    result, _ = ocr(plate_crop)
 
-    if not results or not results[0]:
+    if result is None:
         return {"text": None, "confidence": 0.0, "valid": False, "raw": None}
 
-    raw_text = " ".join([line[1][0] for line in results[0]])
-    confidence = min([line[1][1] for line in results[0]])
+    raw_text = " ".join([item[1] for item in result])
+    confidence = min([item[2] for item in result])
 
     corrected_text, is_valid = validate_and_correct(raw_text)
 

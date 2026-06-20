@@ -1,12 +1,12 @@
 {
   "project": "traffic-violation-prototype",
-  "last_updated": "2026-06-20",
+  "last_updated": "2026-06-22",
   "summary": {
-    "total": 18,
-    "completed": 16,
+    "total": 19,
+    "completed": 18,
     "in_progress": 0,
-    "planned": 2,
-    "tests_passing": 45,
+    "planned": 1,
+    "tests_passing": 42,
     "tests_failing": 0,
     "tests_missing": 0
   },
@@ -136,10 +136,10 @@
       "tests": { "status": "passing", "files": ["tests/test_src/test_detector.py"], "notes": "5 unit tests for mapping logic. Full integration requires model weights." },
       "subtasks": [
         { "id": "F002-1", "name": "Fine-tune YOLOv8m on master dataset", "status": "completed" },
-        { "id": "F002-2", "name": "Place best.pt at artifacts/best.pt", "status": "completed" },
+        { "id": "F002-2", "name": "Export to ONNX (artifacts/best.onnx)", "status": "completed" },
         { "id": "F002-3", "name": "Validate mAP on test split", "status": "completed" }
       ],
-      "notes": "Model trained on Kaggle, weights placed and pipeline confirmed working.",
+      "notes": "Model trained on Kaggle. Runs via ONNX Runtime (CPU) — no PyTorch inference overhead.",
       "added": "2026-06-18",
       "completed": "2026-06-20"
     },
@@ -160,7 +160,7 @@
     {
       "id": "F004",
       "name": "License Plate Recognition",
-      "description": "Plate detection + PaddleOCR PP-OCRv4 + KA-format validation/correction.",
+      "description": "Plate detection + OnnxOCR (PP-OCRv5 via ONNX Runtime) + KA-format validation/correction.",
       "status": "completed",
       "priority": "high",
       "module": "src/lpr.py",
@@ -169,7 +169,7 @@
       "subtasks": [
         { "id": "F004-1", "name": "Measure character accuracy on DataCluster sample", "status": "completed" }
       ],
-      "notes": "KA RegEx and 8x character heuristic swaps implemented. evaluate_lpr() in src/evaluate.py computes char/plate accuracy on 47-image DataCluster dataset (20 with GT).",
+      "notes": "KA RegEx and 8x character heuristic swaps implemented. Replaced PaddleOCR with OnnxOCR (no PaddlePaddle dependency). evaluate_lpr() in src/evaluate.py computes char/plate accuracy on 47-image DataCluster dataset (20 with GT).",
       "added": "2026-06-18",
       "completed": "2026-06-18"
     },
@@ -312,20 +312,41 @@
       "completed": "2026-06-20"
     },
     {
+      "id": "F019",
+      "name": "Model & OCR Migration: .pt + RapidOCR",
+      "description": "Reverted to native YOLOv8 .pt inference (ultralytics) instead of ONNX export. PaddleOCR replaced by RapidOCR (rapidocr-onnxruntime). torch remains CPU-only via the CPU-only pypi index. Dropped ~5GB of CUDA/nvidia deps and ~200MB PaddlePaddle framework overhead. Target: <400MB steady-state on Render 512MB free tier.",
+      "status": "completed",
+      "priority": "high",
+      "module": "src/detector.py, src/triple_riding.py, src/lpr.py, pyproject.toml, Dockerfile, Makefile",
+      "design_doc": null,
+      "tests": { "status": "passing", "files": ["tests/test_src/test_detector.py", "tests/test_src/test_triple_riding.py", "tests/test_src/test_lpr.py", "tests/test_src/test_evaluate.py"], "notes": "All 42 tests passing. Pipeline verified end-to-end on 11 sample images." },
+      "subtasks": [
+        { "id": "F019-1", "name": "Revert detector inference to native .pt (ultralytics YOLO)", "status": "completed" },
+        { "id": "F019-2", "name": "Switch torch to CPU-only index (remove CUDA deps)", "status": "completed" },
+        { "id": "F019-3", "name": "Replace PaddleOCR with RapidOCR in src/lpr.py", "status": "completed" },
+        { "id": "F019-4", "name": "Update pyproject.toml: remove paddlepaddle/paddleocr/onnxruntime/onnxocr, add rapidocr-onnxruntime", "status": "completed" },
+        { "id": "F019-5", "name": "Update Dockerfile: remove ULTRALYTICS_SKIP_REQUIREMENTS_CHECKS, trim env vars", "status": "completed" },
+        { "id": "F019-6", "name": "Update Makefile: download .pt files from HuggingFace instead of .onnx", "status": "completed" }
+      ],
+      "notes": "Best.pt and yolov8n-pose.pt hosted on HF at arnav-gupta/traffic-violation-prototype. onnxocr and onnxruntime removed from deps; rapidocr-onnxruntime added. make download-model downloads .pt files.",
+      "added": "2026-06-20",
+      "completed": "2026-06-20"
+    },
+    {
       "id": "F018",
       "name": "Render Deployment (Docker)",
-      "description": "Multi-stage Dockerfile with uv, PaddleOCR pre-download, PORT env var support, healthcheck, and .dockerignore for clean builds on Render.",
+      "description": "Multi-stage Dockerfile with uv, CPU-only torch index, ONNX models, PORT env var support, healthcheck, and .dockerignore for clean builds on Render.",
       "status": "completed",
       "priority": "high",
       "module": "Dockerfile, .dockerignore",
-      "design_doc": null,
       "tests": { "status": "missing", "files": [], "notes": "Manual — deploy and verify /health responds." },
       "subtasks": [
         { "id": "F018-1", "name": "Fix libgl1 package name for slim", "status": "completed" },
         { "id": "F018-2", "name": "Use $PORT env var in CMD and healthcheck", "status": "completed" },
-        { "id": "F018-3", "name": "Create .dockerignore", "status": "completed" }
+        { "id": "F018-3", "name": "Create .dockerignore", "status": "completed" },
+        { "id": "F018-4", "name": "Remove PaddleOCR pre-download; add OMP_NUM_THREADS=1", "status": "completed" }
       ],
-      "notes": "llm_classifier gracefully degrades if GROQ_API_KEY not set. Ephemeral filesystem: outputs/ lost on restart — fine for prototype.",
+      "notes": "llm_classifier gracefully degrades if GROQ_API_KEY not set. CPU torch to save ~5GB install size. OMP_NUM_THREADS=1 + MALLOC_ARENA_MAX=2 for memory efficiency.",
       "added": "2026-06-20",
       "completed": "2026-06-20"
     }

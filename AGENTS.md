@@ -24,7 +24,7 @@ make test                        # run pytest
 
 ```
 traffic-violation-prototype/
-├── artifacts/                   # tracked model weights (best.pt, yolov8n-pose.pt)
+├── artifacts/                   # tracked model weights (best.onnx, yolov8n-pose.onnx)
 ├── configs/
 │   └── config.yaml              # all thresholds, paths, model configs (see design.md §3)
 ├── data/

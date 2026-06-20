@@ -39,13 +39,20 @@ data:
 	uv run kaggle datasets download -d aneesarom/rider-with-helmet-without-helmet-number-plate -p data/raw/ --unzip
 	@command -v git-lfs >/dev/null 2>&1 || { echo "Installing git-lfs..."; sudo apt-get install -y git-lfs; } && git lfs install && git clone https://huggingface.co/datasets/Dataclusterlabspvtltd/indian-number-plates-dataset data/raw/indian-plates
 
-# Download trained YOLOv8m model weights from HuggingFace
+# Download trained YOLOv8m .pt model weights from HuggingFace
 download-model:
 	@mkdir -p artifacts
-	@echo "Downloading trained model weights..."
+	@echo "Downloading .pt model weights from HuggingFace..."
 	curl -L -o artifacts/best.pt \
-		https://huggingface.co/Eros483/traffic-violation-yolov8m/resolve/main/best.pt
-	@echo "✓ Model weights placed at artifacts/best.pt"
+		https://huggingface.co/arnav-gupta/traffic-violation-prototype/resolve/main/artifacts/best.pt
+	curl -L -o artifacts/yolov8n-pose.pt \
+		https://huggingface.co/arnav-gupta/traffic-violation-prototype/resolve/main/artifacts/yolov8n-pose.pt
+	@echo "✓ .pt model weights placed in artifacts/"
+
+# Re-export .pt → .onnx (requires ultralytics dev dependency)
+export-onnx:
+	uv run python -c "from ultralytics import YOLO; YOLO('artifacts/best.pt').export(format='onnx', imgsz=640); YOLO('artifacts/yolov8n-pose.pt').export(format='onnx', imgsz=640)"
+	@echo "✓ ONNX models re-exported from .pt files"
 
 # Run tests
 test:
