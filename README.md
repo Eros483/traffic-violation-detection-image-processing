@@ -2,7 +2,7 @@
 
 # Traffic Violation Detection Service
 
-Built for the Flipkart Gridlock 2.0
+Built for the Flipkart Gridlock 2.0. Check out the live demo up on [AWS!](http://traffic-violation-api.eba-7aat7qza.ap-south-1.elasticbeanstalk.com/#/)
 
 <p>
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python Version">
