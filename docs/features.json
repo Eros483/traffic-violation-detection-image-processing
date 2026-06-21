@@ -2,8 +2,8 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-22",
   "summary": {
-    "total": 19,
-    "completed": 19,
+    "total": 21,
+    "completed": 21,
     "in_progress": 0,
     "planned": 0,
     "tests_passing": 47,
@@ -354,6 +354,34 @@
       "notes": "llm_classifier gracefully degrades if GROQ_API_KEY not set. CPU torch to save ~5GB install size. OMP_NUM_THREADS=1 + MALLOC_ARENA_MAX=2 for memory efficiency.",
       "added": "2026-06-20",
       "completed": "2026-06-20"
+    },
+    {
+      "id": "F020",
+      "name": "Computational Efficiency & Scalability Assessment Document",
+      "description": "docs/compute_efficiency.md — detailed analysis of per-stage pipeline timing, memory usage, throughput, scalability bottlenecks, and recommendations based on real benchmark_pipeline() output.",
+      "status": "completed",
+      "priority": "medium",
+      "module": "docs/compute_efficiency.md",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Documentation only — no tests needed." },
+      "subtasks": [],
+      "notes": "References real metrics from outputs/metrics.json 'benchmark' key. Covers per-stage timing/memory, GPU projection, horizontal scaling estimates.",
+      "added": "2026-06-22",
+      "completed": "2026-06-22"
+    },
+    {
+      "id": "F021",
+      "name": "Production Upgrade Path Document",
+      "description": "docs/production_upgrade.md — how to evolve from prototype to production-grade system covering architecture, infrastructure (queues, DB, storage), model serving, edge deployment, observability, CI/CD, security, compliance, cost estimates, and migration roadmap.",
+      "status": "completed",
+      "priority": "medium",
+      "module": "docs/production_upgrade.md",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Documentation only — no tests needed." },
+      "subtasks": [],
+      "notes": "Covers 11 sections including architecture diagrams, schema design, cost estimates (₹1.85L/mo for 500 cameras), and 5-phase migration roadmap.",
+      "added": "2026-06-22",
+      "completed": "2026-06-22"
     }
   ]
 }

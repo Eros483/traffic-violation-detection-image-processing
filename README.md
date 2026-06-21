@@ -53,8 +53,12 @@ If make cannot be used, follow setup instructions in `docs/windows-setup.md`.
 
 **Note**: LLM-assisted violations are **enabled by default** in `configs/config.yaml` (`llm_violations.enabled: true`). Set `GROQ_API_KEY` in `.env` to use them. If you don't have a key, set `enabled: false` in the config — the CV-only pipeline (helmet, triple riding, plate) works without it.
 
+---
 
-### Further Setup
+### Documentation
+- Refer to `docs/research.md` for research-grade items that would bulletproof our solution.
+- Refer to `docs/compute_efficiency.md` for information on latency, compute requirements.
+- Refer to `docs/production_upgrade.md` on how our team would migrate it for active daily usage at Bengaluru!
 - Refer to `docs/extra-setup.md` for assistance in setting up locally, i.e training models from scratch, downloading datasets, etc.
 - Refer to `docs/api.md` for information on API endpoints.
 - Refer to `docs/design.md` for information on all capabilities and architectural decisions.
@@ -65,22 +69,23 @@ If make cannot be used, follow setup instructions in `docs/windows-setup.md`.
 
 ```
 Traffic Violation Detection Service
-├── AGENTS.md
-├── api/                           # API endpoints served bia FastAPI
-├── client/                        # dashboard for interfacing with API
-├── configs
-│   └── config.yaml                # Central configuration controller for services
+├── AGENTS.md                     # Contract with AI Harness
+├── api/                          # FastAPI serving and endpoints
+├── artifacts/                    # model storage
+├── client/                       # dashboard for monitoring violations
+├── configs/
 ├── data/
-├── docs
-│   ├── docs/windows-setup.md      # Setup assistance for non-unix users
-│   ├── design.md                  # Design document for service
-│   └── features.json              # Feature Implementation tracker
-├── Makefile                       # Entrypoint for repo setup
-├── models/   
-├── outputs/                       # Persistent storage for prototype
+├── Dockerfile
+├── docs/                         # documentation for everything in the repository
+├── LICENSE
+├── logs/
+├── Makefile                      # single builder for everything
+├── outputs/
+├── public/
 ├── pyproject.toml
 ├── README.md
-├── src/                           # Main scripts for services
+├── src/                          # all controlling scripts
+├── tests/
 ├── utils/
-└── tests/
+└── uv.lock
 ```
