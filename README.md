@@ -12,6 +12,7 @@ Built for the Flipkart Gridlock 2.0. Check out the live demo up on [AWS!](http:/
   <img src="https://img.shields.io/badge/YOLOv8-Medium-FF9D00.svg?logo=ultralytics" alt="YOLOv8">
   <img src="https://img.shields.io/badge/PaddleOCR-PP--OCRv4-blue" alt="PaddleOCR">
   <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code Style: Black">
+  <img src="https://img.shields.io/docker/v/eros483/traffic-violation-detection?logo=docker" alt="Docker Image Version">
 </p>
 
 A system that automatically detects seven traffic violations from live feeds (helmetless riders, triple-seat overcrowding, license plates, phone-using drivers, wrong-way drivers, red-light runners, unbelted passengers), references the specific laws each violation breaks, generates e-challans, and seals every detection as tamper-proof evidence on a live enforcement dashboard.
@@ -20,17 +21,29 @@ A system that automatically detects seven traffic violations from live feeds (he
 
 ---
 
-Refer to `docs/capabilities.md` for everything the system is capable of doing.
+##  Quick Start and Local Usage
 
----
-## Local Usage
+### 1. Via Docker (recommended)
+```bash
 
-### Prerequisites
+docker run -p 8000:8000 eros483/traffic-violation-detection:latest
+# Open http://localhost:8000 in your browser.
+```
+
+Optional: enable LLM-assistance
+
+```bash
+docker run -p 8000:8000 -e GROQ_API_KEY=your_key eros483/traffic-violation-detection:latest
+```
+
+### 2. Setup with Make
+
+#### Prerequisites
 
 - Python 3.10+
 - npm
 
-### Setup
+#### Setup
 
 ```bash
 git clone https://github.com/Eros483/traffic-violation-detection-image-processing.git
@@ -42,7 +55,12 @@ make run
 # Open http://localhost:8000 in your browser.
 ```
 
-If make cannot be used, follow setup instructions in `docs/windows-setup.md`.
+### 3. Manual Setup
+Follow setup instructions in `docs/windows-setup.md`.
+
+**Refer to `docs/capabilities.md` for everything the system is capable of doing**
+
+---
 
 ### Environment Variables
 

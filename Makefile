@@ -1,5 +1,6 @@
 .PHONY: setup sync format format-check lint run-api process evaluate benchmark \
-        data test clean client-install client-build run download-model
+        data test clean client-install client-build run download-model \
+        docker-build docker-push docker-run
 
 # Install uv if not present, then sync all dependencies & install frontend deps
 setup:
@@ -76,3 +77,22 @@ client-build:
 
 # Build frontend + start API (one command for full-stack serving)
 run: client-build run-api
+
+# ----- Docker (publish & run) -----
+
+IMAGE_NAME ?= eros483/traffic-violation-detection
+IMAGE_TAG ?= latest
+
+# Build Docker image
+docker-build:
+	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) .
+
+# Push Docker image to registry
+docker-push:
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+
+# Run API via Docker (set GROQ_API_KEY to enable LLM features)
+docker-run:
+	docker run -p 8000:8000 \
+		-e GROQ_API_KEY=$(GROQ_API_KEY) \
+		$(IMAGE_NAME):$(IMAGE_TAG)

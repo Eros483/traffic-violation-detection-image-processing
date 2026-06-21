@@ -2,8 +2,8 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-22",
   "summary": {
-    "total": 21,
-    "completed": 21,
+    "total": 22,
+    "completed": 22,
     "in_progress": 0,
     "planned": 0,
     "tests_passing": 47,
@@ -380,6 +380,26 @@
       "tests": { "status": "missing", "files": [], "notes": "Documentation only — no tests needed." },
       "subtasks": [],
       "notes": "Covers 11 sections including architecture diagrams, schema design, cost estimates (₹1.85L/mo for 500 cameras), and 5-phase migration roadmap.",
+      "added": "2026-06-22",
+      "completed": "2026-06-22"
+    },
+    {
+      "id": "F022",
+      "name": "Docker Image Published to Docker Hub",
+      "description": "Multi-stage Docker image built and published to docker.io/eros483/traffic-violation-detection:latest. Includes React frontend, FastAPI backend, model weights, and optional GROQ_API_KEY for LLM features. Judges can run with a single docker run command.",
+      "status": "completed",
+      "priority": "high",
+      "module": "Dockerfile, Makefile, README.md",
+      "design_doc": null,
+      "tests": { "status": "missing", "files": [], "notes": "Manual — pull and run the image, verify /health responds." },
+      "subtasks": [
+        { "id": "F022-1", "name": "Add docker-build, docker-push, docker-run targets to Makefile", "status": "completed" },
+        { "id": "F022-2", "name": "Build Docker image", "status": "completed" },
+        { "id": "F022-3", "name": "Push to Docker Hub", "status": "completed" },
+        { "id": "F022-4", "name": "Add Docker quick-start section to README", "status": "completed" },
+        { "id": "F022-5", "name": "Add Docker badge to README", "status": "completed" }
+      ],
+      "notes": "Image is ~703MB compressed. CV-only features work without any env vars. LLM features need GROQ_API_KEY.",
       "added": "2026-06-22",
       "completed": "2026-06-22"
     }
