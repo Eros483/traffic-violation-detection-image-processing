@@ -36,8 +36,9 @@ The system includes built-in tools for measuring both operational data and syste
 
 ## 5. DevOps & Deployment Architecture
 
-The infrastructure is optimized for lean cloud environments, specifically targeting memory-constrained tiers like Render's 512MB free tier.
+The service is deployed on **AWS Elastic Beanstalk** using a `t3.micro` instance (1 vCPU, 1 GB RAM), with a live demo available at [traffic-violation-api.eba-7aat7qza.ap-south-1.elasticbeanstalk.com](http://traffic-violation-api.eba-7aat7qza.ap-south-1.elasticbeanstalk.com/#/).
 
-* **Unified Serving:** The FastAPI backend is configured to automatically mount and serve the built React frontend static files (`client/dist/`) via the root directory, enabling same-origin serving.
-* **Lean Dockerization:** Utilizes a multi-stage Dockerfile with a `.dockerignore` setup, thread limiting (`OMP_NUM_THREADS=1`, `MALLOC_ARENA_MAX=2`), and dynamic port binding for high memory efficiency.
-* **Continuous Integration:** GitHub Actions workflow automates backend formatting checks (`black`), testing (`pytest`), frontend type-checking, and build validation on all main branch pushes and pull requests.
+* **Unified Serving:** The FastAPI backend automatically mounts and serves the built React frontend static files (`client/dist/`) at the root, enabling same-origin serving from a single process.
+* **Swap-Backed Memory:** An `.ebextensions/01-swap.config` hook provisions a 1 GB swap file on instance boot, preventing out-of-memory kills during model weight loading on the memory-constrained `t3.micro`.
+* **Lean Dockerization:** A multi-stage Dockerfile builds the React frontend in a Node image and the Python runtime in a `python:3.12-slim` base. Environment tuning (`OMP_NUM_THREADS=1`, `MALLOC_ARENA_MAX=2`, `MALLOC_TRIM_THRESHOLD_=131072`, `PYTHONMALLOC=malloc`) minimizes thread overhead and memory fragmentation for single-worker CPU inference.
+* **Continuous Integration:** GitHub Actions (`ci.yml`) runs backend formatting checks (`black --check`), `pytest`, frontend TypeScript type-checking, and production build validation on every push and pull request to `main`.

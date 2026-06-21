@@ -17,7 +17,35 @@ Built for the Flipkart Gridlock 2.0. Check out the live demo up on [AWS!](http:/
 
 A system that automatically detects seven traffic violations from live feeds (helmetless riders, triple-seat overcrowding, license plates, phone-using drivers, wrong-way drivers, red-light runners, unbelted passengers), references the specific laws each violation breaks, generates e-challans, and seals every detection as tamper-proof evidence on a live enforcement dashboard.
 
+<br>
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="public/readme/live_detection.png" alt="Live detection" width="100%">
+      <sub><b>Live Detection</b> — real-time inference on camera feeds</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="public/readme/violations.png" alt="Violations" width="100%">
+      <sub><b>Violation Log</b> — detected violations with evidence</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="public/readme/challans.png" alt="Challans" width="100%">
+      <sub><b>E-Challans</b> — auto-generated violation notices</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="public/readme/dashboard.png" alt="Dashboard" width="100%">
+      <sub><b>Dashboard</b> — enforcement monitoring overview</sub>
+    </td>
+  </tr>
+</table>
+
 </div>
+
+---
+**Note**:  Many key features are unimplemented in this prototype for the sake of time constraints and edge deployment. Please review all planned features/augmentations in `docs/research.md`.
 
 ---
 
@@ -33,7 +61,7 @@ docker run -p 8000:8000 eros483/traffic-violation-detection:latest
 Optional: enable LLM-assistance
 
 ```bash
-docker run -p 8000:8000 -e GROQ_API_KEY=your_key eros483/traffic-violation-detection:latest
+docker run -p 8000:8000 -e GROQ_API_KEY=<your_key> eros483/traffic-violation-detection:latest
 ```
 
 ### 2. Setup with Make
@@ -74,6 +102,7 @@ Follow setup instructions in `docs/windows-setup.md`.
 ---
 
 ### Documentation
+- Refer to `outputs/metrics.json` for monitoring system-metrics.
 - Refer to `docs/research.md` for research-grade items that would bulletproof our solution.
 - Refer to `docs/compute_efficiency.md` for information on latency, compute requirements.
 - Refer to `docs/production_upgrade.md` on how our team would migrate it for active daily usage at Bengaluru!
