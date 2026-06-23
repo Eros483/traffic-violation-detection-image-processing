@@ -14,7 +14,6 @@ FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    ffmpeg \
     libgl1 \
     libglib2.0-0 \
     libgomp1 \
@@ -28,7 +27,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --no-dev --frozen
+RUN uv sync --no-dev --frozen && uv cache clean
 
 # Model weights (.pt) are copied in next step via COPY . .
 # CPU-only inference: reduce thread/memory overhead for t3.micro (1GB RAM)
