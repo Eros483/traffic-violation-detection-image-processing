@@ -2,11 +2,11 @@
   "project": "traffic-violation-prototype",
   "last_updated": "2026-06-22",
   "summary": {
-    "total": 22,
-    "completed": 22,
+    "total": 23,
+    "completed": 23,
     "in_progress": 0,
     "planned": 0,
-    "tests_passing": 47,
+    "tests_passing": 58,
     "tests_failing": 0,
     "tests_missing": 0
   },
@@ -402,6 +402,29 @@
       "notes": "Image is ~703MB compressed. CV-only features work without any env vars. LLM features need GROQ_API_KEY.",
       "added": "2026-06-22",
       "completed": "2026-06-22"
+    },
+    {
+      "id": "F023",
+      "name": "Periodic YouTube Capture on Dashboard",
+      "description": "Dashboard polls `POST /api/violations/youtube/upload` every 20s with incrementing timestamp, runs extracted frame through detection pipeline, and displays annotated image + violation results inline with a start/stop toggle.",
+      "status": "completed",
+      "priority": "medium",
+      "module": "client/src/pages/Dashboard.tsx, api/routes/violations.py, api/schemas.py, src/youtube_extractor.py",
+      "design_doc": null,
+      "tests": { "status": "passing", "files": ["tests/test_src/test_youtube_extractor.py"], "notes": "11 unit tests: URL validation, ffmpeg errors, quality helpers, video info, cleanup, batch extraction, context manager." },
+      "subtasks": [
+        { "id": "F023-1", "name": "Add annotated_image_b64 to YouTubeFrameResponse", "status": "completed" },
+        { "id": "F023-2", "name": "Fix base64 encoding of annotated image (cv2.imencode before b64encode)", "status": "completed" },
+        { "id": "F023-3", "name": "Implement periodic capture interval + UI on Dashboard", "status": "completed" },
+        { "id": "F023-4", "name": "Fix yt-dlp live stream format filter for live HLS streams", "status": "completed" },
+        { "id": "F023-5", "name": "Fix ffmpeg at() filter (does not exist in ffmpeg) — replaced with -ss seeking", "status": "completed" },
+        { "id": "F023-6", "name": "Fix _download_video_segment path resolution and add download timeout for live streams", "status": "completed" },
+        { "id": "F023-7", "name": "Add missing logger import in api/routes/violations.py", "status": "completed" },
+        { "id": "F023-8", "name": "Write 11 unit tests for src/youtube_extractor.py", "status": "completed" }
+      ],
+      "notes": "Fixed 3 bugs: (1) ffmpeg at() filter replaced with -ss seeking, (2) yt-dlp prepare_filename replaced with requested_downloads fallback, socket_timeout=30 for live streams, (3) missing logger import in violations.py. 11 unit tests added. yt-dlp live stream download may still time out on very long DVR streams — download_ranges now caps at ±5s window around requested timestamp when is_live=true.",
+      "added": "2026-06-22",
+      "completed": "2026-06-23"
     }
   ]
 }

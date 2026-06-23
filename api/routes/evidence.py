@@ -23,6 +23,23 @@ def _load_all_records() -> list[dict]:
     return records
 
 
+def _find_annotated_image(image_path: str) -> Path | None:
+    """Search for the annotated image in known output directories."""
+    stem = Path(image_path).stem
+    candidates = [
+        SAMPLE_OUTPUTS_DIR / f"{stem}_annotated.jpg",
+        SAMPLE_OUTPUTS_DIR / "uploads" / f"{stem}_annotated.jpg",
+        SAMPLE_OUTPUTS_DIR / f"{stem}.jpg",
+        SAMPLE_OUTPUTS_DIR / "uploads" / f"{stem}.jpg",
+        SAMPLE_OUTPUTS_DIR / Path(image_path).name,
+        SAMPLE_OUTPUTS_DIR / "uploads" / Path(image_path).name,
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return None
+
+
 @router.get("/{violation_id}/image")
 def get_evidence_image(violation_id: str):
     """Returns the annotated evidence image for a given violation ID."""
@@ -36,14 +53,12 @@ def get_evidence_image(violation_id: str):
     if match is None:
         raise HTTPException(status_code=404, detail="Violation not found")
 
-    image_path = match.get("image_path", "")
-    basename = Path(image_path).name
-    annotated_path = SAMPLE_OUTPUTS_DIR / basename
+    annotated = _find_annotated_image(match.get("image_path", ""))
 
-    if not annotated_path.exists():
+    if annotated is None:
         raise HTTPException(status_code=404, detail="Annotated image not found")
 
-    return FileResponse(str(annotated_path), media_type="image/jpeg")
+    return FileResponse(str(annotated), media_type="image/jpeg")
 
 
 @router.get("/{violation_id}/metadata")

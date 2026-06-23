@@ -21,6 +21,10 @@ plate:
   min_crop_width: 100
   upscale_factor: 3
 
+youtube:
+  cookies_from_browser: ""
+  cookies_file: ""
+
 llm_violations:
   enabled: true
   provider: groq

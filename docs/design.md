@@ -58,7 +58,6 @@
 
 ### Out of Scope (Mentioned in Report as "Future Work")
 
-- React Dashboard UI — separate React-based frontend application (will be built by another team; our backend API serves it)
 - Production-grade wrong-side driving stack (temporal + lane topology + calibrated camera geometry)
 - Production-grade red-light / stop-line stack (signal state + stop-line localization + temporal crossing logic)
 - Illegal parking (needs temporal context)

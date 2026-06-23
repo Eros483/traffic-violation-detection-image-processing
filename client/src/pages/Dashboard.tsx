@@ -1,3 +1,5 @@
+// ----- dashboard with violation KPIs & model metrics @ client/src/pages/Dashboard.tsx -----
+
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useConsoleData } from "../context/DataContext";
@@ -5,7 +7,7 @@ import { dailyTrend } from "../lib/derive";
 import { formatNumber, pct } from "../lib/format";
 import { ACCENT } from "../lib/badges";
 import { AsyncBoundary, KPICard, SectionHeader, ActivityRow } from "../components/ui";
-import { IconCamera, IconChevronRightSm, IconInfo } from "../components/icons";
+import { IconInfo } from "../components/icons";
 
 const PANEL = "rounded-md border border-slate-200 bg-white";
 
@@ -87,22 +89,18 @@ export function Dashboard() {
             </div>
 
             <div className={PANEL}>
-              <SectionHeader title="Capture source" />
-              <div className="flex flex-col items-center gap-3 px-4 py-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                  <IconCamera width={26} height={26} />
+              <SectionHeader title="CCTV Feed" />
+              <div className="flex flex-col gap-3 p-4">
+                <div className="relative aspect-video w-full bg-black rounded-lg overflow-hidden">
+                  <iframe
+                    src="https://www.youtube.com/embed/FWvIPfxK5Jo?autoplay=1&controls=1&modestbranding=1&rel=0"
+                    title="CCTV Feed"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  />
                 </div>
-                <p className="text-sm text-slate-500">
-                  Live RTSP ingestion is out of scope for the prototype. Test the pipeline by uploading a still image.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => navigate("/live")}
-                  className="inline-flex items-center gap-1.5 rounded-md bg-blue-700 px-3.5 py-2 text-sm font-semibold text-[#fff] hover:bg-blue-800"
-                >
-                  Open Live Detection
-                  <IconChevronRightSm width={15} height={15} />
-                </button>
               </div>
             </div>
           </div>

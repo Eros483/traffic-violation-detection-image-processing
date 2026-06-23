@@ -47,6 +47,7 @@ export function Sidebar({ counts }: { counts: SidebarCounts }) {
       label: "Tools",
       items: [
         { to: "/live", label: "Live Detection", icon: IconCamera },
+        { to: "/youtube", label: "YouTube Video", icon: IconCamera },
         { to: "/settings", label: "Settings", icon: IconSettings },
       ],
     },

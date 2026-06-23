@@ -3,14 +3,27 @@
 import base64
 import io
 import json
+import time
 import uuid
 from pathlib import Path
+from typing import List
 
 import cv2
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 
-from api.schemas import PaginatedViolations, ProcessRequest, ProcessResponse
+from api.schemas import (
+    PaginatedViolations,
+    ProcessRequest,
+    ProcessResponse,
+    YouTubeFrameRequest,
+    YouTubeFrameResponse,
+    YouTubeCaptureRequest,
+    YouTubeCaptureResult,
+)
+from src.pipeline import process_image as run_pipeline
+from src.youtube_extractor import YouTubeFrameExtractor
+from utils.logger import logger
 
 router = APIRouter()
 DATA_FILE = Path("outputs/violations.jsonl")
@@ -61,10 +74,141 @@ def process_image(request: ProcessRequest):
             detail="Failed to process image. Ensure the file exists and is a valid image.",
         )
 
-    return ProcessResponse(
-        records=result["records"],
-        preprocess_steps=result["preprocess_steps"],
+    _, buffer = cv2.imencode(".jpg", result["annotated_image"])
+    annotated_b64 = base64.b64encode(buffer).decode("utf-8")
+
+    return JSONResponse(
+        content={
+            "records": result["records"],
+            "annotated_image_b64": annotated_b64,
+            "preprocess_steps": result["preprocess_steps"],
+        }
     )
+
+
+@router.post("/youtube/upload", response_model=YouTubeFrameResponse)
+async def process_youtube_frame(request: YouTubeFrameRequest):
+    """Extract frame from YouTube video and run pipeline."""
+    start_time = time.time()
+
+    try:
+        async with YouTubeFrameExtractor() as extractor:
+            frame_result = await extractor.extract_single_frame(request)
+
+            upload_dir = Path("public/outputs/uploads")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            frame_filename = Path(frame_result.frame_path).name
+            target_path = upload_dir / frame_filename
+            import shutil
+
+            shutil.copy2(frame_result.frame_path, str(target_path))
+
+            pipeline_result = run_pipeline(str(target_path))
+            if not pipeline_result:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Failed to process extracted frame.",
+                )
+
+            _, buffer = cv2.imencode(".jpg", pipeline_result["annotated_image"])
+            annotated_b64 = base64.b64encode(buffer).decode("utf-8")
+
+            await extractor.cleanup(frame_result.frame_path)
+
+            processing_time = time.time() - start_time
+
+            return YouTubeFrameResponse(
+                records=pipeline_result["records"],
+                preprocess_steps=pipeline_result["preprocess_steps"],
+                frame_result=frame_result,
+                annotated_image_b64=annotated_b64,
+            )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        err_str = str(e)
+        if "Sign in" in err_str or "bot" in err_str.lower():
+            raise HTTPException(
+                status_code=401,
+                detail=(
+                    "YouTube requires authentication. "
+                    "Set YOUTUBE_COOKIES_BROWSER=chrome (or firefox/brave) in .env "
+                    "or YOUTUBE_COOKIES_FILE=/path/to/cookies.txt. "
+                    "See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp"
+                ),
+            )
+        raise HTTPException(status_code=502, detail=f"YouTube extraction failed: {err_str[:200]}")
+
+
+@router.post("/youtube/capture", response_model=YouTubeCaptureResult)
+async def capture_youtube_frames(request: YouTubeCaptureRequest):
+    """Batch capture frames from YouTube video."""
+    start_time = time.time()
+
+    try:
+        async with YouTubeFrameExtractor() as extractor:
+            frame_results = await extractor.extract_frames_batch(
+                request.youtube_url,
+                request.interval,
+                request.start_time,
+                request.end_time,
+            )
+
+            processed_frames = []
+            for frame_result in frame_results:
+                temp_path = frame_result.frame_path
+                try:
+                    pipeline_result = run_pipeline(temp_path)
+                    if pipeline_result:
+                        upload_dir = Path("public/outputs/uploads")
+                        upload_dir.mkdir(parents=True, exist_ok=True)
+
+                        frame_filename = Path(temp_path).name
+                        target_path = upload_dir / f"processed_{frame_filename}"
+                        import shutil
+
+                        shutil.copy2(temp_path, str(target_path))
+
+                        processed_frame_result = YouTubeFrameResult(
+                            frame_path=str(target_path),
+                            timestamp=frame_result.timestamp,
+                            duration=frame_result.duration,
+                            file_size=frame_result.file_size,
+                            extraction_method=frame_result.extraction_method,
+                            video_id=frame_result.video_id,
+                            resolution=frame_result.resolution,
+                            format=frame_result.format,
+                        )
+                        processed_frames.append(processed_frame_result)
+
+                    await extractor.cleanup(temp_path)
+                except Exception as e:
+                    logger.error(f"Failed to process frame {temp_path}: {e}")
+                    continue
+
+            processing_time = time.time() - start_time
+
+            return YouTubeCaptureResult(
+                frames=processed_frames,
+                total_frames=len(processed_frames),
+                processing_time=processing_time,
+            )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        err_str = str(e)
+        if "Sign in" in err_str or "bot" in err_str.lower():
+            raise HTTPException(
+                status_code=401,
+                detail=(
+                    "YouTube requires authentication. "
+                    "Set YOUTUBE_COOKIES_BROWSER=chrome (or firefox/brave) in .env "
+                    "or YOUTUBE_COOKIES_FILE=/path/to/cookies.txt. "
+                    "See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp"
+                ),
+            )
+        raise HTTPException(status_code=502, detail=f"YouTube extraction failed: {err_str[:200]}")
 
 
 @router.post("/upload")

@@ -7,6 +7,7 @@ import { ViolationDetail } from "./pages/ViolationDetail";
 import { ChallansList } from "./pages/ChallansList";
 import { ChallanDetail } from "./pages/ChallanDetail";
 import { LiveDetection } from "./pages/LiveDetection";
+import { YouTubePage } from "./pages/YouTubePage";
 import { Settings } from "./pages/Settings";
 import { NotFound } from "./pages/NotFound";
 
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="challans" element={<ChallansList />} />
         <Route path="challans/:id" element={<ChallanDetail />} />
         <Route path="live" element={<LiveDetection />} />
+        <Route path="youtube" element={<YouTubePage />} />
         <Route path="settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Route>

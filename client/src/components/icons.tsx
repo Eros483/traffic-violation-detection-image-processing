@@ -154,3 +154,20 @@ export const IconChevronRightSm = (p: P) => (
     <polyline points="9 6 15 12 9 18" />
   </Base>
 );
+export const IconPlay = (p: P) => (
+  <Base {...p}>
+    <polygon points="5 4 19 12 5 20 5 4" />
+  </Base>
+);
+export const IconPlus = (p: P) => (
+  <Base {...p}>
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </Base>
+);
+export const IconYouTube = (p: P) => (
+  <Base {...p}>
+    <path d="M21.7 3a4 4 0 0 1-3.9 4H7.3a4 4 0 0 0-3.9 4v6a4 4 0 0 1 3.9 4h10.3a4 4 0 0 0 3.9-4v-6a4 4 0 0 0-3.9-4z" />
+    <path d="M9.9 9v6L16 12l-6.1-3z" />
+  </Base>
+);
